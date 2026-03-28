@@ -1,0 +1,4064 @@
+{
+    "id": "QKDAbA",
+    "name": "Innovation Agents\u00a0IT-Hebel-Check \u2013 Vorbereitung",
+    "isNameModifiedByUser": false,
+    "workspaceId": "nW0JBj",
+    "organizationId": "wMdW08",
+    "status": "PUBLISHED",
+    "hasDraftBlocks": false,
+    "numberOfSubmissions": 1,
+    "createdAt": "2026-02-18T15:54:01.000Z",
+    "updatedAt": "2026-02-18T18:09:05.000Z",
+    "index": 0,
+    "isClosed": false,
+    "settings": {
+        "language": "de",
+        "isClosed": false,
+        "closeMessageTitle": null,
+        "closeMessageDescription": null,
+        "closeTimezone": null,
+        "closeDate": null,
+        "closeTime": null,
+        "submissionsLimit": null,
+        "uniqueSubmissionKey": null,
+        "redirectOnCompletion": null,
+        "hasSelfEmailNotifications": false,
+        "selfEmailTo": null,
+        "selfEmailReplyTo": null,
+        "selfEmailSubject": null,
+        "selfEmailFromName": null,
+        "selfEmailBody": null,
+        "selfEmailSendingDomainId": null,
+        "hasRespondentEmailNotifications": false,
+        "respondentEmailTo": null,
+        "respondentEmailReplyTo": null,
+        "respondentEmailSubject": null,
+        "respondentEmailFromName": null,
+        "respondentEmailBody": null,
+        "respondentEmailSendingDomainId": null,
+        "hasVerifyEmailNotifications": false,
+        "verifyEmailFromName": null,
+        "verifyEmailSendingDomainId": null,
+        "hasProgressBar": true,
+        "hasPartialSubmissions": false,
+        "pageAutoJump": false,
+        "saveForLater": true,
+        "styles": {
+            "theme": "CUSTOM",
+            "color": {
+                "background": "#ffffff",
+                "text": "#37352F",
+                "accent": "#A219B1",
+                "buttonBackground": "#A219B1",
+                "buttonText": "#FFFFFF"
+            },
+            "direction": "ltr"
+        },
+        "password": "Kartoffel!",
+        "submissionsDataRetentionDuration": null,
+        "submissionsDataRetentionUnit": null,
+        "metaSiteName": null,
+        "metaSiteFaviconUrl": null,
+        "metaTitle": null,
+        "metaDescription": null,
+        "metaImageUrl": null
+    },
+    "blocks": [
+        {
+            "uuid": "7451e944-ea34-4f71-aeb9-cbd2006e992a",
+            "type": "FORM_TITLE",
+            "groupUuid": "9e3478ef-2cca-482d-82d6-483d84d82a79",
+            "groupType": "TEXT",
+            "payload": {
+                "logo": "https://storage.tally.so/b185d4d9-1e14-45f7-a2d1-5c3cdb43d30c/IA_Innovation-Agents_Logo-Reinzeichnung_240408_digital_signet-happypurple.jpg",
+                "button": {
+                    "label": "Weiter"
+                },
+                "safeHTMLSchema": [
+                    [
+                        "Innovation Agents&nbsp;"
+                    ],
+                    [
+                        "IT-Hebel-Check \u2013 Vorbereitung",
+                        [
+                            [
+                                "tag",
+                                "div"
+                            ]
+                        ]
+                    ]
+                ],
+                "title": "Innovation Agents\u00a0IT-Hebel-Check \u2013 Vorbereitung"
+            }
+        },
+        {
+            "uuid": "3f7c91d6-b03c-4894-b1a8-6580bca19558",
+            "type": "TEXT",
+            "groupUuid": "52214ff5-6d25-4caa-9af2-7c46220d5cfa",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Vielen Dank, dass Sie sich die Zeit nehmen. Dieser Fragebogen hilft uns, den Workshop gezielt auf Ihr Unternehmen vorzubereiten."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "2156b2d9-5fe3-4300-b9a1-d45124892d12",
+            "type": "TEXT",
+            "groupUuid": "7e91dbd6-385e-440a-9bae-4d00d0a547c4",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Die Fragen drehen sich um Ihren Arbeitsalltag \u2014 nicht um Technik. Es gibt keine richtigen oder falschen Antworten."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "f6359e14-58e1-4ed8-8112-33759e5b27f9",
+            "type": "TEXT",
+            "groupUuid": "f86e099e-1f5b-4746-844a-0243510a07bc",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Dauer:",
+                        [
+                            [
+                                "tag",
+                                "span"
+                            ],
+                            [
+                                "font-weight",
+                                "bold"
+                            ]
+                        ]
+                    ],
+                    [
+                        " ca. 15\u201320 Minuten"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "5ee75439-ba37-4634-82df-3c41c8b8e776",
+            "type": "HEADING_2",
+            "groupUuid": "0a6faf01-1f9c-4bd9-97b2-bad6e3c1760f",
+            "groupType": "HEADING_2",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Ihr Unternehmen"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "44aa4f78-065e-487b-b645-7e133bbdd424",
+            "type": "TEXT",
+            "groupUuid": "af2db465-737f-4a85-8ff7-09f593d47e61",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Kurzer Kontext zu Ihrem Unternehmen."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "42509993-c5e4-435c-86f2-7b4fd3edbc5d",
+            "type": "TITLE",
+            "groupUuid": "f8c24339-38d0-4dee-8c7d-2c6404ca3747",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie hei\u00dft Ihr Unternehmen?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "de439aae-7c14-4a61-84fd-bc6857bfee3a",
+            "type": "INPUT_TEXT",
+            "groupUuid": "a5651782-311c-4c13-ac24-50324dded250",
+            "groupType": "INPUT_TEXT",
+            "payload": {
+                "isRequired": true,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Firmenname"
+            }
+        },
+        {
+            "uuid": "94f90ffb-dec6-43fe-b7ae-d923fb566303",
+            "type": "TITLE",
+            "groupUuid": "4294dfd9-4b94-40cb-917b-9868a1d9cebb",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "In welcher Rolle sind Sie im Unternehmen?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "293ef786-d523-4f65-8848-b39fc812b7e7",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c0b0cf89-c76d-4805-adcd-b088422519bf",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Gesch\u00e4ftsf\u00fchrung"
+            }
+        },
+        {
+            "uuid": "79cb4ca4-aec5-461a-9494-b4ecdcede671",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c0b0cf89-c76d-4805-adcd-b088422519bf",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "IT-Leitung"
+            }
+        },
+        {
+            "uuid": "dac1e35e-41a8-43fa-912f-f35efd46e8f5",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c0b0cf89-c76d-4805-adcd-b088422519bf",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Fachabteilungsleitung"
+            }
+        },
+        {
+            "uuid": "e84d2089-0bb1-4bf1-8c9b-f3f8f17e9426",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c0b0cf89-c76d-4805-adcd-b088422519bf",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Assistenz & Verwaltung"
+            }
+        },
+        {
+            "uuid": "d166b6d0-8a4d-4de3-a0a5-be79dabe69f2",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c0b0cf89-c76d-4805-adcd-b088422519bf",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "isOtherOption": true,
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Andere"
+            }
+        },
+        {
+            "uuid": "ec6cc0cc-1761-4915-be29-c481f1202801",
+            "type": "TITLE",
+            "groupUuid": "971dd905-5b13-4610-bb63-8aff31ce3941",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie viele Mitarbeiter hat Ihr Unternehmen ungef\u00e4hr?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "dba0490b-7214-4538-b9ca-86d6aa4d3c10",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0723a8fc-c77e-4380-b06c-13d8b3587bf9",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Unter 20"
+            }
+        },
+        {
+            "uuid": "8879586d-896b-48f8-aef4-813ce0e23766",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0723a8fc-c77e-4380-b06c-13d8b3587bf9",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "20\u201350"
+            }
+        },
+        {
+            "uuid": "9d0d9f69-fe2b-4697-821b-4675d7355bf8",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0723a8fc-c77e-4380-b06c-13d8b3587bf9",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "50\u2013150"
+            }
+        },
+        {
+            "uuid": "afece360-fe6c-4876-b764-314d0e5ed9e3",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0723a8fc-c77e-4380-b06c-13d8b3587bf9",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "150\u2013500"
+            }
+        },
+        {
+            "uuid": "7bff4640-ddeb-4382-9c7a-f38f96ddd8ae",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0723a8fc-c77e-4380-b06c-13d8b3587bf9",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "\u00dcber 500"
+            }
+        },
+        {
+            "uuid": "58b325d1-5f09-46c6-91d1-8b896928c67b",
+            "type": "TITLE",
+            "groupUuid": "a6754c7d-9bc9-4745-baf6-e41082e91aa2",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "In welcher Branche ist Ihr Unternehmen t\u00e4tig?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "0f00af85-f181-4768-afd3-9b9d49695800",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Produktion & Fertigung"
+            }
+        },
+        {
+            "uuid": "03177977-5a91-41fa-b2c4-b7ccd368ca3e",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Handel"
+            }
+        },
+        {
+            "uuid": "67d8ab4a-2416-4ba7-a5cd-035c3da478f5",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Handwerk & Baugewerbe"
+            }
+        },
+        {
+            "uuid": "cdd86b74-a511-4e78-ae91-1d090f171ad5",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Dienstleistung"
+            }
+        },
+        {
+            "uuid": "955cfac2-7b81-4687-a463-16ab4330edd3",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "isOtherOption": true,
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Andere Branche"
+            }
+        },
+        {
+            "uuid": "f1ee37d8-8bc4-4564-9f2a-dbb6580fd554",
+            "type": "TEXT",
+            "groupUuid": "34f54196-f527-4105-b89f-78febe97e051",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": []
+            }
+        },
+        {
+            "uuid": "c6223991-f4ad-4041-902c-17797a79276a",
+            "type": "PAGE_BREAK",
+            "groupUuid": "fcda8c5e-00c4-4c20-a91e-ce11eeb6e10a",
+            "groupType": "PAGE_BREAK",
+            "payload": {
+                "index": 0,
+                "name": "Wo es hakt",
+                "isQualifiedForThankYouPage": false,
+                "isFirst": true,
+                "isLast": false,
+                "button": {
+                    "label": "Weiter"
+                }
+            }
+        },
+        {
+            "uuid": "0cea3895-3b40-4ba1-b633-8bd5e291f88b",
+            "type": "HEADING_2",
+            "groupUuid": "e759dc4d-ad30-422f-95e1-d1c864793602",
+            "groupType": "HEADING_2",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wo es hakt"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "240b606f-24b9-4653-a7a5-1a6e5fe1e337",
+            "type": "TEXT",
+            "groupUuid": "30100c09-569a-4f84-af1c-a5b9449c7f2d",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Hier geht es um Ihr Bauchgef\u00fchl \u2014 nicht um technische Analyse, sondern um Ihren Arbeitsalltag."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "4e39c019-827d-4828-bce4-b3d010606e36",
+            "type": "TITLE",
+            "groupUuid": "1c639124-0e4a-43bb-8246-8d2f8e07a415",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "In welchen Bereichen haben Sie das Gef\u00fchl, dass Dinge unn\u00f6tig kompliziert oder langsam laufen?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "e8815e0b-0be1-4db9-8c4d-caf59fce7f9f",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Angebote & Auftr\u00e4ge"
+            }
+        },
+        {
+            "uuid": "89588cc7-d9ab-41f4-af1f-54f5d0f0f0ef",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Einkauf & Bestellwesen"
+            }
+        },
+        {
+            "uuid": "dcc0389f-8ad3-4cfb-81f7-b13cd7ced0b9",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Buchhaltung & Finanzen"
+            }
+        },
+        {
+            "uuid": "8499db89-abf2-4e74-9552-5dc6908a73fe",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Kommunikation im Team"
+            }
+        },
+        {
+            "uuid": "5047829b-60ce-47b6-87a1-8e1a4f137145",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Lagerhaltung & Logistik"
+            }
+        },
+        {
+            "uuid": "1f61e709-ebfb-4f98-987d-db080de16ccf",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 5,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Personalverwaltung"
+            }
+        },
+        {
+            "uuid": "b8fa8c5f-7589-4636-bc62-e8649ec3b5ce",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 6,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Kundenbetreuung"
+            }
+        },
+        {
+            "uuid": "232671e3-1b34-4ee1-b16d-4ce4ec22e6a1",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 7,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Produktion & Fertigung"
+            }
+        },
+        {
+            "uuid": "08693b33-c898-430e-88fd-91af7eb830b1",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 8,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Berichtswesen & Auswertungen"
+            }
+        },
+        {
+            "uuid": "04daeb06-a0d8-48ec-9f02-d933c66bca19",
+            "type": "CHECKBOX",
+            "groupUuid": "c23c9d32-8609-40f0-9532-17f919d4e349",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 9,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Dokumentenablage & Suche"
+            }
+        },
+        {
+            "uuid": "04009faa-dced-4c6b-bde7-d7300bb4c36f",
+            "type": "TITLE",
+            "groupUuid": "4c5b2c8d-64da-46ba-afa5-c44fdcb78c2b",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wenn Sie einen einzigen Bereich sofort verbessern k\u00f6nnten \u2014 welchen und warum?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "3c7716ae-524a-4157-a029-486f1346b244",
+            "type": "TEXTAREA",
+            "groupUuid": "0047f6f1-6205-46b2-b7bb-4256bc74aea6",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": true,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Beschreiben Sie frei, was Sie \u00e4ndern w\u00fcrden\u2026"
+            }
+        },
+        {
+            "uuid": "63958c6d-2980-4bb3-8e90-d228f1baaa15",
+            "type": "TITLE",
+            "groupUuid": "689bf73b-f78c-4523-b9ed-b3f6ed75a2e4",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wo arbeiten Ihre Mitarbeiter mit Behelfsl\u00f6sungen \u2014 zum Beispiel Excel-Listen, Papierformulare, WhatsApp-Gruppen oder Post-Its?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "148704e8-382f-422d-8334-ea5da708dc6b",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Angebote & Auftr\u00e4ge"
+            }
+        },
+        {
+            "uuid": "8ccdb0b3-c512-4da7-835f-559a5a6c2866",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Einkauf & Bestellwesen"
+            }
+        },
+        {
+            "uuid": "73fb8f8c-dd1d-4d23-bf4f-25ce26b67f7c",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Buchhaltung & Finanzen"
+            }
+        },
+        {
+            "uuid": "61ef253f-9991-467a-be51-619fc6e94b1d",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Kommunikation im Team"
+            }
+        },
+        {
+            "uuid": "a1420e4e-d07d-4892-98db-5d0179d19a78",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Lagerhaltung & Logistik"
+            }
+        },
+        {
+            "uuid": "c1751961-cf7e-4fd6-ba25-36664fe018ea",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 5,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Personalverwaltung"
+            }
+        },
+        {
+            "uuid": "71762a03-cf97-4aac-bd03-13ed5eb24a03",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 6,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Kundenbetreuung"
+            }
+        },
+        {
+            "uuid": "9c1c0dd6-bf02-4424-bcac-eeb2840c69f8",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 7,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Produktion & Fertigung"
+            }
+        },
+        {
+            "uuid": "3c14bdcb-f9b7-447b-bdad-2a62fba1a62a",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 8,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Berichtswesen & Auswertungen"
+            }
+        },
+        {
+            "uuid": "5825f3a3-de64-402b-8c0f-4a3814a75104",
+            "type": "CHECKBOX",
+            "groupUuid": "a27e180b-65a8-4745-a4f6-06ac462d5a46",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 9,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Dokumentenablage & Suche"
+            }
+        },
+        {
+            "uuid": "05a69e85-216d-422a-94b0-5031b52ad8bb",
+            "type": "TITLE",
+            "groupUuid": "7a82f5e8-189c-4625-8aa3-25211a64f6fe",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie oft kommt es vor, dass Informationen fehlen, doppelt gepflegt werden oder zu sp\u00e4t ankommen?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "044a504f-ca00-4979-a011-bebffce6cbd5",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "6fec032d-9ef3-4ea4-acf0-1250291a4441",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Selten"
+            }
+        },
+        {
+            "uuid": "87f972f1-7160-4c34-8a5d-47c96bb3581b",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "6fec032d-9ef3-4ea4-acf0-1250291a4441",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ab und zu"
+            }
+        },
+        {
+            "uuid": "fa0609b3-deef-436c-8048-ab46de7268c7",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "6fec032d-9ef3-4ea4-acf0-1250291a4441",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Regelm\u00e4\u00dfig"
+            }
+        },
+        {
+            "uuid": "9585215e-aa80-4341-b934-0166a9db785f",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "6fec032d-9ef3-4ea4-acf0-1250291a4441",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "St\u00e4ndig"
+            }
+        },
+        {
+            "uuid": "6c37b347-d305-4ca7-9099-357c33e345bc",
+            "type": "TITLE",
+            "groupUuid": "88e92ba8-2d9c-4f02-9535-29e03c76a987",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Gibt es Aufgaben, bei denen Ihre Mitarbeiter regelm\u00e4\u00dfig Informationen abtippen, zusammensuchen oder sortieren \u2014 obwohl die Daten eigentlich schon irgendwo vorliegen?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "f3f085f4-7c0d-44c0-8728-1d0a0c796698",
+            "type": "CHECKBOX",
+            "groupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Daten aus E-Mails oder PDFs ins System \u00fcbertragen"
+            }
+        },
+        {
+            "uuid": "0afa6496-1da6-4c3b-8aa9-f14e0054c7d6",
+            "type": "CHECKBOX",
+            "groupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Informationen aus verschiedenen Quellen zusammentragen"
+            }
+        },
+        {
+            "uuid": "bb39a7f0-f78d-40e1-a1b3-fa35473809ef",
+            "type": "CHECKBOX",
+            "groupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Texte schreiben, die sich immer \u00e4hneln (Best\u00e4tigungen, Antworten, Berichte)"
+            }
+        },
+        {
+            "uuid": "d4664e1f-712f-4293-9060-d45c925ddc12",
+            "type": "CHECKBOX",
+            "groupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Eingehende Anfragen oder Belege manuell zuordnen und weiterleiten"
+            }
+        },
+        {
+            "uuid": "f018daf2-2d76-4767-a3be-8d74670c8c3b",
+            "type": "CHECKBOX",
+            "groupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Ist mir nicht bewusst"
+            }
+        },
+        {
+            "uuid": "03f3b1b4-34d4-4105-a04f-b863e71685bb",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "654a281b-9971-4e08-a2bd-d6a7d02101b6",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "dd929a79-3194-43f2-b0c7-1b239ebd489e",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+                                "type": "INPUT_FIELD",
+                                "questionType": "CHECKBOXES",
+                                "blockGroupUuid": "32a7785e-f13b-4ee4-a481-60d3475a59d1",
+                                "title": "Gibt es Aufgaben, bei denen Ihre Mitarbeiter regelm\u00e4\u00dfig Informationen abtippen, zusammensuchen oder sortieren \u2014 obwohl die Daten eigentlich schon irgendwo vorliegen?"
+                            },
+                            "comparison": "DOES_NOT_CONTAIN",
+                            "value": "f018daf2-2d76-4767-a3be-8d74670c8c3b"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "4907305c-2ab2-4c09-8a7c-274485e27c1a",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "1a9ab747-6ccb-4aa8-bc9b-c9df8a9473bf",
+                                "6702f80b-99c6-4407-8185-9f408f9954f6"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "1a9ab747-6ccb-4aa8-bc9b-c9df8a9473bf",
+            "type": "TITLE",
+            "groupUuid": "7177f75b-ffc0-443e-92be-7425671342dd",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Welche Aufgabe frisst dabei die meiste Zeit?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "6702f80b-99c6-4407-8185-9f408f9954f6",
+            "type": "TEXTAREA",
+            "groupUuid": "266c99fd-3582-4f98-9abc-d956a482f77f",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": false,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "placeholder": "Optional \u2014 aber hilft uns enorm bei der Workshop-Vorbereitung"
+            }
+        },
+        {
+            "uuid": "9121a2bb-725b-4a9d-ba96-f119f120cf66",
+            "type": "TITLE",
+            "groupUuid": "5a5ab19c-6654-4883-8a19-1e9b6013d458",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "K\u00f6nnen Ihre Mitarbeiter von unterwegs oder im Homeoffice genauso produktiv arbeiten wie im B\u00fcro?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "832e32f0-aa48-4b9f-9872-c97090a7c878",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d5603861-2324-4e70-8283-be0acd7d40a3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ja, das funktioniert gut"
+            }
+        },
+        {
+            "uuid": "3e75c5b4-946b-4a6b-857c-696b56d5628e",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d5603861-2324-4e70-8283-be0acd7d40a3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Teilweise \u2014 manche Systeme oder Informationen sind nur im B\u00fcro verf\u00fcgbar"
+            }
+        },
+        {
+            "uuid": "6c0c7dd4-1704-4037-a651-e30b9351c966",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d5603861-2324-4e70-8283-be0acd7d40a3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Nein, mobiles Arbeiten ist bei uns kaum m\u00f6glich"
+            }
+        },
+        {
+            "uuid": "ea9de619-271a-49d7-9d9f-f10cf70dab24",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d5603861-2324-4e70-8283-be0acd7d40a3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ist f\u00fcr uns kein Thema (alle arbeiten vor Ort)"
+            }
+        },
+        {
+            "uuid": "d778d44e-09c2-41e0-8b0d-94d4f57bb666",
+            "type": "PAGE_BREAK",
+            "groupUuid": "695afb99-9b11-49d4-82e7-2eae355066ae",
+            "groupType": "PAGE_BREAK",
+            "payload": {
+                "index": 1,
+                "name": "Ihre IT",
+                "isQualifiedForThankYouPage": false,
+                "isFirst": false,
+                "isLast": false,
+                "button": {
+                    "label": "Weiter"
+                }
+            }
+        },
+        {
+            "uuid": "e2f32802-9ec0-490c-af77-6fe74df83dfa",
+            "type": "HEADING_2",
+            "groupUuid": "a1c09e0a-d33f-4904-9a80-264ad3fb6ef1",
+            "groupType": "HEADING_2",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Ihre IT"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "f02e584b-3586-4217-a64a-a967cad4affc",
+            "type": "TEXT",
+            "groupUuid": "fe54e4be-2352-4966-b9d7-4bff7b27cfae",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Nicht welche Systeme Sie nutzen, sondern welche Rolle die IT spielt, wer sich darum k\u00fcmmert \u2014 und wie das l\u00e4uft."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "6d60739a-2e76-44b8-97c8-c8554bff5fa0",
+            "type": "TITLE",
+            "groupUuid": "f2ebcc5e-fc13-4257-bee5-48d99a0130ba",
+            "groupType": "QUESTION",
+            "payload": {
+                "isFolded": false,
+                "safeHTMLSchema": [
+                    [
+                        "Welche Rolle spielt die IT f\u00fcr Ihr Kerngesch\u00e4ft?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "fba6d0ee-214a-48f7-b8fd-1f8a91d31a97",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d11ae622-0207-4af2-80c8-1bbacb2165d4",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Unterst\u00fctzend (l\u00e4uft nebenher)"
+            }
+        },
+        {
+            "uuid": "b3eb5cf6-9196-4ad7-a972-4ec7c9af5403",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d11ae622-0207-4af2-80c8-1bbacb2165d4",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wichtig (erm\u00f6glicht zentrale Abl\u00e4ufe)"
+            }
+        },
+        {
+            "uuid": "d0a81593-63b1-4cd1-b893-8c4047cac276",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d11ae622-0207-4af2-80c8-1bbacb2165d4",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Entscheidend (ohne IT steht das Gesch\u00e4ft still)"
+            }
+        },
+        {
+            "uuid": "6b8104f1-88e9-436a-87cd-8fd70da5b907",
+            "type": "TITLE",
+            "groupUuid": "a73fed90-52f8-4002-b0c1-f281e1e6d3cf",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie ist Ihre IT aktuell aufgestellt?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "b544c7fc-0695-49ad-9ffd-982bda45430d",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c503d53c-fba7-49d2-b532-8ec0b83fc4d8",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Kein dediziertes IT-Personal"
+            }
+        },
+        {
+            "uuid": "7ea683b6-1a99-4f1d-a61c-492f7ba35041",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c503d53c-fba7-49d2-b532-8ec0b83fc4d8",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Einzelne Person nebenher"
+            }
+        },
+        {
+            "uuid": "5466abf8-2077-4ed5-a35c-2e48c6db1c14",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c503d53c-fba7-49d2-b532-8ec0b83fc4d8",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Eigene IT-Abteilung"
+            }
+        },
+        {
+            "uuid": "29de0f29-44e9-4cf5-9de5-44764fe1b304",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c503d53c-fba7-49d2-b532-8ec0b83fc4d8",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Komplett an Dienstleister ausgelagert"
+            }
+        },
+        {
+            "uuid": "41b7b775-d55e-4096-b8d6-1bcfd94de4bf",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c503d53c-fba7-49d2-b532-8ec0b83fc4d8",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Mischung aus intern und extern"
+            }
+        },
+        {
+            "uuid": "22a81ca5-8987-4bc0-bdd8-d5ae00962293",
+            "type": "TITLE",
+            "groupUuid": "423f003d-f74b-4b01-a208-b6c57d2ccb40",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wer trifft bei Ihnen IT-Entscheidungen \u2014 zum Beispiel, welche Software eingesetzt wird oder ob etwas in die Cloud geht?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "798579af-0a15-4863-8756-6910b5db9067",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "8bbd4e4e-89ac-4af1-b766-80489c33e426",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Gesch\u00e4ftsf\u00fchrung allein"
+            }
+        },
+        {
+            "uuid": "6de1e56d-9d39-47c0-8af9-2bcf6aea605d",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "8bbd4e4e-89ac-4af1-b766-80489c33e426",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "IT-Leitung"
+            }
+        },
+        {
+            "uuid": "69cd96cd-4f81-47f6-9f39-0bda37b0ab19",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "8bbd4e4e-89ac-4af1-b766-80489c33e426",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Gemeinsam (GF + IT)"
+            }
+        },
+        {
+            "uuid": "b5093010-4e6c-4a75-955e-153750a9eeee",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "8bbd4e4e-89ac-4af1-b766-80489c33e426",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Das entscheidet oft der Dienstleister"
+            }
+        },
+        {
+            "uuid": "312b8e66-f2b3-437b-8226-9cfcb8fbfdea",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "8bbd4e4e-89ac-4af1-b766-80489c33e426",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Das ergibt sich \u2014 es gibt keinen festen Prozess"
+            }
+        },
+        {
+            "uuid": "3da6a237-8af2-40cc-85f2-0b547cc42216",
+            "type": "TITLE",
+            "groupUuid": "2ab171a5-5c2e-488e-b55c-9c02bc53323c",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie zufrieden sind Sie mit Ihren externen IT-Dienstleistern?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "5c20f496-421f-41a4-9efc-030aa6d59986",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Sehr zufrieden"
+            }
+        },
+        {
+            "uuid": "0195df5e-c0a6-4818-bad7-0cc58df2b346",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "\u00dcberwiegend zufrieden"
+            }
+        },
+        {
+            "uuid": "2e9dbf1e-eae1-424b-8a2c-4877c3a83196",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Gemischt"
+            }
+        },
+        {
+            "uuid": "43110583-851a-48c0-91c2-34c210f94655",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "\u00dcberwiegend unzufrieden"
+            }
+        },
+        {
+            "uuid": "ec731286-19b8-4987-aa4f-4e4dd51eafd5",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir haben keine externen IT-Dienstleister"
+            }
+        },
+        {
+            "uuid": "83195cb5-d25b-4ac0-b540-2f82dd8efad2",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "fdfa39c4-c809-48d2-b092-41dc69baac78",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "0dacea88-1c03-4dd9-95c7-95c8cdd48380",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+                                "type": "INPUT_FIELD",
+                                "questionType": "MULTIPLE_CHOICE",
+                                "blockGroupUuid": "95275f3f-83a7-4b77-bbb9-3adf961ed09e",
+                                "title": "Wie zufrieden sind Sie mit Ihren externen IT-Dienstleistern?"
+                            },
+                            "comparison": "IS_NOT_ANY_OF",
+                            "value": [
+                                "ec731286-19b8-4987-aa4f-4e4dd51eafd5",
+                                "5c20f496-421f-41a4-9efc-030aa6d59986"
+                            ]
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "c67a3e2b-84cc-4d81-8223-1752cc2bdf46",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "cda4551c-b7d3-4626-a163-64fe775bf226",
+                                "95951ac0-d102-4221-b3b5-ac2b7a629a88"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "cda4551c-b7d3-4626-a163-64fe775bf226",
+            "type": "TITLE",
+            "groupUuid": "8c11c6c4-ff84-400e-a5e5-05056ac6607e",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Was m\u00fcsste sich bei Ihrem IT-Dienstleister \u00e4ndern?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "95951ac0-d102-4221-b3b5-ac2b7a629a88",
+            "type": "TEXTAREA",
+            "groupUuid": "e862ab1f-5d90-4104-af5a-12f70585482a",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": false,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "placeholder": "Optional"
+            }
+        },
+        {
+            "uuid": "5f5fc2a5-8b1f-41d9-92f6-fcf0e2a4c2c0",
+            "type": "TITLE",
+            "groupUuid": "6de2a09c-4b9e-419d-b7fa-3408813be907",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wenn Sie ein IT-Thema haben \u2014 wie schnell bekommen Sie es gel\u00f6st?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "e30b2254-a875-44f0-9806-eceba8e60ece",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "e6246b6b-5219-48e2-bfdf-c1f2bc5dee40",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Sofort bis wenige Stunden"
+            }
+        },
+        {
+            "uuid": "16150d67-6f80-445c-908b-69c451c8cfeb",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "e6246b6b-5219-48e2-bfdf-c1f2bc5dee40",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Innerhalb weniger Tage"
+            }
+        },
+        {
+            "uuid": "2b677cb7-ecc8-4251-bd35-9d764b3a9a94",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "e6246b6b-5219-48e2-bfdf-c1f2bc5dee40",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Dauert oft Wochen"
+            }
+        },
+        {
+            "uuid": "cc3d4a34-8bab-43df-8936-b01c00762298",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "e6246b6b-5219-48e2-bfdf-c1f2bc5dee40",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Manche Themen h\u00e4ngen seit Monaten"
+            }
+        },
+        {
+            "uuid": "39eeaa83-4f58-467d-9c3b-70a5646a6c77",
+            "type": "TITLE",
+            "groupUuid": "1d535399-71f1-4827-8769-a317b195c789",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Angenommen, Ihre gesamte IT f\u00e4llt morgen fr\u00fch aus \u2014 kein E-Mail, kein ERP, kein Zugriff auf Dateien. Was passiert?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "d6522b86-22e2-438e-908d-6a908d287a6f",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "30172333-5426-4107-b0d6-d4fe83884b58",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir k\u00f6nnen quasi nicht arbeiten \u2014 nach wenigen Stunden steht alles"
+            }
+        },
+        {
+            "uuid": "508c73ad-49a8-42c8-8341-0684f46c4d3e",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "30172333-5426-4107-b0d6-d4fe83884b58",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir kommen ein paar Tage \u00fcber die Runden, aber mit starken Einschr\u00e4nkungen"
+            }
+        },
+        {
+            "uuid": "e5ac4a76-b2d3-499e-8259-4d8ff8558cc8",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "30172333-5426-4107-b0d6-d4fe83884b58",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir haben Notfallpl\u00e4ne und wissen, wie es weitergeht"
+            }
+        },
+        {
+            "uuid": "e16be5a0-71f4-4f98-83c2-4a04e8f65ca4",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "30172333-5426-4107-b0d6-d4fe83884b58",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ehrlich gesagt: keine Ahnung, das haben wir nie durchgespielt"
+            }
+        },
+        {
+            "uuid": "179f77fb-306f-4b2e-9955-2ea37010546a",
+            "type": "TITLE",
+            "groupUuid": "e675d129-db9b-494e-82b0-7f286f658e1e",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wissen Sie, wie schnell Ihre Systeme wiederhergestellt werden k\u00f6nnten?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "630a9821-1e75-45d1-8625-bf18abf74251",
+            "type": "TEXTAREA",
+            "groupUuid": "72eb15ce-6fa7-4775-a67c-65a6cc84afe0",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": false,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Optional"
+            }
+        },
+        {
+            "uuid": "353bfb86-1e89-411f-af99-0462fbd63c5e",
+            "type": "TITLE",
+            "groupUuid": "ae86de63-2898-4e9a-b66f-76a3615fd7f2",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Hatten Sie in den letzten 12 Monaten einen IT-Sicherheitsvorfall oder eine Situation, die Ihnen Sorge gemacht hat?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "fe771b17-446c-4725-a8cc-87d2777d7ab9",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "72765c5f-d2fb-4b8e-bd88-61c9a1133104",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ja, einen ernsthaften Vorfall"
+            }
+        },
+        {
+            "uuid": "a4b957f9-5d19-4ac7-8539-e9c4e3ddebc9",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "72765c5f-d2fb-4b8e-bd88-61c9a1133104",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Ja, kleinere Vorf\u00e4lle"
+            }
+        },
+        {
+            "uuid": "5d1bdc82-ea67-46f1-9594-8c3d69fa79bc",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "72765c5f-d2fb-4b8e-bd88-61c9a1133104",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Nein, aber wir f\u00fchlen uns nicht gut aufgestellt"
+            }
+        },
+        {
+            "uuid": "c94a13bd-0886-45b2-bf16-06cbb943538a",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "72765c5f-d2fb-4b8e-bd88-61c9a1133104",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Nein, wir f\u00fchlen uns gut abgesichert"
+            }
+        },
+        {
+            "uuid": "cc186294-f4c1-4ffb-836c-06a8a2a497c9",
+            "type": "TEXT",
+            "groupUuid": "fb71ea2a-7c8d-4d23-8886-303e6dab5798",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": []
+            }
+        },
+        {
+            "uuid": "ed2cbf46-3da3-4b0b-8adc-f7cc0e570682",
+            "type": "PAGE_BREAK",
+            "groupUuid": "1f4f603a-ae1c-458d-b806-67af23fa0652",
+            "groupType": "PAGE_BREAK",
+            "payload": {
+                "index": 2,
+                "name": "Was wichtig ist",
+                "isQualifiedForThankYouPage": false,
+                "isFirst": false,
+                "isLast": false,
+                "button": {
+                    "label": "Weiter"
+                }
+            }
+        },
+        {
+            "uuid": "821de89b-2ba4-4c36-a0cf-6d7f46cfdb0c",
+            "type": "HEADING_2",
+            "groupUuid": "8a13c11d-b8f5-4a2a-ac56-7f9afae44d99",
+            "groupType": "HEADING_2",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Was wichtig ist"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "2c1cb776-7d19-4bc7-ad3e-4c35f1245c14",
+            "type": "TEXT",
+            "groupUuid": "3c4528a8-7d59-420d-a090-1f8a3382ee5f",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Perspektivwechsel \u2014 weg vom internen Frust, hin zu Wirkung und Priorit\u00e4t."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "0461880b-acec-41bb-8b09-685f8f6b985f",
+            "type": "TITLE",
+            "groupUuid": "71edf0a8-b27d-4efe-9253-afdf227f156d",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Was ist das gr\u00f6\u00dfte IT-Thema, das bei Ihnen seit Monaten liegen bleibt?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "e3bf12d1-ec8c-4263-bbb6-8b9e080b4eab",
+            "type": "TEXTAREA",
+            "groupUuid": "99aaab0f-67ae-4789-a760-0392e5399514",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": true,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Beschreiben Sie frei, was seit l\u00e4ngerem unerledigt ist\u2026"
+            }
+        },
+        {
+            "uuid": "af97b666-c91e-4c68-b174-ac0c8de3bd76",
+            "type": "TITLE",
+            "groupUuid": "15e53765-f3e3-4e86-b8c4-ba33665d28cd",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wenn intern alles rund laufen w\u00fcrde \u2014 was w\u00fcrde sich f\u00fcr Ihre Kunden sp\u00fcrbar verbessern?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "3a373e33-6962-4a5e-9c26-3c186093e7e1",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Schnellere Lieferung"
+            }
+        },
+        {
+            "uuid": "2b8d9e08-34b0-43c8-ae95-2411a003c6c7",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Bessere Erreichbarkeit"
+            }
+        },
+        {
+            "uuid": "2e8b5e50-010a-42f2-82f1-bd30d35b5974",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Weniger Fehler"
+            }
+        },
+        {
+            "uuid": "9519add7-41e5-4e1e-96b0-7793419b56ad",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Aktuellere Informationen"
+            }
+        },
+        {
+            "uuid": "aa1c8473-f4cb-448d-aa9b-8c0c6073f64c",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 4,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "G\u00fcnstigere Preise"
+            }
+        },
+        {
+            "uuid": "d35c9249-f7f9-48be-bd24-c420b6821cda",
+            "type": "CHECKBOX",
+            "groupUuid": "5184d980-0fe3-4e62-9542-44064e0dda48",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isOtherOption": true,
+                "index": 5,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": true,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "text": "Andere"
+            }
+        },
+        {
+            "uuid": "7ff83de4-f67a-4ef1-b4db-522d75422e86",
+            "type": "TITLE",
+            "groupUuid": "cb412002-5864-43ed-9ffa-27518d35a9cd",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Wie gut k\u00f6nnen Sie einsch\u00e4tzen, was Ihre IT insgesamt kostet \u2014 und ob das Geld gut investiert ist?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "792eb58b-ee9f-495f-8b16-f343b616d865",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "96edfa3e-f49f-4290-b02c-20ee8df64784",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir haben einen guten \u00dcberblick"
+            }
+        },
+        {
+            "uuid": "dd56fbd3-ffe7-47f3-88c3-44442fe1253d",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "96edfa3e-f49f-4290-b02c-20ee8df64784",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Wir kennen die Gesamtkosten, aber der Nutzen ist schwer greifbar"
+            }
+        },
+        {
+            "uuid": "9fc08301-dc30-4672-b388-ba85eaa44727",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "96edfa3e-f49f-4290-b02c-20ee8df64784",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "IT-Kosten sind f\u00fcr uns eher eine Blackbox"
+            }
+        },
+        {
+            "uuid": "72947086-7055-48d6-8c2d-d639eac6ffee",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "96edfa3e-f49f-4290-b02c-20ee8df64784",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "text": "Dar\u00fcber haben wir uns noch keine Gedanken gemacht"
+            }
+        },
+        {
+            "uuid": "114efc02-b4f4-4f27-8716-96545cb1dde3",
+            "type": "TITLE",
+            "groupUuid": "ec72dff9-fb8c-4da3-ba88-6eca0ab0e654",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Welche Themen und Ver\u00e4nderungen besch\u00e4ftigen Ihr Unternehmen aktuell?**"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "419a068a-06f3-4253-8f19-06c5a6d920ce",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Wachstum (neue Standorte, mehr Personal)"
+            }
+        },
+        {
+            "uuid": "c817c906-2d7a-4959-977c-03a9798be2d5",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Fachkr\u00e4ftemangel"
+            }
+        },
+        {
+            "uuid": "a784eec4-8d4b-451c-b5b0-3ce417b845be",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Kostendruck"
+            }
+        },
+        {
+            "uuid": "17cb3925-8181-4fe6-9efc-089084658ce0",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 3,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Digitalisierung"
+            }
+        },
+        {
+            "uuid": "57f84711-a686-4a72-81eb-1e5bdf40f396",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 4,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "KI"
+            }
+        },
+        {
+            "uuid": "dc57cc08-165f-46cf-9d26-dbc4dce363e7",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 5,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Geplanter Systemwechsel (ERP, CRM, \u2026)"
+            }
+        },
+        {
+            "uuid": "6b8ac703-dfc1-4e86-a5c6-e8eb32e17c65",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 6,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Neue gesetzliche Anforderungen"
+            }
+        },
+        {
+            "uuid": "bd835488-a154-455c-b88b-0d4f881f217e",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "index": 7,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "isOtherOption": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Umstrukturierung"
+            }
+        },
+        {
+            "uuid": "ef534372-6b02-427e-a7be-04ea0e188e93",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 8,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Nachfolge"
+            }
+        },
+        {
+            "uuid": "79621b90-f1c1-4dde-95c1-42896b3eda47",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isRequired": true,
+                "index": 9,
+                "isFirst": false,
+                "isLast": false,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Neue M\u00e4rkte oder Produkte"
+            }
+        },
+        {
+            "uuid": "16b6d89a-9ecd-4144-be0f-b2b6c0e81f0f",
+            "type": "CHECKBOX",
+            "groupUuid": "b316c4a9-462a-4d0f-b01a-f2fa14571941",
+            "groupType": "CHECKBOXES",
+            "payload": {
+                "isOtherOption": true,
+                "index": 10,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasMaxChoices": false,
+                "hasDefaultAnswer": false,
+                "hasOtherOption": true,
+                "text": "Keines davon"
+            }
+        },
+        {
+            "uuid": "447ecd29-647f-48aa-8f83-b8e369e7c396",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "d3b28a78-d0b9-4778-8701-80867a2360ac",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "c57bece3-3497-48f0-89ed-0b4fa920b41f",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "type": "INPUT_FIELD",
+                                "questionType": "MULTIPLE_CHOICE",
+                                "blockGroupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "title": "In welcher Branche ist Ihr Unternehmen t\u00e4tig?"
+                            },
+                            "comparison": "IS",
+                            "value": "0f00af85-f181-4768-afd3-9b9d49695800"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "daaabe39-248f-4624-8e2c-2b1e9a8ea16b",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "6ec957ca-eff2-4e7b-bed9-b808dad55093",
+                                "cbb4d275-128c-4ef1-935a-c57310bf3824",
+                                "ac6621c0-1c8b-4884-9f0c-5fd81960fa3a",
+                                "e582dc68-41aa-4acb-a85e-8ac1bf40d9c0",
+                                "14ceb436-0780-454d-9330-9dd3d2d68d47"
+                            ]
+                        }
+                    },
+                    {
+                        "uuid": "59680dcc-3597-4ded-84c3-58de0ed69f4c",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "1d14dd51-bb17-4047-b112-2aa26f639d1e",
+                                "388bbb88-4660-4214-8302-723129db95bd",
+                                "514bf9a8-ff8d-4102-956c-b9a1bb6a8b65",
+                                "89478602-89b6-403d-8de0-78f2e9746d44",
+                                "b634407e-498f-4142-ac54-3eb87892528b"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "6ec957ca-eff2-4e7b-bed9-b808dad55093",
+            "type": "TITLE",
+            "groupUuid": "8d94ff3d-ef6f-4403-a001-e0c7233fd4ec",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie gut sind Ihre Produktionsmaschinen und -anlagen mit Ihren IT-Systemen vernetzt?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "cbb4d275-128c-4ef1-935a-c57310bf3824",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d395ed89-ecb1-46cc-8efa-9b85b2bb931c",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Voll integriert \u2014 Maschinendaten flie\u00dfen automatisch ins ERP/Reporting"
+            }
+        },
+        {
+            "uuid": "ac6621c0-1c8b-4884-9f0c-5fd81960fa3a",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d395ed89-ecb1-46cc-8efa-9b85b2bb931c",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Teilweise \u2014 einzelne Maschinen liefern Daten, aber nicht durchg\u00e4ngig"
+            }
+        },
+        {
+            "uuid": "e582dc68-41aa-4acb-a85e-8ac1bf40d9c0",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d395ed89-ecb1-46cc-8efa-9b85b2bb931c",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Gar nicht \u2014 Produktion und IT sind getrennte Welten"
+            }
+        },
+        {
+            "uuid": "14ceb436-0780-454d-9330-9dd3d2d68d47",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d395ed89-ecb1-46cc-8efa-9b85b2bb931c",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Das kann ich nicht beurteilen"
+            }
+        },
+        {
+            "uuid": "1d14dd51-bb17-4047-b112-2aa26f639d1e",
+            "type": "TITLE",
+            "groupUuid": "ac778f28-765a-4dd2-939a-c95931c51e77",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie l\u00e4uft bei Ihnen die Qualit\u00e4tsdokumentation \u2014 zum Beispiel Pr\u00fcfprotokolle, Reklamationen oder R\u00fcckverfolgbarkeit?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "388bbb88-4660-4214-8302-723129db95bd",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0d7ece6c-8941-477b-8c91-442a69408cab",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Digital und durchg\u00e4ngig"
+            }
+        },
+        {
+            "uuid": "514bf9a8-ff8d-4102-956c-b9a1bb6a8b65",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0d7ece6c-8941-477b-8c91-442a69408cab",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Teilweise digital, aber mit Papier und Medienbr\u00fcchen"
+            }
+        },
+        {
+            "uuid": "89478602-89b6-403d-8de0-78f2e9746d44",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0d7ece6c-8941-477b-8c91-442a69408cab",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "\u00dcberwiegend auf Papier"
+            }
+        },
+        {
+            "uuid": "b634407e-498f-4142-ac54-3eb87892528b",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "0d7ece6c-8941-477b-8c91-442a69408cab",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Ist f\u00fcr uns kein gro\u00dfes Thema"
+            }
+        },
+        {
+            "uuid": "d2342b3e-7860-4d76-a69b-d935438c4a71",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "00dc2b15-7a5d-417a-bbf0-ce3f1bce2629",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "66820f51-0c6e-4170-b2d1-1fc24abb72ad",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "type": "INPUT_FIELD",
+                                "questionType": "MULTIPLE_CHOICE",
+                                "blockGroupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "title": "In welcher Branche ist Ihr Unternehmen t\u00e4tig?"
+                            },
+                            "comparison": "IS",
+                            "value": "03177977-5a91-41fa-b2c4-b7ccd368ca3e"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "88a641c9-832f-47c9-967d-69ed3414f9e6",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "dac02bb1-44c3-4887-b5dc-a0bf5d86f1dc",
+                                "a270216f-1055-49a1-8831-8a0baf4a3505",
+                                "587cc2a9-7875-43be-b56a-5f85797055fe",
+                                "396c34ef-83b5-4081-8812-c3f997dddb8b",
+                                "a6f6e566-4521-4cf4-bfab-ce279b34a453"
+                            ]
+                        }
+                    },
+                    {
+                        "uuid": "d5cef3bc-0eb8-45e4-ab16-82b12afa1f96",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "cbf3f08b-5af3-4304-9f69-f0a0068be667",
+                                "4122d08c-0d39-473c-95fa-da200fa83494",
+                                "9b398cfc-1f3a-43c0-9672-b4c11674e9ff",
+                                "d8fd6ba2-e5f4-4acf-82e3-22f68cd1c567",
+                                "d6cce350-c05e-40c8-9417-e6543b91a959"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "dac02bb1-44c3-4887-b5dc-a0bf5d86f1dc",
+            "type": "TITLE",
+            "groupUuid": "62079e91-2c9b-4719-a9bf-0e5644e7e2bc",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie gut sind Ihre Verkaufskan\u00e4le (Webshop, Marktpl\u00e4tze, Filiale) mit Ihrer Warenwirtschaft verbunden?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "a270216f-1055-49a1-8831-8a0baf4a3505",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d617ce07-a8a5-4da7-84be-154e2c6cebd3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Voll integriert \u2014 Best\u00e4nde, Preise und Bestellungen laufen automatisch"
+            }
+        },
+        {
+            "uuid": "587cc2a9-7875-43be-b56a-5f85797055fe",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d617ce07-a8a5-4da7-84be-154e2c6cebd3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Teilweise \u2014 manuelle Abgleiche sind regelm\u00e4\u00dfig n\u00f6tig"
+            }
+        },
+        {
+            "uuid": "396c34ef-83b5-4081-8812-c3f997dddb8b",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d617ce07-a8a5-4da7-84be-154e2c6cebd3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Kaum \u2014 die Kan\u00e4le laufen weitgehend getrennt"
+            }
+        },
+        {
+            "uuid": "a6f6e566-4521-4cf4-bfab-ce279b34a453",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "d617ce07-a8a5-4da7-84be-154e2c6cebd3",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Wir haben nur einen Verkaufskanal"
+            }
+        },
+        {
+            "uuid": "cbf3f08b-5af3-4304-9f69-f0a0068be667",
+            "type": "TITLE",
+            "groupUuid": "b8667dd4-0da1-4daf-873b-01c80a1cad4f",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie zuverl\u00e4ssig sind Ihre Lagerbest\u00e4nde im System \u2014 stimmen die Zahlen mit der Realit\u00e4t \u00fcberein?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "4122d08c-0d39-473c-95fa-da200fa83494",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "b36774b9-1444-4dcc-af1b-0c8a8bf02a56",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Sehr genau"
+            }
+        },
+        {
+            "uuid": "9b398cfc-1f3a-43c0-9672-b4c11674e9ff",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "b36774b9-1444-4dcc-af1b-0c8a8bf02a56",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Meistens, aber mit regelm\u00e4\u00dfigen Abweichungen"
+            }
+        },
+        {
+            "uuid": "d8fd6ba2-e5f4-4acf-82e3-22f68cd1c567",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "b36774b9-1444-4dcc-af1b-0c8a8bf02a56",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Eher unzuverl\u00e4ssig \u2014 wir vertrauen dem System nicht blind"
+            }
+        },
+        {
+            "uuid": "d6cce350-c05e-40c8-9417-e6543b91a959",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "b36774b9-1444-4dcc-af1b-0c8a8bf02a56",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Wir haben keine digitale Bestandsf\u00fchrung"
+            }
+        },
+        {
+            "uuid": "81ddef2c-2ffc-4157-a66f-51e6e55b60ad",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "27abf447-37e2-4c1c-ae17-9fde3adb3a9b",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "66820f51-0c6e-4170-b2d1-1fc24abb72ad",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "type": "INPUT_FIELD",
+                                "questionType": "MULTIPLE_CHOICE",
+                                "blockGroupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "title": "In welcher Branche ist Ihr Unternehmen t\u00e4tig?"
+                            },
+                            "comparison": "IS",
+                            "value": "67d8ab4a-2416-4ba7-a5cd-035c3da478f5"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "88a641c9-832f-47c9-967d-69ed3414f9e6",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "cbb3f448-47b5-4f39-9e08-733067ae6359",
+                                "79121564-3397-4feb-9a01-7e0863dae9bb",
+                                "522c6b9b-77c1-446b-ab06-0a347eee7d27",
+                                "96189666-71f7-4aa6-bfc9-411ab593a574",
+                                "dd067492-ca98-4716-9e75-b6fbcb892be9"
+                            ]
+                        }
+                    },
+                    {
+                        "uuid": "d5cef3bc-0eb8-45e4-ab16-82b12afa1f96",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "1be2345e-d7e7-4326-bd71-d2579d548ded",
+                                "935266d0-6df3-4663-8b94-7019fd62047c",
+                                "3afc1b24-9a16-4caf-816a-8751bca8fddb",
+                                "dd49c447-f299-4c20-a404-6d8a43009931",
+                                "62b41baa-99f7-4e57-85a9-2303701441d7"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "cbb3f448-47b5-4f39-9e08-733067ae6359",
+            "type": "TITLE",
+            "groupUuid": "1df04be0-1aad-4253-9499-8c19b78bff3b",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie schnell kommen Daten von der Baustelle oder vom Monteur zur\u00fcck ins B\u00fcro \u2014 zum Beispiel Stunden, Materialverbrauch oder Fotos?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "79121564-3397-4feb-9a01-7e0863dae9bb",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c3bd91a7-dd49-403c-90f5-965ae421d8d7",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "In Echtzeit oder am selben Tag"
+            }
+        },
+        {
+            "uuid": "522c6b9b-77c1-446b-ab06-0a347eee7d27",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c3bd91a7-dd49-403c-90f5-965ae421d8d7",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Innerhalb weniger Tage"
+            }
+        },
+        {
+            "uuid": "96189666-71f7-4aa6-bfc9-411ab593a574",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c3bd91a7-dd49-403c-90f5-965ae421d8d7",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Oft erst nach einer Woche oder sp\u00e4ter"
+            }
+        },
+        {
+            "uuid": "dd067492-ca98-4716-9e75-b6fbcb892be9",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "c3bd91a7-dd49-403c-90f5-965ae421d8d7",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Das l\u00e4uft komplett \u00fcber Papier"
+            }
+        },
+        {
+            "uuid": "1be2345e-d7e7-4326-bd71-d2579d548ded",
+            "type": "TITLE",
+            "groupUuid": "bb21ec12-9a2a-4900-9a34-4ccb201927bf",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Haben Ihre Mitarbeiter im Au\u00dfendienst mobilen Zugriff auf die Informationen, die sie vor Ort brauchen \u2014 zum Beispiel Kundenhistorie, Pl\u00e4ne oder Ersatzteillisten?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "935266d0-6df3-4663-8b94-7019fd62047c",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "ca2f7ab9-80e3-42d0-8066-b54d7c2b114e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Ja, per App oder mobilem System"
+            }
+        },
+        {
+            "uuid": "3afc1b24-9a16-4caf-816a-8751bca8fddb",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "ca2f7ab9-80e3-42d0-8066-b54d7c2b114e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Teilweise \u2014 einiges geht, aber vieles fehlt"
+            }
+        },
+        {
+            "uuid": "dd49c447-f299-4c20-a404-6d8a43009931",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "ca2f7ab9-80e3-42d0-8066-b54d7c2b114e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Nein, die meisten Infos gibt es nur im B\u00fcro"
+            }
+        },
+        {
+            "uuid": "62b41baa-99f7-4e57-85a9-2303701441d7",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "ca2f7ab9-80e3-42d0-8066-b54d7c2b114e",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Das ist bei uns noch kein Thema"
+            }
+        },
+        {
+            "uuid": "83418e0b-9edb-4305-b437-f8af7dbf6dde",
+            "type": "CONDITIONAL_LOGIC",
+            "groupUuid": "f58dbe87-d848-4fb6-8dea-888bbb9741d7",
+            "groupType": "CONDITIONAL_LOGIC",
+            "payload": {
+                "updateUuid": null,
+                "logicalOperator": "AND",
+                "conditionals": [
+                    {
+                        "uuid": "66820f51-0c6e-4170-b2d1-1fc24abb72ad",
+                        "type": "SINGLE",
+                        "payload": {
+                            "field": {
+                                "uuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "type": "INPUT_FIELD",
+                                "questionType": "MULTIPLE_CHOICE",
+                                "blockGroupUuid": "5e5700a7-d3f1-45d8-9e40-afa1e27c3684",
+                                "title": "In welcher Branche ist Ihr Unternehmen t\u00e4tig?"
+                            },
+                            "comparison": "IS",
+                            "value": "cdd86b74-a511-4e78-ae91-1d090f171ad5"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "uuid": "88a641c9-832f-47c9-967d-69ed3414f9e6",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "776bce27-db79-4e6b-a3ae-29d256aca950",
+                                "ea1b54cd-ba43-444a-82dc-ceb071ba0a95",
+                                "53fffaa8-0208-4984-b438-fc3d7e9eb252",
+                                "b5e30a7e-1ebf-4ff3-993d-80fd60e55753",
+                                "c17926c2-456b-4dad-ad85-fe91aa56fccb"
+                            ]
+                        }
+                    },
+                    {
+                        "uuid": "d5cef3bc-0eb8-45e4-ab16-82b12afa1f96",
+                        "type": "SHOW_BLOCKS",
+                        "payload": {
+                            "showBlocks": [
+                                "70dfecb3-0e9d-446a-8122-0b5bcac8c9ac",
+                                "c0a113e0-73db-40ad-b5e4-135795696881",
+                                "b0f526a1-f62a-4ad5-b559-998a2076e147",
+                                "f3733fc2-5200-4a61-aea3-4ce594f01fd7",
+                                "ee020437-f2e2-4be5-b921-32b25dc2d3e3"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "uuid": "776bce27-db79-4e6b-a3ae-29d256aca950",
+            "type": "TITLE",
+            "groupUuid": "112b771e-4cc9-4f6c-a484-9bf195aa4847",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "Wie gut k\u00f6nnen Sie w\u00e4hrend eines laufenden Projekts einsch\u00e4tzen, ob es profitabel ist \u2014 oder merken Sie das erst hinterher?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "ea1b54cd-ba43-444a-82dc-ceb071ba0a95",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "bac6e7f7-a325-4782-8b7a-d912badc2737",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Wir sehen jederzeit den aktuellen Stand (Budget, Stunden, Kosten)"
+            }
+        },
+        {
+            "uuid": "53fffaa8-0208-4984-b438-fc3d7e9eb252",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "bac6e7f7-a325-4782-8b7a-d912badc2737",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Wir haben eine grobe Einsch\u00e4tzung, aber keine Echtzeit-Zahlen"
+            }
+        },
+        {
+            "uuid": "b5e30a7e-1ebf-4ff3-993d-80fd60e55753",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "bac6e7f7-a325-4782-8b7a-d912badc2737",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Das wissen wir erst nach Projektabschluss"
+            }
+        },
+        {
+            "uuid": "c17926c2-456b-4dad-ad85-fe91aa56fccb",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "bac6e7f7-a325-4782-8b7a-d912badc2737",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Wir messen Projektrentabilit\u00e4t nicht systematisch"
+            }
+        },
+        {
+            "uuid": "70dfecb3-0e9d-446a-8122-0b5bcac8c9ac",
+            "type": "TITLE",
+            "groupUuid": "16ea1f89-2471-4a2b-b149-d595c51f40ba",
+            "groupType": "QUESTION",
+            "payload": {
+                "isHidden": true,
+                "safeHTMLSchema": [
+                    [
+                        "K\u00f6nnen Ihre Kunden den Status ihrer Auftr\u00e4ge oder Anfragen selbst einsehen \u2014 oder l\u00e4uft alles \u00fcber Telefon und E-Mail?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "c0a113e0-73db-40ad-b5e4-135795696881",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "3552ae2c-d338-41ba-a08b-a6222ee85aa1",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 0,
+                "isFirst": true,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Ja, \u00fcber ein Kundenportal oder Self-Service"
+            }
+        },
+        {
+            "uuid": "b0f526a1-f62a-4ad5-b559-998a2076e147",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "3552ae2c-d338-41ba-a08b-a6222ee85aa1",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 1,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Teilweise \u2014 einzelne Informationen sind online verf\u00fcgbar"
+            }
+        },
+        {
+            "uuid": "f3733fc2-5200-4a61-aea3-4ce594f01fd7",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "3552ae2c-d338-41ba-a08b-a6222ee85aa1",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 2,
+                "isFirst": false,
+                "isLast": false,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Nein, alles l\u00e4uft \u00fcber pers\u00f6nliche Kommunikation"
+            }
+        },
+        {
+            "uuid": "ee020437-f2e2-4be5-b921-32b25dc2d3e3",
+            "type": "MULTIPLE_CHOICE_OPTION",
+            "groupUuid": "3552ae2c-d338-41ba-a08b-a6222ee85aa1",
+            "groupType": "MULTIPLE_CHOICE",
+            "payload": {
+                "index": 3,
+                "isFirst": false,
+                "isLast": true,
+                "isRequired": true,
+                "randomize": false,
+                "hasOtherOption": false,
+                "isOtherOption": false,
+                "allowMultiple": false,
+                "hasMaxChoices": false,
+                "colorCodeOptions": false,
+                "hasBadge": true,
+                "badgeType": "LETTERS",
+                "hasDefaultAnswer": false,
+                "isHidden": true,
+                "text": "Das ist f\u00fcr unsere Kunden nicht relevant"
+            }
+        },
+        {
+            "uuid": "b4a24274-f8ef-49bb-bcb2-51b1e0380f6a",
+            "type": "TITLE",
+            "groupUuid": "b14450a3-8f50-42e9-a629-be9580033066",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Was ist das eine Ergebnis, das der IT-Hebel-Check f\u00fcr Sie liefern muss, damit er sich gelohnt hat?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "601dc903-f996-4b7b-999d-c6a1e12ad525",
+            "type": "TEXTAREA",
+            "groupUuid": "aa0644f6-eb37-430b-a6f6-154b1359d9e4",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": true,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Beschreiben Sie frei, was f\u00fcr Sie z\u00e4hlt\u2026"
+            }
+        },
+        {
+            "uuid": "2e95a32c-ca29-4ff2-8e49-430b0163b8b5",
+            "type": "PAGE_BREAK",
+            "groupUuid": "268fa549-55c2-4f37-892f-918a5c0a72b9",
+            "groupType": "PAGE_BREAK",
+            "payload": {
+                "index": 3,
+                "name": "Erwartungen",
+                "isQualifiedForThankYouPage": false,
+                "isFirst": false,
+                "isLast": false,
+                "button": {
+                    "label": "Absenden"
+                }
+            }
+        },
+        {
+            "uuid": "84ca8569-1738-4049-b6a5-8aadb8522a0b",
+            "type": "HEADING_2",
+            "groupUuid": "dbce2aa3-0d38-4d57-9025-94c705d077de",
+            "groupType": "HEADING_2",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Erwartungen an die Zusammenarbeit"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "88a61f85-cb7b-4ed9-b580-84c0af68e1bd",
+            "type": "TEXT",
+            "groupUuid": "e0b39aac-e0c8-47aa-bf69-85c6d1240876",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Zum Abschluss \u2014 damit wir den Workshop auf das ausrichten, was f\u00fcr Sie z\u00e4hlt."
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "d3ebb2a8-02f3-41dd-945d-4f58e8001762",
+            "type": "TITLE",
+            "groupUuid": "6b16b678-eaef-4c55-8c1d-da96989ef371",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Gibt es Themen, die Sie im Workshop auf jeden Fall ansprechen m\u00f6chten?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "c97a92fe-ef57-4ea0-b947-c547da399f1c",
+            "type": "TEXTAREA",
+            "groupUuid": "210450ed-52da-416e-8507-9ef4f9e20fd5",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": false,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Optional"
+            }
+        },
+        {
+            "uuid": "b1d855c7-9d69-4cd4-bfad-5f26529a26cd",
+            "type": "TITLE",
+            "groupUuid": "f39a6f44-7606-4107-a083-689b2e02210d",
+            "groupType": "QUESTION",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Gibt es sonst noch etwas, das wir wissen sollten?"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "d3b25296-b59e-456a-9c32-3652ef01d985",
+            "type": "TEXTAREA",
+            "groupUuid": "45fc9e4d-92aa-4d29-bd71-4d02646b18ff",
+            "groupType": "TEXTAREA",
+            "payload": {
+                "isRequired": false,
+                "hasMinCharacters": false,
+                "hasMaxCharacters": false,
+                "hasDefaultAnswer": false,
+                "placeholder": "Optional \u2014 alles, was Ihnen wichtig ist"
+            }
+        },
+        {
+            "uuid": "92326435-b14f-4015-9825-af5c595ce4ef",
+            "type": "TEXT",
+            "groupUuid": "df7fddcb-d906-47e7-af93-0b043f294b27",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": []
+            }
+        },
+        {
+            "uuid": "60f3d161-bbcc-4bef-9d1c-fe79245a9a07",
+            "type": "PAGE_BREAK",
+            "groupUuid": "e3fec36c-7f44-446d-9f5c-37c1d05f4e0b",
+            "groupType": "PAGE_BREAK",
+            "payload": {
+                "index": 4,
+                "isQualifiedForThankYouPage": true,
+                "isThankYouPage": true,
+                "isFirst": false,
+                "isLast": true
+            }
+        },
+        {
+            "uuid": "1e551401-731f-4e3a-bd25-cc3e6d674dd3",
+            "type": "HEADING_1",
+            "groupUuid": "17f11a43-9c1c-4f1b-be86-2ad1d368cccd",
+            "groupType": "HEADING_1",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Vielen Dank!"
+                    ]
+                ]
+            }
+        },
+        {
+            "uuid": "eac67b26-6f85-4e0e-946e-7a54582accf1",
+            "type": "TEXT",
+            "groupUuid": "7676e91e-74d5-436c-a09c-d0a051d482ce",
+            "groupType": "TEXT",
+            "payload": {
+                "safeHTMLSchema": [
+                    [
+                        "Ihre Antworten helfen uns, den Workshop gezielt auf Ihr Unternehmen vorzubereiten. Wir melden uns in K\u00fcrze mit den n\u00e4chsten Schritten."
+                    ],
+                    [
+                        "",
+                        [
+                            [
+                                "tag",
+                                "br"
+                            ]
+                        ]
+                    ],
+                    [
+                        "",
+                        [
+                            [
+                                "tag",
+                                "br"
+                            ]
+                        ]
+                    ],
+                    [
+                        "Ihr Team von Innovation Agents",
+                        [
+                            [
+                                "tag",
+                                "span"
+                            ],
+                            [
+                                "font-weight",
+                                "bold"
+                            ]
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
