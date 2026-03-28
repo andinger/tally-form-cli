@@ -8,7 +8,10 @@ import (
 	"github.com/andinger/tally-form-cli/internal/model"
 )
 
-var htmlItalicRe = regexp.MustCompile(`<i>([^<]+)</i>`)
+var (
+	htmlBoldRe   = regexp.MustCompile(`<b>([^<]+)</b>`)
+	htmlItalicRe = regexp.MustCompile(`<i>([^<]+)</i>`)
+)
 
 // Write converts an IR Form back to Markdown format.
 func Write(form *model.Form) string {
@@ -154,5 +157,7 @@ func writeConditional(b *strings.Builder, c *model.Conditional) {
 }
 
 func htmlToMarkdown(s string) string {
-	return htmlItalicRe.ReplaceAllString(s, "*$1*")
+	s = htmlBoldRe.ReplaceAllString(s, "**$1**")
+	s = htmlItalicRe.ReplaceAllString(s, "*$1*")
+	return s
 }

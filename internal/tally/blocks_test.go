@@ -2,6 +2,7 @@ package tally
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/andinger/tally-form-cli/internal/config"
@@ -409,5 +410,131 @@ func TestCompileFormTitle(t *testing.T) {
 	}
 	if ft.Payload["title"] != "My Form" {
 		t.Errorf("title = %v", ft.Payload["title"])
+	}
+}
+
+func TestCompileDropdownNoMultiChoiceFields(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:       "F1",
+					Text:     "Pick one",
+					Type:     model.Dropdown,
+					Required: true,
+					Options: []model.Option{
+						{Text: "Alpha"},
+						{Text: "Beta"},
+					},
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// Check dropdown option blocks don't have MULTIPLE_CHOICE-specific fields
+	for _, b := range req.Blocks {
+		if b.Type != "DROPDOWN_OPTION" {
+			continue
+		}
+		if _, ok := b.Payload["allowMultiple"]; ok {
+			t.Error("DROPDOWN_OPTION should not have allowMultiple")
+		}
+		if _, ok := b.Payload["hasBadge"]; ok {
+			t.Error("DROPDOWN_OPTION should not have hasBadge")
+		}
+		if _, ok := b.Payload["badgeType"]; ok {
+			t.Error("DROPDOWN_OPTION should not have badgeType")
+		}
+		if _, ok := b.Payload["colorCodeOptions"]; ok {
+			t.Error("DROPDOWN_OPTION should not have colorCodeOptions")
+		}
+	}
+}
+
+func TestCompileConditionalRejectsIncompatibleOperator(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "Tools?",
+					Type: model.MultiChoice,
+					Options: []model.Option{
+						{Text: "A"},
+						{Text: "B"},
+					},
+				},
+				&model.Conditional{
+					Targets:  []string{"F2"},
+					Operator: "AND",
+					Conditions: []model.Condition{
+						{Field: "F1", Comparison: "is_not_any_of", Values: []string{"A"}},
+					},
+				},
+				&model.Question{
+					ID:     "F2",
+					Text:   "Details?",
+					Type:   model.LongText,
+					Hidden: true,
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	_, err := c.Compile(form, testConfig())
+	if err == nil {
+		t.Fatal("Expected error for is_not_any_of on multi-choice, got nil")
+	}
+	if !strings.Contains(err.Error(), "is not supported for multi-choice") {
+		t.Errorf("Error = %q, expected mention of multi-choice incompatibility", err.Error())
+	}
+}
+
+func TestSafeHTMLSchemaFromHTML(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		wantLen  int
+		wantText string // first segment text
+	}{
+		{"plain", "Hello world", 1, "Hello world"},
+		{"bold", "Hello <b>world</b>!", 3, "Hello "},
+		{"italic", "<i>emphasis</i> here", 2, "emphasis"},
+		{"mixed", "A <b>bold</b> and <i>italic</i> text", 5, "A "},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			schema := SafeHTMLSchemaFromHTML(tt.input)
+			if len(schema) != tt.wantLen {
+				t.Errorf("segments = %d, want %d: %v", len(schema), tt.wantLen, schema)
+			}
+			if len(schema) > 0 {
+				seg := schema[0].([]any)
+				if seg[0].(string) != tt.wantText {
+					t.Errorf("first text = %q, want %q", seg[0], tt.wantText)
+				}
+			}
+		})
+	}
+
+	// Check bold segment has correct styles
+	schema := SafeHTMLSchemaFromHTML("Go <b>bold</b>!")
+	boldSeg := schema[1].([]any)
+	if boldSeg[0] != "bold" {
+		t.Errorf("bold text = %q", boldSeg[0])
+	}
+	styles := boldSeg[1].([]any)
+	if len(styles) != 2 {
+		t.Fatalf("styles len = %d, want 2", len(styles))
 	}
 }

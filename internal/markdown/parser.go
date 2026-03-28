@@ -18,6 +18,7 @@ var (
 	headingRe     = regexp.MustCompile(`^(#{1,2})\s+(.+)$`)
 	buttonRe      = regexp.MustCompile(`^>\s*button:\s*"(.+)"$`)
 	conditionalRe = regexp.MustCompile(`^>\s*show\s+(.+?)\s+when\s+(.+)$`)
+	boldRe        = regexp.MustCompile(`\*\*([^*]+)\*\*`)
 	italicRe      = regexp.MustCompile(`\*([^*]+)\*`)
 	otherMarkerRe = regexp.MustCompile(`\s*\{other\}\s*$`)
 )
@@ -427,5 +428,8 @@ func parseQuotedValues(s string) []string {
 }
 
 func convertInlineMarkup(s string) string {
-	return italicRe.ReplaceAllString(s, "<i>$1</i>")
+	// Bold before italic — **bold** must be processed first
+	s = boldRe.ReplaceAllString(s, "<b>$1</b>")
+	s = italicRe.ReplaceAllString(s, "<i>$1</i>")
+	return s
 }

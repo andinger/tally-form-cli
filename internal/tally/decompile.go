@@ -402,11 +402,42 @@ func extractFromSchema(schema []any) string {
 		if !ok || len(arr) == 0 {
 			continue
 		}
-		if text, ok := arr[0].(string); ok {
-			parts = append(parts, text)
+		text, ok := arr[0].(string)
+		if !ok {
+			continue
 		}
+
+		// Check for style properties in second element
+		if len(arr) >= 2 {
+			if styles, ok := arr[1].([]any); ok {
+				if hasStyleProp(styles, "font-weight", "bold") {
+					text = "<b>" + text + "</b>"
+				} else if hasStyleProp(styles, "font-style", "italic") {
+					text = "<i>" + text + "</i>"
+				}
+			}
+		}
+
+		parts = append(parts, text)
 	}
 	return strings.Join(parts, "")
+}
+
+// hasStyleProp checks if a styles array contains a specific property-value pair.
+// Styles format: [["tag","span"],["font-weight","bold"]]
+func hasStyleProp(styles []any, prop, value string) bool {
+	for _, item := range styles {
+		pair, ok := item.([]any)
+		if !ok || len(pair) != 2 {
+			continue
+		}
+		k, _ := pair[0].(string)
+		v, _ := pair[1].(string)
+		if k == prop && v == value {
+			return true
+		}
+	}
+	return false
 }
 
 func getPayloadText(b TallyBlock) string {

@@ -66,8 +66,76 @@ func SafeHTMLSchema(text string) []any {
 	return []any{[]any{text}}
 }
 
-// SafeHTMLSchemaFromHTML builds safeHTMLSchema for text that may contain <i> tags.
-// For simplicity, we use the plain text in the schema.
+// SafeHTMLSchemaFromHTML builds safeHTMLSchema for text that may contain <b> and <i> tags.
+// It produces the structured segment format that Tally expects:
+//
+//	[["plain"], ["bold", [["tag","span"],["font-weight","bold"]]], ...]
 func SafeHTMLSchemaFromHTML(html string) []any {
-	return []any{[]any{html}}
+	return parseHTMLToSchema(html)
+}
+
+// parseHTMLToSchema splits HTML with <b>/<i> tags into safeHTMLSchema segments.
+func parseHTMLToSchema(s string) []any {
+	var segments []any
+	for len(s) > 0 {
+		// Find the next tag
+		boldIdx := indexOf(s, "<b>")
+		italicIdx := indexOf(s, "<i>")
+
+		// Pick the nearest tag
+		nextIdx := -1
+		var openTag, closeTag string
+		var styles []any
+		if boldIdx >= 0 && (italicIdx < 0 || boldIdx < italicIdx) {
+			nextIdx = boldIdx
+			openTag = "<b>"
+			closeTag = "</b>"
+			styles = []any{[]any{"tag", "span"}, []any{"font-weight", "bold"}}
+		} else if italicIdx >= 0 {
+			nextIdx = italicIdx
+			openTag = "<i>"
+			closeTag = "</i>"
+			styles = []any{[]any{"tag", "span"}, []any{"font-style", "italic"}}
+		}
+
+		if nextIdx < 0 {
+			// No more tags — rest is plain text
+			if s != "" {
+				segments = append(segments, []any{s})
+			}
+			break
+		}
+
+		// Text before the tag
+		if nextIdx > 0 {
+			segments = append(segments, []any{s[:nextIdx]})
+		}
+
+		// Find closing tag
+		inner := s[nextIdx+len(openTag):]
+		closeIdx := indexOf(inner, closeTag)
+		if closeIdx < 0 {
+			// Unclosed tag — treat rest as plain text
+			segments = append(segments, []any{s[nextIdx:]})
+			break
+		}
+
+		// Styled segment
+		segments = append(segments, []any{inner[:closeIdx], styles})
+		s = inner[closeIdx+len(closeTag):]
+	}
+
+	if len(segments) == 0 {
+		return []any{[]any{""}}
+	}
+	return segments
+}
+
+func indexOf(s, substr string) int {
+	for i := 0; i <= len(s)-len(substr); i++ {
+		if s[i:i+len(substr)] == substr {
+			return i
+		}
+	}
+	return -1
 }

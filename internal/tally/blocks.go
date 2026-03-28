@@ -311,8 +311,8 @@ func (c *Compiler) compileChoiceOptions(q *model.Question, blockType, groupType 
 			"hasOtherOption":   hasOther,
 			"text":             opt.Text,
 		}
-		// MULTIPLE_CHOICE_OPTION-specific fields
-		if !allowMultiple {
+		// MULTIPLE_CHOICE_OPTION-specific fields (not valid for DROPDOWN_OPTION)
+		if blockType == "MULTIPLE_CHOICE_OPTION" {
 			payload["allowMultiple"] = false
 			payload["colorCodeOptions"] = false
 			payload["hasBadge"] = true
@@ -489,6 +489,11 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 
 		comparison := strings.ToUpper(condition.Comparison)
 
+		// Validate operator compatibility with field type
+		if err := validateConditionalOperator(questionType, comparison, condition.Field); err != nil {
+			return nil, err
+		}
+
 		fieldTitle := c.questionTexts[condition.Field]
 
 		condPayload := map[string]any{
@@ -602,4 +607,20 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 	}
 
 	return settings
+}
+
+// validateConditionalOperator checks that the comparison operator is supported
+// for the given question type. Some operators are not supported by certain field types.
+func validateConditionalOperator(questionType, comparison, fieldID string) error {
+	switch questionType {
+	case "CHECKBOXES":
+		switch comparison {
+		case "IS_NOT_ANY_OF", "IS_ANY_OF", "IS", "IS_NOT":
+			return fmt.Errorf(
+				"operator %q is not supported for multi-choice field %s; use is_empty or is_not_empty instead",
+				strings.ToLower(comparison), fieldID,
+			)
+		}
+	}
+	return nil
 }
