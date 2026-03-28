@@ -20,7 +20,8 @@ type Compiler struct {
 	NewUUID func() string
 
 	// Registry maps F<n> IDs to their generated UUIDs
-	questionGroupUUIDs map[string]string            // F1 → groupUuid of the question
+	questionGroupUUIDs map[string]string            // F1 → groupUuid of the TITLE block
+	contentGroupUUIDs  map[string]string            // F1 → groupUuid of the content blocks (options/inputs)
 	questionBlockUUIDs map[string][]string           // F1 → all block UUIDs belonging to that question
 	optionUUIDs        map[string]map[string]string  // F1 → { "Option Text" → option block UUID }
 	firstOptionUUID    map[string]string             // F1 → UUID of the first option/input block
@@ -38,6 +39,7 @@ func NewCompiler() *Compiler {
 // Compile converts an IR Form to a Tally API request.
 func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormRequest, error) {
 	c.questionGroupUUIDs = make(map[string]string)
+	c.contentGroupUUIDs = make(map[string]string)
 	c.questionBlockUUIDs = make(map[string][]string)
 	c.optionUUIDs = make(map[string]map[string]string)
 	c.firstOptionUUID = make(map[string]string)
@@ -252,6 +254,7 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 	// separate from the TITLE's groupUUID. Tally's editor requires this separation
 	// to recognize questions as editable question blocks.
 	contentGroupUUID := c.NewUUID()
+	c.contentGroupUUIDs[q.ID] = contentGroupUUID
 
 	switch q.Type {
 	case model.SingleChoice:
@@ -473,9 +476,11 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 	// Build conditionals array
 	var conditionals []any
 	for _, condition := range cond.Conditions {
-		// Determine the question type for the field reference
-		fieldInputUUID := c.firstOptionUUID[condition.Field]
-		if fieldInputUUID == "" {
+		// The conditional field reference uses the content group UUID
+		// (the groupUuid shared by all option/input blocks of a question).
+		// Both uuid and blockGroupUuid must be this content group UUID.
+		contentGroup := c.contentGroupUUIDs[condition.Field]
+		if contentGroup == "" {
 			return nil, fmt.Errorf("conditional field %q not found", condition.Field)
 		}
 		questionType := c.getQuestionType(condition.Field)
@@ -491,10 +496,10 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 
 		condPayload := map[string]any{
 			"field": map[string]any{
-				"uuid":           fieldInputUUID,
+				"uuid":           contentGroup,
 				"type":           "INPUT_FIELD",
 				"questionType":   questionType,
-				"blockGroupUuid": fieldInputUUID,
+				"blockGroupUuid": contentGroup,
 				"title":          fieldTitle,
 			},
 			"comparison": comparison,
