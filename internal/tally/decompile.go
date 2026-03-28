@@ -19,386 +19,280 @@ func Decompile(tf *TallyForm) (*model.Form, error) {
 		form.Password = pw
 	}
 
-	// Group blocks by groupUuid
-	groups := groupBlocks(tf.Blocks)
-
-	// Split into pages
-	pages := splitIntoPages(tf.Blocks, groups)
-	form.Pages = pages
-
-	return form, nil
-}
-
-type blockGroup struct {
-	groupUUID string
-	groupType string
-	blocks    []TallyBlock
-	firstIdx  int // index in original block array
-}
-
-func groupBlocks(blocks []TallyBlock) map[string]*blockGroup {
-	groups := make(map[string]*blockGroup)
-	for i, b := range blocks {
-		g, ok := groups[b.GroupUUID]
-		if !ok {
-			g = &blockGroup{
-				groupUUID: b.GroupUUID,
-				groupType: b.GroupType,
-				firstIdx:  i,
-			}
-			groups[b.GroupUUID] = g
-		}
-		g.blocks = append(g.blocks, b)
-	}
-	return groups
-}
-
-func splitIntoPages(blocks []TallyBlock, groups map[string]*blockGroup) []model.Page {
-	var pages []model.Page
-	currentPage := model.Page{}
+	// Process blocks sequentially
+	blocks := tf.Blocks
 	questionCounter := 0
+	currentPage := &model.Page{}
+	var pages []model.Page
 
-	// Track which groupUUIDs we've already processed
-	processed := make(map[string]bool)
+	// Maps for conditional resolution
+	groupToQID := make(map[string]string)       // groupUuid → question ID (for both TITLE and option groups)
+	optionUUIDToText := make(map[string]string)  // option block UUID → option text
+	blockUUIDToQID := make(map[string]string)    // any block UUID → question ID (for showBlocks)
 
-	// UUID → question ID mapping for conditionals
-	groupToQID := make(map[string]string)
-	optionUUIDToText := make(map[string]string)
-
-	// First pass: build UUID maps
-	for _, b := range blocks {
-		if b.Type == "MULTIPLE_CHOICE_OPTION" || b.Type == "CHECKBOX" || b.Type == "DROPDOWN_OPTION" {
-			if text, ok := b.Payload["text"].(string); ok {
-				optionUUIDToText[b.UUID] = text
-			}
-		}
-	}
-
-	for _, b := range blocks {
-		if processed[b.GroupUUID] {
-			continue
-		}
+	// First pass: build maps
+	i := 0
+	for i < len(blocks) {
+		b := blocks[i]
 
 		switch b.Type {
 		case "FORM_TITLE":
-			processed[b.GroupUUID] = true
+			i++
 			continue
 
 		case "PAGE_BREAK":
-			processed[b.GroupUUID] = true
-			pages = append(pages, currentPage)
-			currentPage = model.Page{}
+			i++
+			continue
+
+		case "HEADING_1", "HEADING_2", "TEXT":
+			i++
+			continue
+
+		case "CONDITIONAL_LOGIC":
+			i++
+			continue
+
+		case "TITLE":
+			questionCounter++
+			qID := fmt.Sprintf("F%d", questionCounter)
+			groupToQID[b.GroupUUID] = qID
+			blockUUIDToQID[b.UUID] = qID
+
+			// Look ahead for companion blocks (including hint TEXT blocks)
+			i++
+			for i < len(blocks) {
+				nb := blocks[i]
+				if isQuestionContent(nb.Type) {
+					groupToQID[nb.GroupUUID] = qID
+					blockUUIDToQID[nb.UUID] = qID
+					if text, ok := nb.Payload["text"].(string); ok {
+						optionUUIDToText[nb.UUID] = text
+					}
+					i++
+				} else if nb.Type == "TEXT" && i+1 < len(blocks) && isQuestionContent(blocks[i+1].Type) {
+					// Hint TEXT block between TITLE and content
+					blockUUIDToQID[nb.UUID] = qID
+					i++
+				} else {
+					break
+				}
+			}
+			continue
+
+		default:
+			i++
+		}
+	}
+
+	// Second pass: build form structure
+	questionCounter = 0
+	i = 0
+	for i < len(blocks) {
+		b := blocks[i]
+
+		switch b.Type {
+		case "FORM_TITLE":
+			i++
+
+		case "PAGE_BREAK":
+			pages = append(pages, *currentPage)
+			currentPage = &model.Page{}
 			if btn, ok := b.Payload["button"].(map[string]any); ok {
 				if label, ok := btn["label"].(string); ok && label != "Weiter" {
 					currentPage.ButtonLabel = label
 				}
 			}
-			continue
+			i++
 
 		case "HEADING_1", "HEADING_2":
-			processed[b.GroupUUID] = true
-			text := extractText(b)
 			level := 2
 			if b.Type == "HEADING_1" {
 				level = 1
 			}
 			currentPage.Blocks = append(currentPage.Blocks, &model.HeadingBlock{
-				Text:  text,
+				Text:  extractText(b),
 				Level: level,
 			})
-			continue
+			i++
 
 		case "TEXT":
-			processed[b.GroupUUID] = true
-			text := extractText(b)
 			currentPage.Blocks = append(currentPage.Blocks, &model.TextBlock{
-				HTML: text,
+				HTML: extractText(b),
 			})
-			continue
+			i++
 
 		case "CONDITIONAL_LOGIC":
-			processed[b.GroupUUID] = true
-			cond := decompileConditional(b, groupToQID, optionUUIDToText)
+			cond := decompileConditional(b, groupToQID, optionUUIDToText, blockUUIDToQID)
 			if cond != nil {
 				currentPage.Blocks = append(currentPage.Blocks, cond)
 			}
-			continue
+			i++
 
 		case "TITLE":
-			// This starts a question group
-			processed[b.GroupUUID] = true
-			g := groups[b.GroupUUID]
-			if g == nil {
-				continue
-			}
-
 			questionCounter++
 			qID := fmt.Sprintf("F%d", questionCounter)
-			groupToQID[b.GroupUUID] = qID
 
-			q := decompileQuestion(qID, b, g, groups, processed, optionUUIDToText, groupToQID)
-			currentPage.Blocks = append(currentPage.Blocks, q)
-			continue
-
-		default:
-			// Part of a question group — skip if already processed
-			if !processed[b.GroupUUID] {
-				// Standalone input blocks (TEXTAREA, INPUT_TEXT, etc.)
-				g := groups[b.GroupUUID]
-				if g != nil {
-					processed[b.GroupUUID] = true
-					// Check if there's a TITLE block for this group
-					hasTitleInGroup := false
-					for _, gb := range g.blocks {
-						if gb.Type == "TITLE" {
-							hasTitleInGroup = true
-							break
-						}
-					}
-					if !hasTitleInGroup {
-						// Standalone input — create question from it
-						questionCounter++
-						qID := fmt.Sprintf("F%d", questionCounter)
-						groupToQID[b.GroupUUID] = qID
-						q := &model.Question{
-							ID:   qID,
-							Type: mapBlockTypeToQuestionType(b.Type),
-						}
-						if req, ok := b.Payload["isRequired"].(bool); ok {
-							q.Required = req
-						}
-						currentPage.Blocks = append(currentPage.Blocks, q)
-					}
-				}
+			q := &model.Question{
+				ID:         qID,
+				Text:       extractText(b),
+				Required:   true,
+				Properties: make(map[string]any),
 			}
-		}
-	}
-
-	pages = append(pages, currentPage)
-	return pages
-}
-
-func decompileQuestion(qID string, titleBlock TallyBlock, titleGroup *blockGroup, allGroups map[string]*blockGroup, processed map[string]bool, optionUUIDToText map[string]string, groupToQID map[string]string) *model.Question {
-	q := &model.Question{
-		ID:         qID,
-		Text:       extractText(titleBlock),
-		Required:   true,
-		Properties: make(map[string]any),
-	}
-
-	if desc, ok := titleBlock.Payload["description"].(string); ok {
-		q.Hint = desc
-	}
-	if hidden, ok := titleBlock.Payload["isHidden"].(bool); ok {
-		q.Hidden = hidden
-	}
-
-	// Find the companion blocks (same groupUuid as the TITLE block's question group)
-	// The TITLE has groupType: QUESTION, the options share the same conceptual group
-	// but may have different groupUuids. We need to look at the next blocks in sequence.
-	// Actually, in Tally the TITLE block and option blocks share the SAME groupUuid for the option group.
-	// Wait — looking at the reference: TITLE has its own groupUuid (groupType: QUESTION),
-	// and options have a different groupUuid (groupType: MULTIPLE_CHOICE).
-	// We need to find the option group that follows this TITLE.
-
-	// Strategy: look for blocks with the same groupUuid as the options
-	// The option blocks come right after the TITLE in the block array
-	// For now, use a simpler approach: the group that contains the TITLE also
-	// reveals the question type through adjacent blocks
-
-	// Actually, looking at the reference form more carefully:
-	// - TITLE block: groupUuid = X, groupType = QUESTION
-	// - MULTIPLE_CHOICE_OPTION blocks: groupUuid = Y, groupType = MULTIPLE_CHOICE
-	// They have DIFFERENT groupUuids. The connection is positional.
-
-	// Let me find option blocks that follow this TITLE block positionally
-	// by scanning all groups and matching by position proximity.
-
-	// For a simpler approach: find the next non-processed group after this one
-	// that contains option/input blocks.
-
-	// Actually, let's use the allGroups map differently:
-	// Find groups whose firstIdx is right after our title's firstIdx
-	titleIdx := titleGroup.firstIdx
-
-	type indexedGroup struct {
-		idx   int
-		group *blockGroup
-		uuid  string
-	}
-	var candidates []indexedGroup
-	for uuid, g := range allGroups {
-		if !processed[uuid] && g.firstIdx > titleIdx {
-			candidates = append(candidates, indexedGroup{g.firstIdx, g, uuid})
-		}
-	}
-	sort.Slice(candidates, func(i, j int) bool {
-		return candidates[i].idx < candidates[j].idx
-	})
-
-	if len(candidates) > 0 {
-		nextGroup := candidates[0]
-		firstBlock := nextGroup.group.blocks[0]
-
-		switch firstBlock.Type {
-		case "MULTIPLE_CHOICE_OPTION":
-			processed[nextGroup.uuid] = true
-			q.Type = model.SingleChoice
-			for _, ob := range nextGroup.group.blocks {
-				opt := model.Option{Text: getPayloadText(ob)}
-				if isOther, ok := ob.Payload["isOtherOption"].(bool); ok && isOther {
-					opt.IsOther = true
-				}
-				q.Options = append(q.Options, opt)
-				optionUUIDToText[ob.UUID] = opt.Text
-			}
-			if req, ok := firstBlock.Payload["isRequired"].(bool); ok {
-				q.Required = req
-			}
-			if hidden, ok := firstBlock.Payload["isHidden"].(bool); ok {
+			if hidden, ok := b.Payload["isHidden"].(bool); ok {
 				q.Hidden = hidden
 			}
-			if maxChoices, ok := firstBlock.Payload["hasMaxChoices"].(bool); ok && maxChoices {
-				if max, ok := firstBlock.Payload["maxChoices"].(float64); ok {
-					q.Properties["max"] = int(max)
+
+			i++
+
+			// Consume companion blocks (including hint TEXT blocks between TITLE and content)
+			for i < len(blocks) {
+				nb := blocks[i]
+
+				// TEXT block between TITLE and content = hint
+				if nb.Type == "TEXT" {
+					// Check if the next block after this TEXT is question content
+					if i+1 < len(blocks) && isQuestionContent(blocks[i+1].Type) {
+						hintText := extractText(nb)
+						// Strip italic wrapper if present
+						hintText = strings.TrimPrefix(hintText, "<i>")
+						hintText = strings.TrimSuffix(hintText, "</i>")
+						q.Hint = hintText
+						blockUUIDToQID[nb.UUID] = qID
+						i++
+						continue
+					}
+					break
 				}
-			}
-			// Register option group UUID for conditionals too
-			groupToQID[nextGroup.uuid] = qID
 
-		case "CHECKBOX":
-			processed[nextGroup.uuid] = true
-			q.Type = model.MultiChoice
-			for _, ob := range nextGroup.group.blocks {
-				opt := model.Option{Text: getPayloadText(ob)}
-				if isOther, ok := ob.Payload["isOtherOption"].(bool); ok && isOther {
-					opt.IsOther = true
+				if !isQuestionContent(nb.Type) {
+					break
 				}
-				q.Options = append(q.Options, opt)
-				optionUUIDToText[ob.UUID] = opt.Text
-			}
-			if req, ok := firstBlock.Payload["isRequired"].(bool); ok {
-				q.Required = req
-			}
-			if hidden, ok := firstBlock.Payload["isHidden"].(bool); ok {
-				q.Hidden = hidden
-			}
-			if maxChoices, ok := firstBlock.Payload["hasMaxChoices"].(bool); ok && maxChoices {
-				if max, ok := firstBlock.Payload["maxChoices"].(float64); ok {
-					q.Properties["max"] = int(max)
-				}
-			}
-			groupToQID[nextGroup.uuid] = qID
 
-		case "DROPDOWN_OPTION":
-			processed[nextGroup.uuid] = true
-			q.Type = model.Dropdown
-			for _, ob := range nextGroup.group.blocks {
-				q.Options = append(q.Options, model.Option{Text: getPayloadText(ob)})
-			}
-			groupToQID[nextGroup.uuid] = qID
+				switch nb.Type {
+				case "MULTIPLE_CHOICE_OPTION":
+					q.Type = model.SingleChoice
+					opt := model.Option{Text: getPayloadText(nb)}
+					if isOther, ok := nb.Payload["isOtherOption"].(bool); ok && isOther {
+						opt.IsOther = true
+					}
+					q.Options = append(q.Options, opt)
+					if req, ok := nb.Payload["isRequired"].(bool); ok {
+						q.Required = req
+					}
+					if hidden, ok := nb.Payload["isHidden"].(bool); ok && hidden {
+						q.Hidden = true
+					}
+					if hasMax, ok := nb.Payload["hasMaxChoices"].(bool); ok && hasMax {
+						if max, ok := nb.Payload["maxChoices"].(float64); ok {
+							q.Properties["max"] = int(max)
+						}
+					}
 
-		case "TEXTAREA":
-			processed[nextGroup.uuid] = true
-			q.Type = model.LongText
-			if ph, ok := firstBlock.Payload["placeholder"].(string); ok {
-				q.Placeholder = ph
-			}
-			if req, ok := firstBlock.Payload["isRequired"].(bool); ok {
-				q.Required = req
-			}
-			groupToQID[nextGroup.uuid] = qID
+				case "CHECKBOX":
+					q.Type = model.MultiChoice
+					opt := model.Option{Text: getPayloadText(nb)}
+					if isOther, ok := nb.Payload["isOtherOption"].(bool); ok && isOther {
+						opt.IsOther = true
+					}
+					q.Options = append(q.Options, opt)
+					if req, ok := nb.Payload["isRequired"].(bool); ok {
+						q.Required = req
+					}
+					if hidden, ok := nb.Payload["isHidden"].(bool); ok && hidden {
+						q.Hidden = true
+					}
+					if hasMax, ok := nb.Payload["hasMaxChoices"].(bool); ok && hasMax {
+						if max, ok := nb.Payload["maxChoices"].(float64); ok {
+							q.Properties["max"] = int(max)
+						}
+					}
 
-		case "INPUT_TEXT":
-			processed[nextGroup.uuid] = true
-			q.Type = model.ShortText
-			if ph, ok := firstBlock.Payload["placeholder"].(string); ok {
-				q.Placeholder = ph
-			}
-			if req, ok := firstBlock.Payload["isRequired"].(bool); ok {
-				q.Required = req
-			}
-			groupToQID[nextGroup.uuid] = qID
+				case "DROPDOWN_OPTION":
+					q.Type = model.Dropdown
+					q.Options = append(q.Options, model.Option{Text: getPayloadText(nb)})
 
-		case "MATRIX":
-			processed[nextGroup.uuid] = true
-			q.Type = model.Matrix
-			// Find MATRIX_COLUMN and MATRIX_ROW blocks in this group
-			for _, mb := range nextGroup.group.blocks {
-				switch mb.Type {
+				case "TEXTAREA":
+					q.Type = model.LongText
+					if ph, ok := nb.Payload["placeholder"].(string); ok {
+						q.Placeholder = ph
+					}
+					if req, ok := nb.Payload["isRequired"].(bool); ok {
+						q.Required = req
+					}
+
+				case "INPUT_TEXT":
+					q.Type = model.ShortText
+					if ph, ok := nb.Payload["placeholder"].(string); ok {
+						q.Placeholder = ph
+					}
+					if req, ok := nb.Payload["isRequired"].(bool); ok {
+						q.Required = req
+					}
+
+				case "INPUT_NUMBER":
+					q.Type = model.Number
+				case "INPUT_EMAIL":
+					q.Type = model.Email
+				case "INPUT_PHONE_NUMBER":
+					q.Type = model.Phone
+				case "INPUT_LINK":
+					q.Type = model.URL
+				case "INPUT_DATE":
+					q.Type = model.Date
+				case "INPUT_TIME":
+					q.Type = model.Time
+				case "RATING":
+					q.Type = model.Rating
+				case "LINEAR_SCALE":
+					q.Type = model.Scale
+				case "FILE_UPLOAD":
+					q.Type = model.FileUpload
+				case "SIGNATURE":
+					q.Type = model.Signature
+
+				case "MATRIX":
+					q.Type = model.Matrix
 				case "MATRIX_COLUMN":
-					q.MatrixCols = append(q.MatrixCols, getPayloadText(mb))
+					q.MatrixCols = append(q.MatrixCols, getPayloadText(nb))
 				case "MATRIX_ROW":
-					q.MatrixRows = append(q.MatrixRows, getPayloadText(mb))
+					q.MatrixRows = append(q.MatrixRows, getPayloadText(nb))
 				}
+
+				i++
 			}
-			groupToQID[nextGroup.uuid] = qID
 
-		case "LINEAR_SCALE":
-			processed[nextGroup.uuid] = true
-			q.Type = model.Scale
-			groupToQID[nextGroup.uuid] = qID
-
-		case "RATING":
-			processed[nextGroup.uuid] = true
-			q.Type = model.Rating
-			groupToQID[nextGroup.uuid] = qID
-
-		case "INPUT_NUMBER":
-			processed[nextGroup.uuid] = true
-			q.Type = model.Number
-			groupToQID[nextGroup.uuid] = qID
+			currentPage.Blocks = append(currentPage.Blocks, q)
 
 		default:
-			q.Type = model.ShortText
+			i++
 		}
 	}
 
-	return q
+	pages = append(pages, *currentPage)
+	form.Pages = pages
+
+	return form, nil
 }
 
-func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUIDToText map[string]string) *model.Conditional {
+func isQuestionContent(blockType string) bool {
+	switch blockType {
+	case "MULTIPLE_CHOICE_OPTION", "CHECKBOX", "DROPDOWN_OPTION",
+		"TEXTAREA", "INPUT_TEXT", "INPUT_NUMBER", "INPUT_EMAIL",
+		"INPUT_PHONE_NUMBER", "INPUT_LINK", "INPUT_DATE", "INPUT_TIME",
+		"RATING", "LINEAR_SCALE", "FILE_UPLOAD", "SIGNATURE",
+		"MATRIX", "MATRIX_COLUMN", "MATRIX_ROW":
+		return true
+	}
+	return false
+}
+
+func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUIDToText map[string]string, blockUUIDToQID map[string]string) *model.Conditional {
 	cond := &model.Conditional{
 		Operator: "AND",
 	}
 
 	if op, ok := b.Payload["logicalOperator"].(string); ok {
 		cond.Operator = op
-	}
-
-	// Parse actions → targets
-	if actions, ok := b.Payload["actions"].([]any); ok {
-		for _, a := range actions {
-			am, ok := a.(map[string]any)
-			if !ok {
-				continue
-			}
-			if am["type"] == "SHOW_BLOCKS" {
-				if payload, ok := am["payload"].(map[string]any); ok {
-					if showBlocks, ok := payload["showBlocks"].([]any); ok {
-						targetSet := make(map[string]bool)
-						for _, sb := range showBlocks {
-							// This is a block UUID — we need to find which question it belongs to
-							// For now, collect unique question IDs from the groupToQID map
-							sbStr, ok := sb.(string)
-							if !ok {
-								continue
-							}
-							for gUUID, qID := range groupToQID {
-								_ = gUUID
-								// Check if this block UUID belongs to this question
-								// This is imperfect — we'd need a full block→question map
-								// For simplicity, just record the mapping
-								targetSet[qID] = true
-								_ = sbStr
-							}
-						}
-						// Actually we need a block UUID → question ID map
-						// Let's build it differently
-					}
-				}
-			}
-		}
 	}
 
 	// Parse conditionals → conditions
@@ -429,10 +323,12 @@ func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUID
 			var values []string
 			switch v := payload["value"].(type) {
 			case string:
-				if text, ok := optionUUIDToText[v]; ok {
-					values = append(values, text)
-				} else {
-					values = append(values, v)
+				if v != "" {
+					if text, ok := optionUUIDToText[v]; ok {
+						values = append(values, text)
+					} else {
+						values = append(values, v)
+					}
 				}
 			case []any:
 				for _, item := range v {
@@ -455,8 +351,6 @@ func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUID
 	}
 
 	// Parse targets from showBlocks
-	// We need a block UUID → question ID lookup
-	// For now, use a simplified approach
 	if actions, ok := b.Payload["actions"].([]any); ok {
 		targetSet := make(map[string]bool)
 		for _, a := range actions {
@@ -469,12 +363,9 @@ func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUID
 					if showBlocks, ok := payload["showBlocks"].([]any); ok {
 						for _, sb := range showBlocks {
 							if sbStr, ok := sb.(string); ok {
-								// Look up in groupToQID — showBlocks contains block UUIDs,
-								// but we stored groupUUIDs. In the compiler, showBlocks
-								// contains all block UUIDs for a question.
-								// For decompile, we'd need a reverse lookup.
-								// For now, mark any question that has a matching UUID.
-								_ = sbStr
+								if qID, ok := blockUUIDToQID[sbStr]; ok {
+									targetSet[qID] = true
+								}
 							}
 						}
 					}
@@ -487,9 +378,7 @@ func decompileConditional(b TallyBlock, groupToQID map[string]string, optionUUID
 		sort.Strings(cond.Targets)
 	}
 
-	if len(cond.Targets) == 0 && len(cond.Conditions) > 0 {
-		// Fallback: we couldn't resolve targets perfectly
-		// Return the conditional anyway with empty targets
+	if len(cond.Targets) == 0 {
 		cond.Targets = []string{"F?"}
 	}
 
@@ -525,35 +414,4 @@ func getPayloadText(b TallyBlock) string {
 		return text
 	}
 	return extractText(b)
-}
-
-func mapBlockTypeToQuestionType(blockType string) model.QuestionType {
-	switch blockType {
-	case "TEXTAREA":
-		return model.LongText
-	case "INPUT_TEXT":
-		return model.ShortText
-	case "INPUT_NUMBER":
-		return model.Number
-	case "INPUT_EMAIL":
-		return model.Email
-	case "INPUT_PHONE_NUMBER":
-		return model.Phone
-	case "INPUT_LINK":
-		return model.URL
-	case "INPUT_DATE":
-		return model.Date
-	case "INPUT_TIME":
-		return model.Time
-	case "RATING":
-		return model.Rating
-	case "LINEAR_SCALE":
-		return model.Scale
-	case "FILE_UPLOAD":
-		return model.FileUpload
-	case "SIGNATURE":
-		return model.Signature
-	default:
-		return model.ShortText
-	}
 }

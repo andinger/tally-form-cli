@@ -136,9 +136,6 @@ func TestCompileMultiChoice(t *testing.T) {
 	if cb.GroupType != "CHECKBOXES" {
 		t.Errorf("GroupType = %q, want CHECKBOXES", cb.GroupType)
 	}
-	if cb.Payload["allowMultiple"] != true {
-		t.Error("Expected allowMultiple = true")
-	}
 	if cb.Payload["hasMaxChoices"] != true {
 		t.Error("Expected hasMaxChoices = true")
 	}

@@ -24,6 +24,8 @@ type Compiler struct {
 	questionBlockUUIDs map[string][]string           // F1 → all block UUIDs belonging to that question
 	optionUUIDs        map[string]map[string]string  // F1 → { "Option Text" → option block UUID }
 	firstOptionUUID    map[string]string             // F1 → UUID of the first option/input block
+	questionTexts      map[string]string             // F1 → question text (for conditional field.title)
+	questionTypes      map[string]model.QuestionType // F1 → question type
 }
 
 // NewCompiler creates a compiler with random UUID generation.
@@ -39,6 +41,8 @@ func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormReq
 	c.questionBlockUUIDs = make(map[string][]string)
 	c.optionUUIDs = make(map[string]map[string]string)
 	c.firstOptionUUID = make(map[string]string)
+	c.questionTexts = make(map[string]string)
+	c.questionTypes = make(map[string]model.QuestionType)
 
 	var blocks []TallyBlock
 
@@ -114,6 +118,8 @@ func (c *Compiler) registerQuestion(q *model.Question) {
 	groupUUID := c.NewUUID()
 	c.questionGroupUUIDs[q.ID] = groupUUID
 	c.optionUUIDs[q.ID] = make(map[string]string)
+	c.questionTexts[q.ID] = q.Text
+	c.questionTypes[q.ID] = q.Type
 }
 
 func (c *Compiler) buildFormTitle(name string, cfg *config.Merged) TallyBlock {
@@ -209,9 +215,6 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 	titlePayload := map[string]any{
 		"safeHTMLSchema": SafeHTMLSchema(q.Text),
 	}
-	if q.Hint != "" {
-		titlePayload["description"] = q.Hint
-	}
 
 	titleBlock := TallyBlock{
 		UUID:      titleUUID,
@@ -225,6 +228,25 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 	}
 	blocks = append(blocks, titleBlock)
 	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], titleUUID)
+
+	// Hint as italic TEXT block below the title
+	if q.Hint != "" {
+		hintUUID := c.NewUUID()
+		hintBlock := TallyBlock{
+			UUID:      hintUUID,
+			Type:      "TEXT",
+			GroupUUID: c.NewUUID(),
+			GroupType: "TEXT",
+			Payload: map[string]any{
+				"safeHTMLSchema": SafeHTMLSchemaFromHTML("<i>" + q.Hint + "</i>"),
+			},
+		}
+		if q.Hidden {
+			hintBlock.Payload["isHidden"] = true
+		}
+		blocks = append(blocks, hintBlock)
+		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], hintUUID)
+	}
 
 	switch q.Type {
 	case model.SingleChoice:
@@ -284,14 +306,17 @@ func (c *Compiler) compileChoiceOptions(q *model.Question, blockType, groupType 
 			"isRequired":       q.Required,
 			"randomize":        false,
 			"isOtherOption":    opt.IsOther,
-			"allowMultiple":    allowMultiple,
 			"hasMaxChoices":    q.Properties["max"] != nil,
-			"colorCodeOptions": false,
-			"hasBadge":         true,
-			"badgeType":        "LETTERS",
 			"hasDefaultAnswer": false,
 			"hasOtherOption":   hasOther,
 			"text":             opt.Text,
+		}
+		// MULTIPLE_CHOICE_OPTION-specific fields
+		if !allowMultiple {
+			payload["allowMultiple"] = false
+			payload["colorCodeOptions"] = false
+			payload["hasBadge"] = true
+			payload["badgeType"] = "LETTERS"
 		}
 		if q.Properties["max"] != nil {
 			payload["maxChoices"] = q.Properties["max"]
@@ -464,12 +489,15 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 
 		comparison := strings.ToUpper(condition.Comparison)
 
+		fieldTitle := c.questionTexts[condition.Field]
+
 		condPayload := map[string]any{
 			"field": map[string]any{
 				"uuid":           fieldInputUUID,
 				"type":           "INPUT_FIELD",
 				"questionType":   questionType,
 				"blockGroupUuid": fieldGroupUUID,
+				"title":          fieldTitle,
 			},
 			"comparison": comparison,
 		}
@@ -491,6 +519,9 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 			} else {
 				condPayload["value"] = resolvedValues
 			}
+		} else {
+			// value is always required by the API, even for IS_EMPTY/IS_NOT_EMPTY
+			condPayload["value"] = ""
 		}
 
 		conditionals = append(conditionals, map[string]any{
@@ -522,12 +553,29 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 }
 
 func (c *Compiler) getQuestionType(fieldID string) string {
-	// Check what kind of blocks this question has
-	optionMap := c.optionUUIDs[fieldID]
-	if len(optionMap) > 0 {
+	qt := c.questionTypes[fieldID]
+	switch qt {
+	case model.SingleChoice:
 		return "MULTIPLE_CHOICE"
+	case model.MultiChoice:
+		return "CHECKBOXES"
+	case model.Dropdown:
+		return "DROPDOWN"
+	case model.LongText:
+		return "TEXTAREA"
+	case model.ShortText:
+		return "INPUT_TEXT"
+	case model.Number:
+		return "INPUT_NUMBER"
+	case model.Matrix:
+		return "MATRIX"
+	default:
+		// Fallback based on options
+		if len(c.optionUUIDs[fieldID]) > 0 {
+			return "MULTIPLE_CHOICE"
+		}
+		return "TEXTAREA"
 	}
-	return "TEXTAREA"
 }
 
 func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[string]any {
