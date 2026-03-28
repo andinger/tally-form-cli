@@ -376,39 +376,29 @@ func (c *Compiler) compileInputBlock(q *model.Question, blockType, groupType, gr
 	}}
 }
 
-func (c *Compiler) compileMatrix(q *model.Question, groupUUID string) []TallyBlock {
+func (c *Compiler) compileMatrix(q *model.Question, contentGroupUUID string) []TallyBlock {
 	var blocks []TallyBlock
 
-	// MATRIX container block
-	matrixUUID := c.NewUUID()
-	blocks = append(blocks, TallyBlock{
-		UUID:      matrixUUID,
-		Type:      "MATRIX",
-		GroupUUID: groupUUID,
-		GroupType: "QUESTION",
-		Payload: map[string]any{
-			"isRequired": q.Required,
-		},
-	})
-	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], matrixUUID)
-	c.firstOptionUUID[q.ID] = matrixUUID
-
-	// MATRIX_COLUMN blocks
+	// MATRIX_COLUMN blocks (no separate MATRIX container — Tally doesn't use one)
 	for i, col := range q.MatrixCols {
 		colUUID := c.NewUUID()
 		blocks = append(blocks, TallyBlock{
 			UUID:      colUUID,
 			Type:      "MATRIX_COLUMN",
-			GroupUUID: groupUUID,
+			GroupUUID: contentGroupUUID,
 			GroupType: "MATRIX",
 			Payload: map[string]any{
-				"text":    col,
-				"index":   i,
-				"isFirst": i == 0,
-				"isLast":  i == len(q.MatrixCols)-1,
+				"safeHTMLSchema": SafeHTMLSchema(col),
+				"isRequired":     q.Required,
+				"index":          i,
+				"isFirst":        i == 0,
+				"isLast":         i == len(q.MatrixCols)-1,
 			},
 		})
 		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], colUUID)
+		if i == 0 {
+			c.firstOptionUUID[q.ID] = colUUID
+		}
 	}
 
 	// MATRIX_ROW blocks
@@ -417,13 +407,14 @@ func (c *Compiler) compileMatrix(q *model.Question, groupUUID string) []TallyBlo
 		blocks = append(blocks, TallyBlock{
 			UUID:      rowUUID,
 			Type:      "MATRIX_ROW",
-			GroupUUID: groupUUID,
+			GroupUUID: contentGroupUUID,
 			GroupType: "MATRIX",
 			Payload: map[string]any{
-				"text":    row,
-				"index":   i,
-				"isFirst": i == 0,
-				"isLast":  i == len(q.MatrixRows)-1,
+				"safeHTMLSchema": SafeHTMLSchema(row),
+				"isRequired":     q.Required,
+				"index":          i,
+				"isFirst":        i == 0,
+				"isLast":         i == len(q.MatrixRows)-1,
 			},
 		})
 		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], rowUUID)

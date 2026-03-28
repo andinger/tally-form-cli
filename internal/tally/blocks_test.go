@@ -208,22 +208,32 @@ func TestCompileMatrix(t *testing.T) {
 		t.Fatalf("Compile error: %v", err)
 	}
 
-	// FORM_TITLE + TITLE + MATRIX + 2 cols + 2 rows = 7
-	if len(req.Blocks) != 7 {
-		t.Fatalf("Blocks = %d, want 7", len(req.Blocks))
+	// FORM_TITLE + TITLE + 2 cols + 2 rows = 6 (no MATRIX container)
+	if len(req.Blocks) != 6 {
+		t.Fatalf("Blocks = %d, want 6", len(req.Blocks))
 	}
 
-	// MATRIX block
-	if req.Blocks[2].Type != "MATRIX" {
-		t.Errorf("Block 2 type = %q, want MATRIX", req.Blocks[2].Type)
+	// Columns start at index 2 (directly after TITLE)
+	if req.Blocks[2].Type != "MATRIX_COLUMN" {
+		t.Errorf("Block 2 type = %q, want MATRIX_COLUMN", req.Blocks[2].Type)
 	}
-	// Columns
-	if req.Blocks[3].Type != "MATRIX_COLUMN" {
-		t.Errorf("Block 3 type = %q, want MATRIX_COLUMN", req.Blocks[3].Type)
+	if req.Blocks[2].Payload["isRequired"] != true {
+		t.Error("MATRIX_COLUMN should have isRequired")
 	}
+	// Check safeHTMLSchema instead of text
+	schema, ok := req.Blocks[2].Payload["safeHTMLSchema"].([]any)
+	if !ok || len(schema) == 0 {
+		t.Error("MATRIX_COLUMN should have safeHTMLSchema")
+	}
+
 	// Rows
-	if req.Blocks[5].Type != "MATRIX_ROW" {
-		t.Errorf("Block 5 type = %q, want MATRIX_ROW", req.Blocks[5].Type)
+	if req.Blocks[4].Type != "MATRIX_ROW" {
+		t.Errorf("Block 4 type = %q, want MATRIX_ROW", req.Blocks[4].Type)
+	}
+
+	// TITLE and matrix content must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and MATRIX_COLUMN must have different groupUUIDs")
 	}
 }
 

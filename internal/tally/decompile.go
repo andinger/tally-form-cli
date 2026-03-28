@@ -253,8 +253,10 @@ func Decompile(tf *TallyForm) (*model.Form, error) {
 				case "MATRIX":
 					q.Type = model.Matrix
 				case "MATRIX_COLUMN":
+					q.Type = model.Matrix
 					q.MatrixCols = append(q.MatrixCols, getPayloadText(nb))
 				case "MATRIX_ROW":
+					q.Type = model.Matrix
 					q.MatrixRows = append(q.MatrixRows, getPayloadText(nb))
 				}
 
