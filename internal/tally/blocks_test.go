@@ -147,6 +147,18 @@ func TestCompileMultiChoice(t *testing.T) {
 	if cb.Payload["hasMaxChoices"] != true {
 		t.Error("Expected hasMaxChoices = true")
 	}
+	if cb.Payload["maxChoices"] != 2 {
+		t.Errorf("maxChoices = %v, want 2", cb.Payload["maxChoices"])
+	}
+
+	// TITLE and checkboxes must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and CHECKBOX must have different groupUUIDs")
+	}
+	// All checkboxes share the same groupUUID
+	if req.Blocks[2].GroupUUID != req.Blocks[3].GroupUUID {
+		t.Error("All CHECKBOXes must share the same groupUUID")
+	}
 }
 
 func TestCompileLongText(t *testing.T) {
@@ -182,6 +194,105 @@ func TestCompileLongText(t *testing.T) {
 	}
 	if ta.Payload["placeholder"] != "Type here" {
 		t.Errorf("placeholder = %v", ta.Payload["placeholder"])
+	}
+
+	// TITLE and TEXTAREA must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and TEXTAREA must have different groupUUIDs")
+	}
+}
+
+func TestCompileShortText(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:       "F1",
+					Text:     "Name?",
+					Type:     model.ShortText,
+					Required: false,
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// FORM_TITLE + TITLE + INPUT_TEXT = 3
+	if len(req.Blocks) != 3 {
+		t.Fatalf("Blocks = %d, want 3", len(req.Blocks))
+	}
+
+	inp := req.Blocks[2]
+	if inp.Type != "INPUT_TEXT" {
+		t.Errorf("Type = %q, want INPUT_TEXT", inp.Type)
+	}
+	if inp.Payload["isRequired"] != false {
+		t.Error("isRequired should be false")
+	}
+
+	// TITLE and INPUT_TEXT must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and INPUT_TEXT must have different groupUUIDs")
+	}
+}
+
+func TestCompileQuestionWithHint(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:       "F1",
+					Text:     "Email?",
+					Type:     model.Email,
+					Required: true,
+					Hint:     "Your work email",
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// FORM_TITLE + TITLE + TEXT(hint) + INPUT_EMAIL = 4
+	if len(req.Blocks) != 4 {
+		t.Fatalf("Blocks = %d, want 4", len(req.Blocks))
+	}
+
+	// Hint is a TEXT block with italic safeHTMLSchema
+	hint := req.Blocks[2]
+	if hint.Type != "TEXT" {
+		t.Errorf("Hint type = %q, want TEXT", hint.Type)
+	}
+	if hint.GroupType != "TEXT" {
+		t.Errorf("Hint groupType = %q, want TEXT", hint.GroupType)
+	}
+
+	// Input block
+	inp := req.Blocks[3]
+	if inp.Type != "INPUT_EMAIL" {
+		t.Errorf("Input type = %q, want INPUT_EMAIL", inp.Type)
+	}
+
+	// TITLE, hint, and input all have different groupUUIDs
+	titleGroup := req.Blocks[1].GroupUUID
+	hintGroup := req.Blocks[2].GroupUUID
+	inputGroup := req.Blocks[3].GroupUUID
+	if titleGroup == inputGroup {
+		t.Error("TITLE and INPUT_EMAIL must have different groupUUIDs")
+	}
+	if hintGroup == titleGroup || hintGroup == inputGroup {
+		t.Error("Hint TEXT must have its own groupUUID")
 	}
 }
 
@@ -230,10 +341,39 @@ func TestCompileMatrix(t *testing.T) {
 	if req.Blocks[4].Type != "MATRIX_ROW" {
 		t.Errorf("Block 4 type = %q, want MATRIX_ROW", req.Blocks[4].Type)
 	}
+	if req.Blocks[4].Payload["isRequired"] != true {
+		t.Error("MATRIX_ROW should have isRequired")
+	}
+	rowSchema, ok := req.Blocks[4].Payload["safeHTMLSchema"].([]any)
+	if !ok || len(rowSchema) == 0 {
+		t.Error("MATRIX_ROW should have safeHTMLSchema")
+	}
 
 	// TITLE and matrix content must have different groupUUIDs
 	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
 		t.Error("TITLE and MATRIX_COLUMN must have different groupUUIDs")
+	}
+
+	// All matrix columns and rows share the same groupUUID
+	contentGroup := req.Blocks[2].GroupUUID
+	for i := 2; i < 6; i++ {
+		if req.Blocks[i].GroupUUID != contentGroup {
+			t.Errorf("Block %d groupUUID = %s, want %s (all matrix blocks share one group)", i, req.Blocks[i].GroupUUID, contentGroup)
+		}
+	}
+
+	// Verify column/row index ordering
+	if req.Blocks[2].Payload["isFirst"] != true {
+		t.Error("First column should have isFirst=true")
+	}
+	if req.Blocks[2].Payload["isLast"] != false {
+		t.Error("First column should have isLast=false")
+	}
+	if req.Blocks[3].Payload["isFirst"] != false {
+		t.Error("Second column should have isFirst=false")
+	}
+	if req.Blocks[3].Payload["isLast"] != true {
+		t.Error("Second column should have isLast=true")
 	}
 }
 
@@ -290,14 +430,205 @@ func TestCompileConditional(t *testing.T) {
 		t.Errorf("logicalOperator = %v, want AND", condBlock.Payload["logicalOperator"])
 	}
 
+	// Verify field reference uses the content groupUUID
+	conditionals := condBlock.Payload["conditionals"].([]any)
+	if len(conditionals) != 1 {
+		t.Fatalf("conditionals = %d, want 1", len(conditionals))
+	}
+	cond := conditionals[0].(map[string]any)
+	payload := cond["payload"].(map[string]any)
+	field := payload["field"].(map[string]any)
+
+	// field.uuid and field.blockGroupUuid must be the content group UUID (not a block uuid)
+	fieldUUID := field["uuid"].(string)
+	blockGroupUUID := field["blockGroupUuid"].(string)
+	if fieldUUID != blockGroupUUID {
+		t.Errorf("field.uuid (%s) != field.blockGroupUuid (%s), must be equal", fieldUUID, blockGroupUUID)
+	}
+
+	// The content group UUID must match the groupUuid of the option blocks
+	optionGroupUUID := req.Blocks[2].GroupUUID // first MULTIPLE_CHOICE_OPTION
+	if fieldUUID != optionGroupUUID {
+		t.Errorf("field.uuid (%s) != option groupUuid (%s), must reference content group", fieldUUID, optionGroupUUID)
+	}
+
+	// Must not be a block uuid
+	for _, b := range req.Blocks {
+		if b.UUID == fieldUUID {
+			t.Errorf("field.uuid (%s) matches a block UUID, must be a groupUuid", fieldUUID)
+		}
+	}
+
+	// Verify value resolves to option UUID
+	value := payload["value"].(string)
+	yesOptUUID := req.Blocks[2].UUID // "Yes" option
+	if value != yesOptUUID {
+		t.Errorf("value = %s, want Yes option UUID %s", value, yesOptUUID)
+	}
+
+	if field["questionType"] != "MULTIPLE_CHOICE" {
+		t.Errorf("questionType = %v, want MULTIPLE_CHOICE", field["questionType"])
+	}
+	if field["type"] != "INPUT_FIELD" {
+		t.Errorf("type = %v, want INPUT_FIELD", field["type"])
+	}
+	if field["title"] != "Role?" {
+		t.Errorf("title = %v, want Role?", field["title"])
+	}
+
+	// Verify actions
 	actions := condBlock.Payload["actions"].([]any)
 	if len(actions) != 1 {
 		t.Fatalf("Actions = %d, want 1", len(actions))
 	}
-
 	action := actions[0].(map[string]any)
 	if action["type"] != "SHOW_BLOCKS" {
 		t.Errorf("Action type = %v, want SHOW_BLOCKS", action["type"])
+	}
+
+	// showBlocks must reference the target question's block UUIDs
+	showBlocks := action["payload"].(map[string]any)["showBlocks"].([]string)
+	// F2 is long-text: TITLE + TEXTAREA = 2 block UUIDs
+	if len(showBlocks) != 2 {
+		t.Errorf("showBlocks = %d, want 2 (TITLE + TEXTAREA)", len(showBlocks))
+	}
+}
+
+func TestCompileConditionalIsNotEmpty(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "Tools?",
+					Type: model.MultiChoice,
+					Options: []model.Option{
+						{Text: "A"},
+						{Text: "B"},
+					},
+				},
+				&model.Conditional{
+					Targets:  []string{"F2"},
+					Operator: "AND",
+					Conditions: []model.Condition{
+						{Field: "F1", Comparison: "is_not_empty"},
+					},
+				},
+				&model.Question{
+					ID:     "F2",
+					Text:   "Which?",
+					Type:   model.LongText,
+					Hidden: true,
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	var condBlock *TallyBlock
+	for i := range req.Blocks {
+		if req.Blocks[i].Type == "CONDITIONAL_LOGIC" {
+			condBlock = &req.Blocks[i]
+			break
+		}
+	}
+	if condBlock == nil {
+		t.Fatal("No CONDITIONAL_LOGIC block found")
+	}
+
+	conditionals := condBlock.Payload["conditionals"].([]any)
+	payload := conditionals[0].(map[string]any)["payload"].(map[string]any)
+
+	if payload["comparison"] != "IS_NOT_EMPTY" {
+		t.Errorf("comparison = %v, want IS_NOT_EMPTY", payload["comparison"])
+	}
+	// value must be empty string for IS_NOT_EMPTY
+	if payload["value"] != "" {
+		t.Errorf("value = %v, want empty string", payload["value"])
+	}
+
+	field := payload["field"].(map[string]any)
+	if field["questionType"] != "CHECKBOXES" {
+		t.Errorf("questionType = %v, want CHECKBOXES", field["questionType"])
+	}
+}
+
+func TestCompileConditionalMultipleValues(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "Pick?",
+					Type: model.SingleChoice,
+					Options: []model.Option{
+						{Text: "A"},
+						{Text: "B"},
+						{Text: "C"},
+					},
+				},
+				&model.Conditional{
+					Targets:  []string{"F2"},
+					Operator: "AND",
+					Conditions: []model.Condition{
+						{Field: "F1", Comparison: "is_any_of", Values: []string{"A", "B"}},
+					},
+				},
+				&model.Question{
+					ID:     "F2",
+					Text:   "Details?",
+					Type:   model.LongText,
+					Hidden: true,
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	var condBlock *TallyBlock
+	for i := range req.Blocks {
+		if req.Blocks[i].Type == "CONDITIONAL_LOGIC" {
+			condBlock = &req.Blocks[i]
+			break
+		}
+	}
+	if condBlock == nil {
+		t.Fatal("No CONDITIONAL_LOGIC block found")
+	}
+
+	conditionals := condBlock.Payload["conditionals"].([]any)
+	payload := conditionals[0].(map[string]any)["payload"].(map[string]any)
+
+	if payload["comparison"] != "IS_ANY_OF" {
+		t.Errorf("comparison = %v, want IS_ANY_OF", payload["comparison"])
+	}
+
+	// Multiple values should be a slice
+	values, ok := payload["value"].([]string)
+	if !ok {
+		t.Fatalf("value is not []string: %T", payload["value"])
+	}
+	if len(values) != 2 {
+		t.Fatalf("values = %d, want 2", len(values))
+	}
+
+	// Values should be option UUIDs, not text
+	optAUUID := req.Blocks[2].UUID
+	optBUUID := req.Blocks[3].UUID
+	if values[0] != optAUUID || values[1] != optBUUID {
+		t.Errorf("values = %v, want [%s, %s]", values, optAUUID, optBUUID)
 	}
 }
 
@@ -430,7 +761,7 @@ func TestCompileFormTitle(t *testing.T) {
 	}
 }
 
-func TestCompileDropdownNoMultiChoiceFields(t *testing.T) {
+func TestCompileDropdown(t *testing.T) {
 	form := &model.Form{
 		Name: "Test",
 		Pages: []model.Page{{
@@ -455,11 +786,20 @@ func TestCompileDropdownNoMultiChoiceFields(t *testing.T) {
 		t.Fatalf("Compile error: %v", err)
 	}
 
-	// Check dropdown option blocks don't have MULTIPLE_CHOICE-specific fields
+	// FORM_TITLE + TITLE + 2 options = 4
+	if len(req.Blocks) != 4 {
+		t.Fatalf("Blocks = %d, want 4", len(req.Blocks))
+	}
+
+	// Check dropdown option blocks
 	for _, b := range req.Blocks {
 		if b.Type != "DROPDOWN_OPTION" {
 			continue
 		}
+		if b.GroupType != "DROPDOWN" {
+			t.Errorf("GroupType = %q, want DROPDOWN", b.GroupType)
+		}
+		// Must not have MULTIPLE_CHOICE-specific fields
 		if _, ok := b.Payload["allowMultiple"]; ok {
 			t.Error("DROPDOWN_OPTION should not have allowMultiple")
 		}
@@ -472,6 +812,15 @@ func TestCompileDropdownNoMultiChoiceFields(t *testing.T) {
 		if _, ok := b.Payload["colorCodeOptions"]; ok {
 			t.Error("DROPDOWN_OPTION should not have colorCodeOptions")
 		}
+	}
+
+	// TITLE and dropdown options must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and DROPDOWN_OPTION must have different groupUUIDs")
+	}
+	// All dropdown options share the same groupUUID
+	if req.Blocks[2].GroupUUID != req.Blocks[3].GroupUUID {
+		t.Error("All DROPDOWN_OPTIONs must share the same groupUUID")
 	}
 }
 
@@ -553,5 +902,157 @@ func TestSafeHTMLSchemaFromHTML(t *testing.T) {
 	styles := boldSeg[1].([]any)
 	if len(styles) != 2 {
 		t.Fatalf("styles len = %d, want 2", len(styles))
+	}
+}
+
+func TestCompileScale(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:       "F1",
+					Text:     "How likely?",
+					Type:     model.Scale,
+					Required: true,
+					Properties: map[string]any{
+						"start":       0,
+						"end":         10,
+						"step":        1,
+						"left-label":  "Not at all",
+						"right-label": "Definitely",
+					},
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// FORM_TITLE + TITLE + LINEAR_SCALE = 3
+	if len(req.Blocks) != 3 {
+		t.Fatalf("Blocks = %d, want 3", len(req.Blocks))
+	}
+
+	scale := req.Blocks[2]
+	if scale.Type != "LINEAR_SCALE" {
+		t.Errorf("Type = %q, want LINEAR_SCALE", scale.Type)
+	}
+	if scale.Payload["startNumber"] != 0 {
+		t.Errorf("startNumber = %v, want 0", scale.Payload["startNumber"])
+	}
+	if scale.Payload["endNumber"] != 10 {
+		t.Errorf("endNumber = %v, want 10", scale.Payload["endNumber"])
+	}
+	if scale.Payload["leftLabel"] != "Not at all" {
+		t.Errorf("leftLabel = %v", scale.Payload["leftLabel"])
+	}
+	if scale.Payload["rightLabel"] != "Definitely" {
+		t.Errorf("rightLabel = %v", scale.Payload["rightLabel"])
+	}
+
+	// TITLE and scale must have different groupUUIDs
+	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+		t.Error("TITLE and LINEAR_SCALE must have different groupUUIDs")
+	}
+}
+
+func TestCompileConditionalFieldReferencesContentGroup(t *testing.T) {
+	// Comprehensive test: build a form with multiple question types and conditionals,
+	// verify all conditional field references use content groupUUIDs consistently.
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "Choices?",
+					Type: model.SingleChoice,
+					Options: []model.Option{
+						{Text: "A"},
+						{Text: "B"},
+					},
+				},
+				&model.Conditional{
+					Targets:  []string{"F2"},
+					Operator: "AND",
+					Conditions: []model.Condition{
+						{Field: "F1", Comparison: "is", Values: []string{"A"}},
+					},
+				},
+				&model.Question{
+					ID:     "F2",
+					Text:   "Hidden text",
+					Type:   model.ShortText,
+					Hidden: true,
+				},
+				&model.Question{
+					ID:   "F3",
+					Text: "Long input?",
+					Type: model.LongText,
+				},
+				&model.Conditional{
+					Targets:  []string{"F4"},
+					Operator: "AND",
+					Conditions: []model.Condition{
+						{Field: "F3", Comparison: "is_not_empty"},
+					},
+				},
+				&model.Question{
+					ID:     "F4",
+					Text:   "Follow-up",
+					Type:   model.LongText,
+					Hidden: true,
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// Collect all blocks by type for reference
+	blocksByUUID := make(map[string]*TallyBlock)
+	groupMembers := make(map[string][]string) // groupUUID → []blockType
+	for i := range req.Blocks {
+		b := &req.Blocks[i]
+		blocksByUUID[b.UUID] = b
+		groupMembers[b.GroupUUID] = append(groupMembers[b.GroupUUID], b.Type)
+	}
+
+	// Find all conditionals and verify their field references
+	for i, b := range req.Blocks {
+		if b.Type != "CONDITIONAL_LOGIC" {
+			continue
+		}
+		conditionals := b.Payload["conditionals"].([]any)
+		for _, c := range conditionals {
+			payload := c.(map[string]any)["payload"].(map[string]any)
+			field := payload["field"].(map[string]any)
+			fuuid := field["uuid"].(string)
+			bgUUID := field["blockGroupUuid"].(string)
+
+			// uuid == blockGroupUuid
+			if fuuid != bgUUID {
+				t.Errorf("[%d] field.uuid != field.blockGroupUuid: %s != %s", i, fuuid, bgUUID)
+			}
+
+			// Must be a groupUUID, not a block UUID
+			if _, isBlockUUID := blocksByUUID[fuuid]; isBlockUUID {
+				t.Errorf("[%d] field.uuid %s is a block UUID, must be a content groupUUID", i, fuuid)
+			}
+
+			// Must match some blocks' groupUUID
+			if _, hasMembers := groupMembers[fuuid]; !hasMembers {
+				t.Errorf("[%d] field.uuid %s doesn't match any block's groupUUID", i, fuuid)
+			}
+		}
 	}
 }
