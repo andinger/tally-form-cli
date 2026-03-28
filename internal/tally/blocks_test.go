@@ -85,6 +85,13 @@ func TestCompileSingleChoice(t *testing.T) {
 		}
 	}
 
+	// TITLE and options must have different groupUUIDs (Tally editor requires this)
+	titleGroup := req.Blocks[1].GroupUUID
+	optionGroup := req.Blocks[2].GroupUUID
+	if titleGroup == optionGroup {
+		t.Errorf("TITLE and options must have different groupUUIDs, both are %q", titleGroup)
+	}
+
 	// Check other option
 	lastOpt := req.Blocks[4]
 	if lastOpt.Payload["isOtherOption"] != true {

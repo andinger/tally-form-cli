@@ -248,46 +248,50 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], hintUUID)
 	}
 
+	// Content blocks (options, inputs, matrix, etc.) need their own groupUUID,
+	// separate from the TITLE's groupUUID. Tally's editor requires this separation
+	// to recognize questions as editable question blocks.
+	contentGroupUUID := c.NewUUID()
+
 	switch q.Type {
 	case model.SingleChoice:
-		blocks = append(blocks, c.compileChoiceOptions(q, "MULTIPLE_CHOICE_OPTION", "MULTIPLE_CHOICE", false)...)
+		blocks = append(blocks, c.compileChoiceOptions(q, "MULTIPLE_CHOICE_OPTION", "MULTIPLE_CHOICE", false, contentGroupUUID)...)
 	case model.MultiChoice:
-		blocks = append(blocks, c.compileChoiceOptions(q, "CHECKBOX", "CHECKBOXES", true)...)
+		blocks = append(blocks, c.compileChoiceOptions(q, "CHECKBOX", "CHECKBOXES", true, contentGroupUUID)...)
 	case model.Dropdown:
-		blocks = append(blocks, c.compileChoiceOptions(q, "DROPDOWN_OPTION", "DROPDOWN", false)...)
+		blocks = append(blocks, c.compileChoiceOptions(q, "DROPDOWN_OPTION", "DROPDOWN", false, contentGroupUUID)...)
 	case model.Matrix:
-		blocks = append(blocks, c.compileMatrix(q, groupUUID)...)
+		blocks = append(blocks, c.compileMatrix(q, contentGroupUUID)...)
 	case model.LongText:
-		blocks = append(blocks, c.compileInputBlock(q, "TEXTAREA", "TEXTAREA", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "TEXTAREA", "TEXTAREA", contentGroupUUID)...)
 	case model.ShortText:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_TEXT", "INPUT_TEXT", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_TEXT", "INPUT_TEXT", contentGroupUUID)...)
 	case model.Number:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_NUMBER", "INPUT_NUMBER", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_NUMBER", "INPUT_NUMBER", contentGroupUUID)...)
 	case model.Email:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_EMAIL", "INPUT_EMAIL", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_EMAIL", "INPUT_EMAIL", contentGroupUUID)...)
 	case model.Phone:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_PHONE_NUMBER", "INPUT_PHONE_NUMBER", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_PHONE_NUMBER", "INPUT_PHONE_NUMBER", contentGroupUUID)...)
 	case model.URL:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_LINK", "INPUT_LINK", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_LINK", "INPUT_LINK", contentGroupUUID)...)
 	case model.Date:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_DATE", "INPUT_DATE", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_DATE", "INPUT_DATE", contentGroupUUID)...)
 	case model.Time:
-		blocks = append(blocks, c.compileInputBlock(q, "INPUT_TIME", "INPUT_TIME", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "INPUT_TIME", "INPUT_TIME", contentGroupUUID)...)
 	case model.Rating:
-		blocks = append(blocks, c.compileInputBlock(q, "RATING", "RATING", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "RATING", "RATING", contentGroupUUID)...)
 	case model.Scale:
-		blocks = append(blocks, c.compileScaleBlock(q, groupUUID)...)
+		blocks = append(blocks, c.compileScaleBlock(q, contentGroupUUID)...)
 	case model.FileUpload:
-		blocks = append(blocks, c.compileInputBlock(q, "FILE_UPLOAD", "FILE_UPLOAD", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "FILE_UPLOAD", "FILE_UPLOAD", contentGroupUUID)...)
 	case model.Signature:
-		blocks = append(blocks, c.compileInputBlock(q, "SIGNATURE", "SIGNATURE", groupUUID)...)
+		blocks = append(blocks, c.compileInputBlock(q, "SIGNATURE", "SIGNATURE", contentGroupUUID)...)
 	}
 
 	return blocks
 }
 
-func (c *Compiler) compileChoiceOptions(q *model.Question, blockType, groupType string, allowMultiple bool) []TallyBlock {
-	groupUUID := c.questionGroupUUIDs[q.ID]
+func (c *Compiler) compileChoiceOptions(q *model.Question, blockType, groupType string, allowMultiple bool, contentGroupUUID string) []TallyBlock {
 	var blocks []TallyBlock
 	hasOther := false
 	for _, opt := range q.Options {
@@ -328,7 +332,7 @@ func (c *Compiler) compileChoiceOptions(q *model.Question, blockType, groupType 
 		block := TallyBlock{
 			UUID:      optUUID,
 			Type:      blockType,
-			GroupUUID: groupUUID,
+			GroupUUID: contentGroupUUID,
 			GroupType: groupType,
 			Payload:   payload,
 		}
