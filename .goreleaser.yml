@@ -31,7 +31,8 @@ changelog:
       - "^ci:"
 
 brews:
-  - repository:
+  - name: tally
+    repository:
       owner: andinger
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
