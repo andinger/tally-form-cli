@@ -85,8 +85,6 @@ F4: Rate document complexity
 - Protocols
 ```
 
-See the [format specification](https://github.com/andinger/tally-form-cli/wiki) for details.
-
 ## License
 
 MIT
