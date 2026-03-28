@@ -473,13 +473,11 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 	// Build conditionals array
 	var conditionals []any
 	for _, condition := range cond.Conditions {
-		fieldGroupUUID, ok := c.questionGroupUUIDs[condition.Field]
-		if !ok {
-			return nil, fmt.Errorf("conditional field %q not found", condition.Field)
-		}
-
 		// Determine the question type for the field reference
 		fieldInputUUID := c.firstOptionUUID[condition.Field]
+		if fieldInputUUID == "" {
+			return nil, fmt.Errorf("conditional field %q not found", condition.Field)
+		}
 		questionType := c.getQuestionType(condition.Field)
 
 		comparison := strings.ToUpper(condition.Comparison)
@@ -496,7 +494,7 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 				"uuid":           fieldInputUUID,
 				"type":           "INPUT_FIELD",
 				"questionType":   questionType,
-				"blockGroupUuid": fieldGroupUUID,
+				"blockGroupUuid": fieldInputUUID,
 				"title":          fieldTitle,
 			},
 			"comparison": comparison,
