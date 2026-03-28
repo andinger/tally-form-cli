@@ -1,5 +1,5 @@
 # Binaries
-/tally-form-cli
+/tally
 *.exe
 *.exe~
 *.dll

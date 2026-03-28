@@ -14,7 +14,7 @@ var (
 // NewRootCmd creates the root cobra command.
 func NewRootCmd(version, commit, date string) *cobra.Command {
 	root := &cobra.Command{
-		Use:   "tally-form-cli",
+		Use:   "tally",
 		Short: "Markdown-to-Tally form builder",
 		Long:  "Bidirectional conversion between Markdown and Tally.so forms.",
 		Version: fmt.Sprintf("%s (commit: %s, built: %s)", version, commit, date),
@@ -28,6 +28,7 @@ func NewRootCmd(version, commit, date string) *cobra.Command {
 	root.AddCommand(newUpdateCmd())
 	root.AddCommand(newExportCmd())
 	root.AddCommand(newSubmissionsCmd())
+	root.AddCommand(newReferenceCmd())
 
 	return root
 }

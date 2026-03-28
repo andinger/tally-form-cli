@@ -1,16 +1,16 @@
-# tally-form-cli
+# tally
 
 Bidirectional conversion between Markdown and [Tally.so](https://tally.so) forms. Write your questionnaire in Markdown, push it to Tally with a single command. Export existing forms back to Markdown.
 
 ## Installation
 
 ```bash
-brew install andinger/tap/tally-form-cli
+brew install andinger/tap/tally
 ```
 
 ## Configuration
 
-Create `~/.config/tally-form-cli/config.yaml`:
+Create `~/.config/tally/config.yaml`:
 
 ```yaml
 api:
@@ -24,22 +24,25 @@ workspace: "your_workspace_id"
 
 ```bash
 # Push (upsert) — creates or updates based on form_id in frontmatter
-tally-form-cli push questionnaire.md --config tally-config.yaml
+tally push questionnaire.md --config tally-config.yaml
 
 # Dry-run — show JSON payload without calling API
-tally-form-cli push questionnaire.md --dry-run
+tally push questionnaire.md --dry-run
 
 # Create — always creates a new form
-tally-form-cli create questionnaire.md
+tally create questionnaire.md
 
 # Update — update existing form
-tally-form-cli update <form-id> questionnaire.md
+tally update <form-id> questionnaire.md
 
 # Export — download form as Markdown
-tally-form-cli export <form-id> > questionnaire.md
+tally export <form-id> > questionnaire.md
 
 # Submissions — download responses as CSV
-tally-form-cli submissions <form-id> --format csv > responses.csv
+tally submissions <form-id> --format csv > responses.csv
+
+# Reference — print CLI reference for Claude
+tally reference > ~/.claude/references/tally.md
 ```
 
 ## Markdown Format

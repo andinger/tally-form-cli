@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config holds all configuration for a tally-form-cli operation.
+// Config holds all configuration for a tally operation.
 type Config struct {
 	API       APIConfig      `yaml:"api"`
 	Workspace string         `yaml:"workspace"`
@@ -106,8 +106,17 @@ func loadUserConfig() (*Config, error) {
 		return &Config{}, nil
 	}
 
-	path := filepath.Join(home, ".config", "tally-form-cli", "config.yaml")
+	path := filepath.Join(home, ".config", "tally", "config.yaml")
 	data, err := os.ReadFile(path)
+	if err != nil && os.IsNotExist(err) {
+		// Fallback to legacy path
+		legacyPath := filepath.Join(home, ".config", "tally-form-cli", "config.yaml")
+		data, err = os.ReadFile(legacyPath)
+		if err == nil {
+			fmt.Fprintf(os.Stderr, "warning: config at %s is deprecated, move to %s\n", legacyPath, path)
+			path = legacyPath
+		}
+	}
 	if err != nil {
 		if os.IsNotExist(err) {
 			return &Config{}, nil

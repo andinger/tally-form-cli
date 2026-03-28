@@ -60,7 +60,7 @@ func runPush(cmd *cobra.Command, args []string) error {
 	}
 
 	if cfg.Token == "" {
-		return fmt.Errorf("no API token configured (set in ~/.config/tally-form-cli/config.yaml or TALLY_API_TOKEN)")
+		return fmt.Errorf("no API token configured (set in ~/.config/tally/config.yaml or TALLY_API_TOKEN)")
 	}
 
 	client := tally.NewClient(cfg.BaseURL, cfg.Token)

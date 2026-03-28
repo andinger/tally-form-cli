@@ -1,8 +1,8 @@
 version: 2
 
 builds:
-  - main: ./cmd/tally-form-cli
-    binary: tally-form-cli
+  - main: ./cmd/tally
+    binary: tally
     env:
       - CGO_ENABLED=0
     goos:
@@ -39,6 +39,6 @@ brews:
     description: Markdown-to-Tally form builder
     license: MIT
     install: |
-      bin.install "tally-form-cli"
+      bin.install "tally"
     test: |
-      system bin/"tally-form-cli", "--version"
+      system bin/"tally", "--version"
