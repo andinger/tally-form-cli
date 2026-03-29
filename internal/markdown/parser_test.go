@@ -397,3 +397,212 @@ F1: Which tasks?
 		t.Errorf("Option 0 = %q", q.Options[0].Text)
 	}
 }
+
+func TestParseNoFrontmatter(t *testing.T) {
+	content := `F1: Question?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	if form.Name != "" {
+		t.Errorf("Name = %q, want empty", form.Name)
+	}
+	q := form.Pages[0].Blocks[0].(*model.Question)
+	if q.Text != "Question?" {
+		t.Errorf("Text = %q", q.Text)
+	}
+}
+
+func TestParseMalformedFrontmatter(t *testing.T) {
+	// Missing closing ---
+	content := `---
+name: "Test"
+F1: Question?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	// Should treat whole thing as body since no closing ---
+	if form.Name != "" {
+		t.Errorf("Name = %q, want empty (no closing ---)", form.Name)
+	}
+}
+
+func TestParseConditionalOR(t *testing.T) {
+	content := `---
+name: "Test"
+---
+
+F1: Q?
+> type: single-choice
+- A
+- B
+- C
+
+> show F2 when F1 is "A" or F1 is "B"
+
+F2: Details?
+> type: long-text
+> hidden: true
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	var cond *model.Conditional
+	for _, b := range form.Pages[0].Blocks {
+		if c, ok := b.(*model.Conditional); ok {
+			cond = c
+			break
+		}
+	}
+	if cond == nil {
+		t.Fatal("No conditional found")
+	}
+	if cond.Operator != "OR" {
+		t.Errorf("Operator = %q, want OR", cond.Operator)
+	}
+	if len(cond.Conditions) != 2 {
+		t.Fatalf("Conditions = %d, want 2", len(cond.Conditions))
+	}
+}
+
+func TestParseAllMetadata(t *testing.T) {
+	content := `---
+name: "Test"
+---
+
+F1: Scale?
+> type: scale
+> required: false
+> placeholder: "Type here"
+> hidden: true
+> stars: 5
+> start: 1
+> end: 10
+> step: 2
+> left-label: "Low"
+> right-label: "High"
+> min: 1
+> max: 5
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	q := form.Pages[0].Blocks[0].(*model.Question)
+	if q.Required {
+		t.Error("should not be required")
+	}
+	if q.Placeholder != "Type here" {
+		t.Errorf("Placeholder = %q", q.Placeholder)
+	}
+	if !q.Hidden {
+		t.Error("should be hidden")
+	}
+	if q.Properties["stars"] != 5 {
+		t.Errorf("stars = %v", q.Properties["stars"])
+	}
+	if q.Properties["start"] != 1 {
+		t.Errorf("start = %v", q.Properties["start"])
+	}
+	if q.Properties["end"] != 10 {
+		t.Errorf("end = %v", q.Properties["end"])
+	}
+	if q.Properties["step"] != 2 {
+		t.Errorf("step = %v", q.Properties["step"])
+	}
+	if q.Properties["left-label"] != "Low" {
+		t.Errorf("left-label = %v", q.Properties["left-label"])
+	}
+	if q.Properties["right-label"] != "High" {
+		t.Errorf("right-label = %v", q.Properties["right-label"])
+	}
+	if q.Properties["min"] != 1 {
+		t.Errorf("min = %v", q.Properties["min"])
+	}
+	if q.Properties["max"] != 5 {
+		t.Errorf("max = %v", q.Properties["max"])
+	}
+}
+
+func TestParseLinkInText(t *testing.T) {
+	content := `---
+name: "Test"
+---
+
+Visit [our site](https://example.com) for details.
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	tb := form.Pages[0].Blocks[0].(*model.TextBlock)
+	expected := `Visit <a href="https://example.com">our site</a> for details.`
+	if tb.HTML != expected {
+		t.Errorf("HTML = %q, want %q", tb.HTML, expected)
+	}
+}
+
+func TestParseBoldInText(t *testing.T) {
+	content := `---
+name: "Test"
+---
+
+This is **important** text.
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	tb := form.Pages[0].Blocks[0].(*model.TextBlock)
+	if tb.HTML != "This is <b>important</b> text." {
+		t.Errorf("HTML = %q", tb.HTML)
+	}
+}
+
+func TestParseInvalidCondition(t *testing.T) {
+	content := `---
+name: "Test"
+---
+
+F1: Q?
+> type: short-text
+
+> show F2 when invalid
+`
+	_, err := Parse(content)
+	if err == nil {
+		t.Error("Expected error for invalid condition with only 1 part")
+	}
+}
+
+func TestParseFrontmatterWithSettings(t *testing.T) {
+	content := `---
+name: "Test"
+workspace: "ws123"
+password: "secret"
+language: "de"
+---
+
+F1: Q?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	if form.Workspace != "ws123" {
+		t.Errorf("Workspace = %q", form.Workspace)
+	}
+	if form.Password != "secret" {
+		t.Errorf("Password = %q", form.Password)
+	}
+	if form.Settings["language"] != "de" {
+		t.Errorf("Settings = %v", form.Settings)
+	}
+}

@@ -118,6 +118,58 @@ func TestGetSubmissions(t *testing.T) {
 	}
 }
 
+func TestGetFormInvalidJSON(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`not json`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "token")
+	_, err := client.GetForm("xyz")
+	if err == nil {
+		t.Fatal("Expected error for invalid JSON")
+	}
+}
+
+func TestCreateFormInvalidJSON(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`not json`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "token")
+	_, err := client.CreateForm(&CreateFormRequest{})
+	if err == nil {
+		t.Fatal("Expected error for invalid JSON response")
+	}
+}
+
+func TestUpdateFormInvalidJSON(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`not json`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "token")
+	_, err := client.UpdateForm("id", &UpdateFormRequest{})
+	if err == nil {
+		t.Fatal("Expected error for invalid JSON response")
+	}
+}
+
+func TestGetSubmissionsInvalidJSON(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`not json`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "token")
+	_, err := client.GetSubmissions("id")
+	if err == nil {
+		t.Fatal("Expected error for invalid JSON response")
+	}
+}
+
 func TestAPIError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)

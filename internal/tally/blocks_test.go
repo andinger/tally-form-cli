@@ -925,6 +925,275 @@ func TestSafeHTMLSchemaFromHTML(t *testing.T) {
 	}
 }
 
+func TestSafeHTMLSchemaEdgeCases(t *testing.T) {
+	// Empty string
+	s := SafeHTMLSchemaFromHTML("")
+	if len(s) != 1 {
+		t.Errorf("empty: segments = %d, want 1", len(s))
+	}
+
+	// Unclosed bold tag — "Hello " + rest as plain
+	s = SafeHTMLSchemaFromHTML("Hello <b>world")
+	if len(s) < 1 {
+		t.Error("unclosed bold: should produce at least 1 segment")
+	}
+
+	// Unclosed link tag
+	s = SafeHTMLSchemaFromHTML(`Click <a href="url">here`)
+	if len(s) < 1 {
+		t.Error("unclosed link: should produce at least 1 segment")
+	}
+
+	// Nested: italic containing link
+	s = SafeHTMLSchemaFromHTML(`<i>text <a href="url">link</a> more</i>`)
+	// Should produce: italic "text ", link "link", italic " more"
+	if len(s) != 3 {
+		t.Fatalf("nested: segments = %d, want 3: %v", len(s), s)
+	}
+}
+
+func TestApplyThankYouPage(t *testing.T) {
+	settings := make(map[string]any)
+
+	// Heading + text blocks
+	page := model.Page{
+		Blocks: []model.Block{
+			&model.HeadingBlock{Text: "Thank you!", Level: 1},
+			&model.TextBlock{HTML: "Your answers help us."},
+			&model.TextBlock{HTML: "We will contact you."},
+		},
+	}
+	applyThankYouPage(page, settings)
+	if settings["closeMessageTitle"] != "Thank you!" {
+		t.Errorf("title = %q", settings["closeMessageTitle"])
+	}
+	if settings["closeMessageDescription"] != "Your answers help us.\n\nWe will contact you." {
+		t.Errorf("desc = %q", settings["closeMessageDescription"])
+	}
+
+	// Text-only (first text becomes title)
+	settings2 := make(map[string]any)
+	page2 := model.Page{
+		Blocks: []model.Block{
+			&model.TextBlock{HTML: "<b>Thanks</b>"},
+			&model.TextBlock{HTML: "See you."},
+		},
+	}
+	applyThankYouPage(page2, settings2)
+	if settings2["closeMessageTitle"] != "Thanks" {
+		t.Errorf("title = %q (should strip HTML)", settings2["closeMessageTitle"])
+	}
+}
+
+func TestStripHTMLTags(t *testing.T) {
+	tests := []struct{ in, want string }{
+		{"<b>bold</b>", "bold"},
+		{"<i>italic</i>", "italic"},
+		{"<b>A</b> and <i>B</i>", "A and B"},
+		{"no tags", "no tags"},
+		{"", ""},
+	}
+	for _, tt := range tests {
+		if got := stripHTMLTags(tt.in); got != tt.want {
+			t.Errorf("stripHTMLTags(%q) = %q, want %q", tt.in, got, tt.want)
+		}
+	}
+}
+
+func TestPageHasQuestions(t *testing.T) {
+	withQ := model.Page{Blocks: []model.Block{
+		&model.TextBlock{HTML: "Intro"},
+		&model.Question{ID: "F1", Text: "Q?", Type: model.ShortText},
+	}}
+	if !pageHasQuestions(withQ) {
+		t.Error("should have questions")
+	}
+
+	withoutQ := model.Page{Blocks: []model.Block{
+		&model.TextBlock{HTML: "Thanks"},
+		&model.HeadingBlock{Text: "Done", Level: 1},
+	}}
+	if pageHasQuestions(withoutQ) {
+		t.Error("should not have questions")
+	}
+
+	empty := model.Page{}
+	if pageHasQuestions(empty) {
+		t.Error("empty should not have questions")
+	}
+}
+
+func TestBuildPageBreak(t *testing.T) {
+	c := testCompiler()
+
+	// Default button label
+	pb := c.buildPageBreak("", 0, false)
+	btn := pb.Payload["button"].(map[string]any)["label"]
+	if btn != "Weiter" {
+		t.Errorf("default label = %q, want Weiter", btn)
+	}
+	if pb.Payload["isFirst"] != true {
+		t.Error("index 0 should be isFirst")
+	}
+	if pb.Payload["isLast"] != false {
+		t.Error("should not be isLast")
+	}
+
+	// Custom label, isLast
+	pb2 := c.buildPageBreak("Submit", 3, true)
+	btn2 := pb2.Payload["button"].(map[string]any)["label"]
+	if btn2 != "Submit" {
+		t.Errorf("label = %q", btn2)
+	}
+	if pb2.Payload["isLast"] != true {
+		t.Error("should be isLast")
+	}
+	if pb2.Payload["isFirst"] != false {
+		t.Error("index 3 should not be isFirst")
+	}
+}
+
+func TestCompileHeadingLevel1(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.HeadingBlock{Text: "Main Title", Level: 1},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	h := req.Blocks[1] // after FORM_TITLE
+	if h.Type != "HEADING_1" {
+		t.Errorf("Type = %q, want HEADING_1", h.Type)
+	}
+	if h.GroupType != "HEADING_1" {
+		t.Errorf("GroupType = %q, want HEADING_1", h.GroupType)
+	}
+}
+
+func TestCompileThankYouPage(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{
+			{Blocks: []model.Block{
+				&model.Question{ID: "F1", Text: "Q?", Type: model.ShortText},
+			}},
+			{Blocks: []model.Block{
+				&model.TextBlock{HTML: "<b>Thanks!</b>"},
+				&model.TextBlock{HTML: "Your feedback matters."},
+			}},
+		},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	// Should NOT have TEXT blocks for thank-you — they go to settings
+	for _, b := range req.Blocks {
+		if b.Type == "TEXT" {
+			t.Error("Thank-you TEXT blocks should not be in blocks array")
+		}
+	}
+
+	settings := req.Settings.(map[string]any)
+	if settings["closeMessageTitle"] != "Thanks!" {
+		t.Errorf("closeMessageTitle = %q", settings["closeMessageTitle"])
+	}
+	if settings["closeMessageDescription"] != "Your feedback matters." {
+		t.Errorf("closeMessageDescription = %q", settings["closeMessageDescription"])
+	}
+}
+
+func TestCompileAllInputTypes(t *testing.T) {
+	// Test all input question types compile to correct block types
+	tests := []struct {
+		qType     model.QuestionType
+		blockType string
+	}{
+		{model.Number, "INPUT_NUMBER"},
+		{model.Email, "INPUT_EMAIL"},
+		{model.Phone, "INPUT_PHONE_NUMBER"},
+		{model.URL, "INPUT_LINK"},
+		{model.Date, "INPUT_DATE"},
+		{model.Time, "INPUT_TIME"},
+		{model.Rating, "RATING"},
+		{model.FileUpload, "FILE_UPLOAD"},
+		{model.Signature, "SIGNATURE"},
+	}
+
+	for _, tt := range tests {
+		t.Run(string(tt.qType), func(t *testing.T) {
+			form := &model.Form{
+				Name: "Test",
+				Pages: []model.Page{{
+					Blocks: []model.Block{
+						&model.Question{ID: "F1", Text: "Q?", Type: tt.qType, Required: true},
+					},
+				}},
+			}
+			c := testCompiler()
+			req, err := c.Compile(form, testConfig())
+			if err != nil {
+				t.Fatalf("error: %v", err)
+			}
+			// FORM_TITLE + TITLE + input = 3
+			if len(req.Blocks) != 3 {
+				t.Fatalf("Blocks = %d, want 3", len(req.Blocks))
+			}
+			if req.Blocks[2].Type != tt.blockType {
+				t.Errorf("Type = %q, want %q", req.Blocks[2].Type, tt.blockType)
+			}
+			// groupUUID separation
+			if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
+				t.Error("TITLE and input must have different groupUUIDs")
+			}
+		})
+	}
+}
+
+func TestBuildSettings(t *testing.T) {
+	form := &model.Form{
+		Name:     "Test",
+		Password: "secret",
+		Settings: map[string]any{"language": "de"},
+		Pages:    []model.Page{{}},
+	}
+
+	cfg := testConfig()
+	cfg.Settings = map[string]any{"hasProgressBar": true}
+	cfg.Styles = `{"theme":"CUSTOM"}`
+
+	c := testCompiler()
+	req, err := c.Compile(form, cfg)
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	settings := req.Settings.(map[string]any)
+	if settings["hasProgressBar"] != true {
+		t.Error("missing hasProgressBar from config")
+	}
+	if settings["styles"] != `{"theme":"CUSTOM"}` {
+		t.Errorf("styles = %v", settings["styles"])
+	}
+	if settings["language"] != "de" {
+		t.Error("missing language from form settings")
+	}
+	if req.Password != "secret" {
+		t.Errorf("password = %q", req.Password)
+	}
+}
+
 func TestCompileScale(t *testing.T) {
 	form := &model.Form{
 		Name: "Test",
