@@ -197,13 +197,26 @@ Pages separated by `---` (thematic break). Optional button label:
 
 Last page break auto-gets `button: "Absenden"` if no label set.
 
-### Headings and Text
+### Headings, Text and Inline Formatting
 
 ```markdown
 ## Section Title          → HEADING_2 block
 Plain paragraph text.     → TEXT block
 **Bold text**             → bold in Tally
 *Italic text*             → italic in Tally
+[Link text](https://url)  → clickable link in Tally
+```
+
+### Thank-You Page
+
+The last page (after the final `---`) is used as the thank-you page if it contains only text (no questions). The first text block becomes `closeMessageTitle`, the rest becomes `closeMessageDescription`.
+
+```markdown
+---
+
+**Thank you for your time!**
+
+Your answers help us prepare the workshop.
 ```
 
 ### Conditional Logic
