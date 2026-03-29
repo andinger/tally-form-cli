@@ -20,6 +20,7 @@ var (
 	conditionalRe = regexp.MustCompile(`^>\s*show\s+(.+?)\s+when\s+(.+)$`)
 	boldRe        = regexp.MustCompile(`\*\*([^*]+)\*\*`)
 	italicRe      = regexp.MustCompile(`\*([^*]+)\*`)
+	linkRe        = regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
 	otherMarkerRe = regexp.MustCompile(`\s*\{other\}\s*$`)
 )
 
@@ -431,5 +432,6 @@ func convertInlineMarkup(s string) string {
 	// Bold before italic — **bold** must be processed first
 	s = boldRe.ReplaceAllString(s, "<b>$1</b>")
 	s = italicRe.ReplaceAllString(s, "<i>$1</i>")
+	s = linkRe.ReplaceAllString(s, `<a href="$2">$1</a>`)
 	return s
 }

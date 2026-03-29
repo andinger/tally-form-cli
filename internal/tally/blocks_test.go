@@ -876,6 +876,8 @@ func TestSafeHTMLSchemaFromHTML(t *testing.T) {
 		{"bold", "Hello <b>world</b>!", 3, "Hello "},
 		{"italic", "<i>emphasis</i> here", 2, "emphasis"},
 		{"mixed", "A <b>bold</b> and <i>italic</i> text", 5, "A "},
+		{"link", `Click <a href="https://example.com">here</a> now`, 3, "Click "},
+		{"link_only", `<a href="mailto:a@b.com">a@b.com</a>`, 1, "a@b.com"},
 	}
 
 	for _, tt := range tests {
@@ -902,6 +904,24 @@ func TestSafeHTMLSchemaFromHTML(t *testing.T) {
 	styles := boldSeg[1].([]any)
 	if len(styles) != 2 {
 		t.Fatalf("styles len = %d, want 2", len(styles))
+	}
+
+	// Check link segment has correct href style
+	linkSchema := SafeHTMLSchemaFromHTML(`Visit <a href="https://example.com">Example</a>!`)
+	if len(linkSchema) != 3 {
+		t.Fatalf("link segments = %d, want 3", len(linkSchema))
+	}
+	linkSeg := linkSchema[1].([]any)
+	if linkSeg[0] != "Example" {
+		t.Errorf("link text = %q, want Example", linkSeg[0])
+	}
+	linkStyles := linkSeg[1].([]any)
+	if len(linkStyles) != 1 {
+		t.Fatalf("link styles len = %d, want 1", len(linkStyles))
+	}
+	hrefPair := linkStyles[0].([]any)
+	if hrefPair[0] != "href" || hrefPair[1] != "https://example.com" {
+		t.Errorf("href = %v, want [href, https://example.com]", hrefPair)
 	}
 }
 

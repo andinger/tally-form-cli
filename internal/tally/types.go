@@ -1,5 +1,7 @@
 package tally
 
+import "strings"
+
 // TallyBlock represents a single block in the Tally API.
 type TallyBlock struct {
 	UUID      string         `json:"uuid"`
@@ -74,61 +76,133 @@ func SafeHTMLSchemaFromHTML(html string) []any {
 	return parseHTMLToSchema(html)
 }
 
-// parseHTMLToSchema splits HTML with <b>/<i> tags into safeHTMLSchema segments.
+// parseHTMLToSchema splits HTML with <b>/<i>/<a> tags into safeHTMLSchema segments.
 func parseHTMLToSchema(s string) []any {
 	var segments []any
 	for len(s) > 0 {
 		// Find the next tag
 		boldIdx := indexOf(s, "<b>")
 		italicIdx := indexOf(s, "<i>")
+		linkIdx := indexOf(s, "<a href=\"")
 
 		// Pick the nearest tag
-		nextIdx := -1
-		var openTag, closeTag string
-		var styles []any
-		if boldIdx >= 0 && (italicIdx < 0 || boldIdx < italicIdx) {
-			nextIdx = boldIdx
-			openTag = "<b>"
-			closeTag = "</b>"
-			styles = []any{[]any{"tag", "span"}, []any{"font-weight", "bold"}}
-		} else if italicIdx >= 0 {
-			nextIdx = italicIdx
-			openTag = "<i>"
-			closeTag = "</i>"
-			styles = []any{[]any{"tag", "span"}, []any{"font-style", "italic"}}
+		type tagMatch struct {
+			idx      int
+			openEnd  string // closing delimiter of the open tag (e.g. ">" or "">")
+			closeTag string
+			styles   func(s string) []any
 		}
 
-		if nextIdx < 0 {
-			// No more tags — rest is plain text
+		candidates := []tagMatch{}
+		if boldIdx >= 0 {
+			candidates = append(candidates, tagMatch{
+				idx: boldIdx, closeTag: "</b>",
+				styles: func(string) []any {
+					return []any{[]any{"tag", "span"}, []any{"font-weight", "bold"}}
+				},
+			})
+		}
+		if italicIdx >= 0 {
+			candidates = append(candidates, tagMatch{
+				idx: italicIdx, closeTag: "</i>",
+				styles: func(string) []any {
+					return []any{[]any{"tag", "span"}, []any{"font-style", "italic"}}
+				},
+			})
+		}
+		if linkIdx >= 0 {
+			candidates = append(candidates, tagMatch{
+				idx: linkIdx, closeTag: "</a>",
+				styles: func(openTag string) []any {
+					// Extract href from <a href="url">
+					href := extractHref(openTag)
+					return []any{[]any{"href", href}}
+				},
+			})
+		}
+
+		if len(candidates) == 0 {
 			if s != "" {
 				segments = append(segments, []any{s})
 			}
 			break
 		}
 
-		// Text before the tag
-		if nextIdx > 0 {
-			segments = append(segments, []any{s[:nextIdx]})
+		// Pick the earliest tag
+		best := candidates[0]
+		for _, c := range candidates[1:] {
+			if c.idx < best.idx {
+				best = c
+			}
 		}
 
+		// Text before the tag
+		if best.idx > 0 {
+			segments = append(segments, []any{s[:best.idx]})
+		}
+
+		// Find the end of the opening tag (">")
+		afterOpen := s[best.idx:]
+		gtIdx := indexOf(afterOpen, ">")
+		if gtIdx < 0 {
+			segments = append(segments, []any{s[best.idx:]})
+			break
+		}
+		openTag := afterOpen[:gtIdx+1]
+		inner := afterOpen[gtIdx+1:]
+
 		// Find closing tag
-		inner := s[nextIdx+len(openTag):]
-		closeIdx := indexOf(inner, closeTag)
+		closeIdx := indexOf(inner, best.closeTag)
 		if closeIdx < 0 {
-			// Unclosed tag — treat rest as plain text
-			segments = append(segments, []any{s[nextIdx:]})
+			segments = append(segments, []any{s[best.idx:]})
 			break
 		}
 
-		// Styled segment
-		segments = append(segments, []any{inner[:closeIdx], styles})
-		s = inner[closeIdx+len(closeTag):]
+		// Styled segment — check for nested tags inside
+		innerText := inner[:closeIdx]
+		styles := best.styles(openTag)
+		if containsHTMLTag(innerText) {
+			// Recursively parse inner content and apply styles to each sub-segment
+			subSegments := parseHTMLToSchema(innerText)
+			for _, sub := range subSegments {
+				subArr := sub.([]any)
+				if len(subArr) == 1 {
+					// Plain text sub-segment — apply parent styles
+					segments = append(segments, []any{subArr[0], styles})
+				} else {
+					// Already styled sub-segment — keep its own styles (don't nest)
+					segments = append(segments, sub)
+				}
+			}
+		} else {
+			segments = append(segments, []any{innerText, styles})
+		}
+		s = inner[closeIdx+len(best.closeTag):]
 	}
 
 	if len(segments) == 0 {
 		return []any{[]any{""}}
 	}
 	return segments
+}
+
+// containsHTMLTag checks if a string contains any HTML-like tags.
+func containsHTMLTag(s string) bool {
+	return indexOf(s, "<") >= 0 && indexOf(s, ">") >= 0
+}
+
+// extractHref extracts the URL from an opening <a href="url"> tag.
+func extractHref(openTag string) string {
+	prefix := `<a href="`
+	if !strings.HasPrefix(openTag, prefix) {
+		return ""
+	}
+	rest := openTag[len(prefix):]
+	endQuote := indexOf(rest, `"`)
+	if endQuote < 0 {
+		return rest
+	}
+	return rest[:endQuote]
 }
 
 func indexOf(s, substr string) int {

@@ -11,6 +11,7 @@ import (
 var (
 	htmlBoldRe   = regexp.MustCompile(`<b>([^<]+)</b>`)
 	htmlItalicRe = regexp.MustCompile(`<i>([^<]+)</i>`)
+	htmlLinkRe   = regexp.MustCompile(`<a href="([^"]+)">([^<]+)</a>`)
 )
 
 // Write converts an IR Form back to Markdown format.
@@ -159,5 +160,6 @@ func writeConditional(b *strings.Builder, c *model.Conditional) {
 func htmlToMarkdown(s string) string {
 	s = htmlBoldRe.ReplaceAllString(s, "**$1**")
 	s = htmlItalicRe.ReplaceAllString(s, "*$1*")
+	s = htmlLinkRe.ReplaceAllString(s, "[$2]($1)")
 	return s
 }

@@ -416,6 +416,8 @@ func extractFromSchema(schema []any) string {
 					text = "<b>" + text + "</b>"
 				} else if hasStyleProp(styles, "font-style", "italic") {
 					text = "<i>" + text + "</i>"
+				} else if href := getStyleValue(styles, "href"); href != "" {
+					text = `<a href="` + href + `">` + text + "</a>"
 				}
 			}
 		}
@@ -440,6 +442,22 @@ func hasStyleProp(styles []any, prop, value string) bool {
 		}
 	}
 	return false
+}
+
+// getStyleValue returns the value for a style key (e.g. "href") or empty string.
+func getStyleValue(styles []any, key string) string {
+	for _, item := range styles {
+		pair, ok := item.([]any)
+		if !ok || len(pair) != 2 {
+			continue
+		}
+		k, _ := pair[0].(string)
+		if k == key {
+			v, _ := pair[1].(string)
+			return v
+		}
+	}
+	return ""
 }
 
 func getPayloadText(b TallyBlock) string {
