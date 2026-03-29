@@ -64,9 +64,19 @@ func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormReq
 	// Second pass: compile all blocks, collecting deferred conditionals
 	var deferredConditionals []*deferredCond
 
-	for i, page := range form.Pages {
+	lastPage := len(form.Pages) - 1
+	// Check if the last page is a thank-you page (text only, no questions).
+	// If so, extract it into closeMessageTitle/closeMessageDescription settings
+	// instead of emitting it as blocks.
+	hasThankYouPage := lastPage > 0 && !pageHasQuestions(form.Pages[lastPage])
+	pagesToCompile := form.Pages
+	if hasThankYouPage {
+		pagesToCompile = form.Pages[:lastPage]
+	}
+
+	for i, page := range pagesToCompile {
 		if i > 0 {
-			pb := c.buildPageBreak(page.ButtonLabel, i-1, i == len(form.Pages)-1)
+			pb := c.buildPageBreak(page.ButtonLabel, i-1, i == len(pagesToCompile)-1)
 			blocks = append(blocks, pb)
 		}
 
@@ -98,8 +108,11 @@ func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormReq
 		blocks[dc.insertAt] = compiled[0]
 	}
 
-	// Build settings
+	// Build settings (including thank-you page content if present)
 	settings := c.buildSettings(form, cfg)
+	if hasThankYouPage {
+		applyThankYouPage(form.Pages[lastPage], settings)
+	}
 
 	req := &CreateFormRequest{
 		WorkspaceID: cfg.Workspace,
@@ -605,6 +618,59 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 	}
 
 	return settings
+}
+
+// pageHasQuestions returns true if the page contains any Question blocks.
+func pageHasQuestions(page model.Page) bool {
+	for _, block := range page.Blocks {
+		if _, ok := block.(*model.Question); ok {
+			return true
+		}
+	}
+	return false
+}
+
+// applyThankYouPage extracts text from a text-only page and sets
+// closeMessageTitle and closeMessageDescription in settings.
+func applyThankYouPage(page model.Page, settings map[string]any) {
+	var title string
+	var descParts []string
+
+	for _, block := range page.Blocks {
+		switch b := block.(type) {
+		case *model.HeadingBlock:
+			if title == "" {
+				title = b.Text
+			} else {
+				descParts = append(descParts, b.Text)
+			}
+		case *model.TextBlock:
+			text := b.HTML
+			// Strip HTML tags for settings (plain text)
+			text = stripHTMLTags(text)
+			if title == "" {
+				title = text
+			} else {
+				descParts = append(descParts, text)
+			}
+		}
+	}
+
+	if title != "" {
+		settings["closeMessageTitle"] = title
+	}
+	if len(descParts) > 0 {
+		settings["closeMessageDescription"] = strings.Join(descParts, "\n\n")
+	}
+}
+
+// stripHTMLTags removes simple HTML tags like <b>, <i> from text for settings fields.
+func stripHTMLTags(s string) string {
+	result := strings.NewReplacer(
+		"<b>", "", "</b>", "",
+		"<i>", "", "</i>", "",
+	).Replace(s)
+	return result
 }
 
 // validateConditionalOperator checks that the comparison operator is supported
