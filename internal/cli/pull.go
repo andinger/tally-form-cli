@@ -11,19 +11,19 @@ import (
 	"github.com/andinger/tally-form-cli/internal/tally"
 )
 
-func newExportCmd() *cobra.Command {
+func newPullCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "export <form-id>",
-		Short: "Export a Tally form as Markdown",
+		Use:   "pull <form-id>",
+		Short: "Download a Tally form as Markdown",
 		Args:  cobra.ExactArgs(1),
-		RunE:  runExport,
+		RunE:  runPull,
 	}
 }
 
-func runExport(cmd *cobra.Command, args []string) error {
+func runPull(cmd *cobra.Command, args []string) error {
 	formID := args[0]
 
-	cfg, err := config.Load(configPath, nil)
+	cfg, err := config.Load(nil)
 	if err != nil {
 		return fmt.Errorf("config: %w", err)
 	}

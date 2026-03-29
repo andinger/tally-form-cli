@@ -8,36 +8,29 @@ Bidirectional Markdown-to-Tally.so form builder. Single Go binary, installed via
 brew install andinger/tap/tally
 ```
 
-## Invocation
-
-```bash
-tally <command> [flags]
-```
-
-### Commands
+## Commands
 
 | Command | Usage | Description |
 |---|---|---|
-| `push` | `push <file.md> [--dry-run]` | Upsert: creates if no `form_id` in frontmatter, updates if present |
-| `create` | `create <file.md> [--dry-run]` | Always creates a new form (ignores `form_id`) |
-| `update` | `update <form-id> <file.md> [--dry-run]` | Updates an existing form |
-| `export` | `export <form-id>` | Downloads form as Markdown to stdout |
+| `push` | `push <file.md> [--dry-run] [--create]` | Upsert: creates if no `form_id`, updates if present. `--create` forces a new form. |
+| `pull` | `pull <form-id>` | Downloads form as Markdown to stdout |
+| `diff` | `diff <file.md> [form-id]` | Compares local Markdown with a Tally form. Uses `form_id` from frontmatter if not provided. |
 | `submissions` | `submissions <form-id> [--format csv\|json]` | Downloads responses (default: csv) to stdout |
+| `prepare` | `prepare <file.md>` | Merges global config (workspace, logo, password, primary_color, domain) into frontmatter |
+| `config` | `config` | Shows the global config file path |
 | `reference` | `reference` | Prints this reference documentation to stdout |
 
 ### Global Flags
 
 | Flag | Description |
 |---|---|
-| `--config <path>` | Path to project config YAML (theme, branding, defaults) |
 | `--token <token>` | Tally API token (overrides config) |
-| `--dry-run` | Print JSON payload without calling API (on push/create/update) |
 
-## Configuration — Three Layers
+## Configuration
 
-Merge order: User-Config < Project-Config < Form-Frontmatter < CLI-Flags
+Two layers, merged in order: **Global config** < **Frontmatter**
 
-### Layer 1: User Config (`~/.config/tally/config.yaml`)
+### Global Config (`~/.config/tally/config.yaml`)
 
 Credentials and defaults per machine. Not versioned.
 
@@ -47,63 +40,32 @@ api:
   base_url: "https://api.tally.so"
 
 workspace: "mOJGz8"
-```
-
-### Layer 2: Project Config (`--config tally-config.yaml`)
-
-Theme, branding, form defaults per product/project. Versioned, shared in team.
-
-```yaml
-defaults:
-  language: "de"
-  status: "PUBLISHED"
-  hasProgressBar: true
-  saveForLater: true
-  pageAutoJump: false
-  hasPartialSubmissions: false
-  closeMessageTitle: "Vielen Dank..."
-  closeMessageDescription: "Falls noch nicht geschehen..."
-
 logo: "https://storage.tally.so/..."
-
-styles:
-  theme: "CUSTOM"
-  direction: "ltr"
-  color:
-    background: "#ffffff"
-    text: "#37352F"
-    accent: "#A219B1"
-    buttonBackground: "#07E9A4"
-    buttonText: "#000000"
-  css: ""
+primary_color: "#A219B1"
+password: "optional-password"
+domain: "forms.example.com"
 ```
 
-### Layer 3: Form Frontmatter
+`primary_color` is used as both the accent color and button background color in Tally.
+
+### Frontmatter
 
 Per-form overrides in the Markdown file:
 
 ```yaml
 ---
-name: "KI-Hebel-Check — Mustermann GmbH"
-password: "muster-check"
-form_id: "81d6KA"   # written back after create
-workspace: "other"   # overrides user config
+name: "Survey — Acme Corp"
+form_id: "auto-filled-after-push"
+workspace: "override-ws"
+password: "form-specific-password"
 ---
 ```
+
+`form_id` is written back into the file after the first `push`. This enables upsert semantics.
+
+Use `tally prepare <file.md>` to copy global settings into the frontmatter.
 
 ## Markdown Format
-
-### Frontmatter
-
-```yaml
----
-name: "Form Title"
-password: "optional-password"
-form_id: "auto-filled-after-create"
----
-```
-
-`form_id` is written back into the file after `create` or `push` (on first push). This enables upsert semantics.
 
 ### Questions
 
@@ -195,8 +157,6 @@ Pages separated by `---` (thematic break). Optional button label:
 > button: "Next page 3 / 5"
 ```
 
-Last page break auto-gets `button: "Absenden"` if no label set.
-
 ### Headings, Text and Inline Formatting
 
 ```markdown
@@ -254,78 +214,30 @@ Your answers help us prepare the workshop.
 
 ```bash
 # Create a new form from Markdown
-tally push questionnaire.md --config tally-config.yaml --dry-run
-tally push questionnaire.md --config tally-config.yaml
+tally push questionnaire.md --dry-run
+tally push questionnaire.md
 
-# Export existing form to Markdown
-tally export 81GYAY > exported.md
+# Force creating a new form (even if form_id exists)
+tally push questionnaire.md --create
+
+# Download existing form as Markdown
+tally pull 81GYAY > exported.md
+
+# Compare local file with Tally
+tally diff questionnaire.md
 
 # Download submissions as CSV
 tally submissions 81GYAY --format csv > responses.csv
 
-# Update after editing
-# (form_id already in frontmatter after first push)
-tally push questionnaire.md --config tally-config.yaml
+# Update after editing (form_id in frontmatter enables upsert)
+tally push questionnaire.md
 
-# Round-trip: export, compare, iterate
-tally export 81GYAY > exported.md
-diff questionnaire.md exported.md
+# Prepare a new markdown file with global settings
+tally prepare new-form.md
 
-# Generate reference documentation for Claude
+# Show config location
+tally config
+
+# Generate reference for Claude
 tally reference > ~/.claude/references/tally.md
-```
-
-## Full Example
-
-```markdown
----
-name: "Customer Survey — Acme Corp"
-password: "acme-2026"
----
-
-Thank you for participating in our survey. It takes about 10 minutes.
-
-## Your Role
-
-F1: What is your role?
-> type: single-choice
-> required: true
-- CEO / Management
-- Department Lead
-- Team Lead
-- Employee
-- Other {other}
-
-F2: How long have you been with the company?
-> type: dropdown
-- Less than 1 year
-- 1-3 years
-- 3-10 years
-- More than 10 years
-
----
-
-## Your Daily Work
-
-F3: What is the most annoying routine task?
-> type: long-text
-
-F4: Which tools do you use daily?
-> type: multi-choice
-> max: 5
-- Excel
-- SAP
-- Salesforce
-- Custom internal tools
-- Other {other}
-
-> show F5 when F4 is_not_empty
-
-F5: Rate the complexity of these tasks
-> type: matrix
-> hidden: true
-> columns: Low, Moderate, High, N/A
-- Data entry
-- Reporting
-- Communication
 ```

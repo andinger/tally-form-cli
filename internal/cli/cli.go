@@ -6,10 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	configPath string
-	tokenFlag  string
-)
+var tokenFlag string
 
 // NewRootCmd creates the root cobra command.
 func NewRootCmd(version, commit, date string) *cobra.Command {
@@ -20,14 +17,14 @@ func NewRootCmd(version, commit, date string) *cobra.Command {
 		Version: fmt.Sprintf("%s (commit: %s, built: %s)", version, commit, date),
 	}
 
-	root.PersistentFlags().StringVar(&configPath, "config", "", "path to project config YAML")
 	root.PersistentFlags().StringVar(&tokenFlag, "token", "", "Tally API token (overrides config)")
 
 	root.AddCommand(newPushCmd())
-	root.AddCommand(newCreateCmd())
-	root.AddCommand(newUpdateCmd())
-	root.AddCommand(newExportCmd())
+	root.AddCommand(newPullCmd())
+	root.AddCommand(newDiffCmd())
 	root.AddCommand(newSubmissionsCmd())
+	root.AddCommand(newPrepareCmd())
+	root.AddCommand(newConfigCmd())
 	root.AddCommand(newReferenceCmd())
 
 	return root

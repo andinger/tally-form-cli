@@ -13,16 +13,21 @@ import (
 	"github.com/andinger/tally-form-cli/internal/tally"
 )
 
-var dryRun bool
+var (
+	dryRun      bool
+	forceCreate bool
+)
 
 func newPushCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "push <file.md>",
-		Short: "Create or update a Tally form from Markdown (upsert)",
+		Short: "Push a Markdown form to Tally (upsert)",
+		Long:  "Creates a new form or updates an existing one based on form_id in frontmatter. Use --create to force creating a new form.",
 		Args:  cobra.ExactArgs(1),
 		RunE:  runPush,
 	}
 	cmd.Flags().BoolVar(&dryRun, "dry-run", false, "print JSON payload without calling API")
+	cmd.Flags().BoolVar(&forceCreate, "create", false, "force creating a new form (ignores form_id)")
 	return cmd
 }
 
@@ -39,7 +44,7 @@ func runPush(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("parse markdown: %w", err)
 	}
 
-	cfg, err := config.Load(configPath, form.Settings)
+	cfg, err := config.Load(form.Settings)
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
 	}
@@ -60,12 +65,12 @@ func runPush(cmd *cobra.Command, args []string) error {
 	}
 
 	if cfg.Token == "" {
-		return fmt.Errorf("no API token configured (set in ~/.config/tally/config.yaml or TALLY_API_TOKEN)")
+		return fmt.Errorf("no API token configured (set in %s or TALLY_API_TOKEN)", config.ConfigPath())
 	}
 
 	client := tally.NewClient(cfg.BaseURL, cfg.Token)
 
-	if form.FormID != "" {
+	if form.FormID != "" && !forceCreate {
 		// Update existing form
 		result, err := client.UpdateForm(form.FormID, req)
 		if err != nil {
@@ -93,7 +98,6 @@ func runPush(cmd *cobra.Command, args []string) error {
 }
 
 func writeBackFormID(filePath, content, formID string) error {
-	// Find the frontmatter closing --- and insert form_id before it
 	if !strings.HasPrefix(content, "---") {
 		return fmt.Errorf("no frontmatter found")
 	}
@@ -107,13 +111,20 @@ func writeBackFormID(filePath, content, formID string) error {
 	frontmatter := rest[:idx]
 	afterFrontmatter := rest[idx:]
 
-	// Check if form_id already exists
+	// Replace existing empty form_id or add new one
 	if strings.Contains(frontmatter, "form_id:") {
-		return nil // already has form_id
+		lines := strings.Split(frontmatter, "\n")
+		for i, line := range lines {
+			trimmed := strings.TrimSpace(line)
+			if strings.HasPrefix(trimmed, "form_id:") {
+				lines[i] = fmt.Sprintf("form_id: %q", formID)
+			}
+		}
+		frontmatter = strings.Join(lines, "\n")
+		newContent := "---" + frontmatter + afterFrontmatter
+		return os.WriteFile(filePath, []byte(newContent), 0644)
 	}
 
-	// Insert form_id
 	newContent := "---" + frontmatter + fmt.Sprintf("\nform_id: %q", formID) + afterFrontmatter
-
 	return os.WriteFile(filePath, []byte(newContent), 0644)
 }

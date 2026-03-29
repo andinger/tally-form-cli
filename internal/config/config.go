@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,13 +8,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config holds all configuration for a tally operation.
+// Config holds the global configuration from ~/.config/tally/config.yaml.
 type Config struct {
-	API       APIConfig      `yaml:"api"`
-	Workspace string         `yaml:"workspace"`
-	Defaults  map[string]any `yaml:"defaults"`
-	Logo      string         `yaml:"logo"`
-	Styles    map[string]any `yaml:"styles"`
+	API          APIConfig `yaml:"api"`
+	Workspace    string    `yaml:"workspace"`
+	Logo         string    `yaml:"logo"`
+	PrimaryColor string    `yaml:"primary_color"`
+	Domain       string    `yaml:"domain"`
+	Password     string    `yaml:"password"`
 }
 
 // APIConfig holds API credentials.
@@ -26,66 +26,40 @@ type APIConfig struct {
 
 // Merged holds the final merged configuration ready for use.
 type Merged struct {
-	Token     string
-	BaseURL   string
-	Workspace string
-	Settings  map[string]any
-	Logo      string
-	Styles    string // JSON-encoded styles
+	Token        string
+	BaseURL      string
+	Workspace    string
+	Logo         string
+	PrimaryColor string
+	Domain       string
+	Password     string
+	Settings     map[string]any
 }
 
-// Load reads and merges configuration from user config, project config, and frontmatter.
-func Load(projectConfigPath string, frontmatter map[string]any) (*Merged, error) {
-	// Layer 1: User config
+// Load reads and merges configuration from global config and frontmatter.
+// Merge order: Global config < Frontmatter < Environment variables
+func Load(frontmatter map[string]any) (*Merged, error) {
 	userCfg, err := loadUserConfig()
 	if err != nil {
 		return nil, fmt.Errorf("user config: %w", err)
 	}
 
-	// Layer 2: Project config
-	var projCfg Config
-	if projectConfigPath != "" {
-		data, err := os.ReadFile(projectConfigPath)
-		if err != nil {
-			return nil, fmt.Errorf("project config %s: %w", projectConfigPath, err)
-		}
-		if err := yaml.Unmarshal(data, &projCfg); err != nil {
-			return nil, fmt.Errorf("parse project config: %w", err)
-		}
-	}
-
-	// Build merged result
 	m := &Merged{
-		Token:    userCfg.API.Token,
-		BaseURL:  "https://api.tally.so",
-		Settings: make(map[string]any),
+		Token:        userCfg.API.Token,
+		BaseURL:      "https://api.tally.so",
+		Workspace:    userCfg.Workspace,
+		Logo:         userCfg.Logo,
+		PrimaryColor: userCfg.PrimaryColor,
+		Domain:       userCfg.Domain,
+		Password:     userCfg.Password,
+		Settings:     make(map[string]any),
 	}
 
 	if userCfg.API.BaseURL != "" {
 		m.BaseURL = userCfg.API.BaseURL
 	}
-	if userCfg.Workspace != "" {
-		m.Workspace = userCfg.Workspace
-	}
 
-	// Apply project config
-	if projCfg.Workspace != "" {
-		m.Workspace = projCfg.Workspace
-	}
-	for k, v := range projCfg.Defaults {
-		m.Settings[k] = v
-	}
-	if projCfg.Logo != "" {
-		m.Logo = projCfg.Logo
-	}
-	if projCfg.Styles != nil {
-		stylesJSON, err := json.Marshal(projCfg.Styles)
-		if err == nil {
-			m.Styles = string(stylesJSON)
-		}
-	}
-
-	// Layer 3: Frontmatter overrides
+	// Frontmatter overrides
 	if frontmatter != nil {
 		if ws, ok := frontmatter["workspace"].(string); ok && ws != "" {
 			m.Workspace = ws
@@ -98,6 +72,15 @@ func Load(projectConfigPath string, frontmatter map[string]any) (*Merged, error)
 	}
 
 	return m, nil
+}
+
+// ConfigPath returns the path to the global config file.
+func ConfigPath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "~/.config/tally/config.yaml"
+	}
+	return filepath.Join(home, ".config", "tally", "config.yaml")
 }
 
 func loadUserConfig() (*Config, error) {

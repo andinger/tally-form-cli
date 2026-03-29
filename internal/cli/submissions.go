@@ -28,7 +28,7 @@ func newSubmissionsCmd() *cobra.Command {
 func runSubmissions(cmd *cobra.Command, args []string) error {
 	formID := args[0]
 
-	cfg, err := config.Load(configPath, nil)
+	cfg, err := config.Load(nil)
 	if err != nil {
 		return fmt.Errorf("config: %w", err)
 	}

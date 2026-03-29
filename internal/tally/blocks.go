@@ -602,14 +602,25 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 		for k, v := range cfg.Settings {
 			settings[k] = v
 		}
-		if cfg.Styles != "" {
-			settings["styles"] = cfg.Styles
+		// Build styles from primary color
+		if cfg.PrimaryColor != "" {
+			settings["styles"] = map[string]any{
+				"direction": "ltr",
+				"color": map[string]any{
+					"accent":           cfg.PrimaryColor,
+					"buttonBackground": cfg.PrimaryColor,
+				},
+			}
 		}
 	}
 
 	// Apply form-level overrides
-	if form.Password != "" {
-		settings["password"] = form.Password
+	password := form.Password
+	if password == "" && cfg != nil {
+		password = cfg.Password
+	}
+	if password != "" {
+		settings["password"] = password
 	}
 	if form.Settings != nil {
 		for k, v := range form.Settings {

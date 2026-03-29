@@ -1171,7 +1171,7 @@ func TestBuildSettings(t *testing.T) {
 
 	cfg := testConfig()
 	cfg.Settings = map[string]any{"hasProgressBar": true}
-	cfg.Styles = `{"theme":"CUSTOM"}`
+	cfg.PrimaryColor = "#A219B1"
 
 	c := testCompiler()
 	req, err := c.Compile(form, cfg)
@@ -1183,8 +1183,20 @@ func TestBuildSettings(t *testing.T) {
 	if settings["hasProgressBar"] != true {
 		t.Error("missing hasProgressBar from config")
 	}
-	if settings["styles"] != `{"theme":"CUSTOM"}` {
-		t.Errorf("styles = %v", settings["styles"])
+	// Primary color should produce styles with accent + buttonBackground
+	styles, ok := settings["styles"].(map[string]any)
+	if !ok {
+		t.Fatal("styles should be a map")
+	}
+	color, ok := styles["color"].(map[string]any)
+	if !ok {
+		t.Fatal("styles.color should be a map")
+	}
+	if color["accent"] != "#A219B1" {
+		t.Errorf("accent = %v", color["accent"])
+	}
+	if color["buttonBackground"] != "#A219B1" {
+		t.Errorf("buttonBackground = %v", color["buttonBackground"])
 	}
 	if settings["language"] != "de" {
 		t.Error("missing language from form settings")

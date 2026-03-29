@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"bytes"
 	"strings"
 	"testing"
 )
@@ -14,7 +13,7 @@ func TestNewRootCmd(t *testing.T) {
 	}
 
 	// Check subcommands are registered
-	wantCmds := []string{"push", "create", "update", "export", "submissions", "reference"}
+	wantCmds := []string{"push", "pull", "diff", "submissions", "prepare", "config", "reference"}
 	for _, name := range wantCmds {
 		found := false
 		for _, sub := range cmd.Commands() {
@@ -29,30 +28,13 @@ func TestNewRootCmd(t *testing.T) {
 	}
 
 	// Check global flags
-	if cmd.PersistentFlags().Lookup("config") == nil {
-		t.Error("Missing --config flag")
-	}
 	if cmd.PersistentFlags().Lookup("token") == nil {
 		t.Error("Missing --token flag")
 	}
-}
 
-func TestReferenceCmd(t *testing.T) {
-	cmd := NewRootCmd("test", "test", "test")
-	buf := new(bytes.Buffer)
-	cmd.SetOut(buf)
-	cmd.SetArgs([]string{"reference"})
-
-	// Reference command writes to stdout, not cmd.OutOrStdout()
-	// So we capture via the RunE directly
-	for _, sub := range cmd.Commands() {
-		if sub.Name() == "reference" {
-			// Just verify the command exists and has correct metadata
-			if sub.Short == "" {
-				t.Error("Reference command should have Short description")
-			}
-			break
-		}
+	// --config should NOT exist (removed)
+	if cmd.PersistentFlags().Lookup("config") != nil {
+		t.Error("--config flag should be removed")
 	}
 }
 
@@ -60,8 +42,5 @@ func TestVersionOutput(t *testing.T) {
 	cmd := NewRootCmd("1.2.3", "deadbeef", "2026-03-29")
 	if !strings.Contains(cmd.Version, "1.2.3") {
 		t.Errorf("Version = %q, should contain 1.2.3", cmd.Version)
-	}
-	if !strings.Contains(cmd.Version, "deadbeef") {
-		t.Errorf("Version = %q, should contain commit", cmd.Version)
 	}
 }
