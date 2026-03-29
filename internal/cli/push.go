@@ -71,11 +71,7 @@ func runPush(cmd *cobra.Command, args []string) error {
 	client := tally.NewClient(cfg.BaseURL, cfg.Token)
 
 	formURL := func(id string) string {
-		host := "tally.so"
-		if cfg.Domain != "" {
-			host = cfg.Domain
-		}
-		return fmt.Sprintf("https://%s/r/%s", host, id)
+		return fmt.Sprintf("https://tally.so/r/%s", id)
 	}
 
 	if form.FormID != "" && !forceCreate {

@@ -14,7 +14,6 @@ type Config struct {
 	Workspace             string    `yaml:"workspace"`
 	Logo                  string    `yaml:"logo"`
 	PrimaryColor          string    `yaml:"primary_color"`
-	Domain                string    `yaml:"domain"`
 	Password              string    `yaml:"password"`
 	Language              string    `yaml:"language"`
 	HasProgressBar        *bool     `yaml:"hasProgressBar"`
@@ -35,7 +34,6 @@ type Merged struct {
 	Workspace    string
 	Logo         string
 	PrimaryColor string
-	Domain       string
 	Password     string
 	Language     string
 	Settings     map[string]any
@@ -55,7 +53,6 @@ func Load(frontmatter map[string]any) (*Merged, error) {
 		Workspace:    userCfg.Workspace,
 		Logo:         userCfg.Logo,
 		PrimaryColor: userCfg.PrimaryColor,
-		Domain:       userCfg.Domain,
 		Password:     userCfg.Password,
 		Language:     userCfg.Language,
 		Settings:     make(map[string]any),

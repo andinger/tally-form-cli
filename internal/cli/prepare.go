@@ -60,7 +60,6 @@ func runPrepare(cmd *cobra.Command, args []string) error {
 		{"logo", cfg.Logo},
 		{"password", cfg.Password},
 		{"primary_color", cfg.PrimaryColor},
-		{"domain", cfg.Domain},
 		{"language", cfg.Language},
 	}
 

@@ -43,7 +43,10 @@ workspace: "mOJGz8"
 logo: "https://storage.tally.so/..."
 primary_color: "#A219B1"
 password: "optional-password"
-domain: "forms.example.com"
+language: "de"
+hasProgressBar: true
+hasPartialSubmissions: true
+saveForLater: true
 ```
 
 `primary_color` is used as both the accent color and button background color in Tally.
