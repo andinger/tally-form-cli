@@ -57,6 +57,13 @@ func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormReq
 		}
 	}
 
+	// Apply frontmatter logo override (form.Settings flows from YAML inline fields)
+	if form.Settings != nil && cfg != nil {
+		if logo, ok := form.Settings["logo"].(string); ok && logo != "" {
+			cfg.Logo = logo
+		}
+	}
+
 	// FORM_TITLE block
 	titleBlock := c.buildFormTitle(form.Name, cfg)
 	blocks = append(blocks, titleBlock)
@@ -623,10 +630,34 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 		settings["password"] = password
 	}
 	if form.Settings != nil {
+		// Map snake_case frontmatter keys to Tally camelCase API keys
+		fmKeyMap := map[string]string{
+			"has_progress_bar":       "hasProgressBar",
+			"has_partial_submissions": "hasPartialSubmissions",
+			"save_for_later":         "saveForLater",
+		}
 		for k, v := range form.Settings {
-			settings[k] = v
+			if mapped, ok := fmKeyMap[k]; ok {
+				settings[mapped] = v
+			} else if k == "primary_color" {
+				// primary_color in frontmatter overrides config
+				if color, ok := v.(string); ok && color != "" {
+					settings["styles"] = map[string]any{
+						"direction": "ltr",
+						"color": map[string]any{
+							"accent":           color,
+							"buttonBackground": color,
+						},
+					}
+				}
+			} else if k == "logo" {
+				// logo goes into settings, not here — handled by buildFormTitle
+			} else {
+				settings[k] = v
+			}
 		}
 	}
+
 
 	return settings
 }

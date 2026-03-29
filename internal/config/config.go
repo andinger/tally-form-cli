@@ -16,9 +16,9 @@ type Config struct {
 	PrimaryColor          string    `yaml:"primary_color"`
 	Password              string    `yaml:"password"`
 	Language              string    `yaml:"language"`
-	HasProgressBar        *bool     `yaml:"hasProgressBar"`
-	HasPartialSubmissions *bool     `yaml:"hasPartialSubmissions"`
-	SaveForLater          *bool     `yaml:"saveForLater"`
+	HasProgressBar        *bool     `yaml:"has_progress_bar"`
+	HasPartialSubmissions *bool     `yaml:"has_partial_submissions"`
+	SaveForLater          *bool     `yaml:"save_for_later"`
 }
 
 // APIConfig holds API credentials.

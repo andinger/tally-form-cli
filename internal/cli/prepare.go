@@ -77,9 +77,9 @@ func runPrepare(cmd *cobra.Command, args []string) error {
 		key   string
 		value string
 	}{
-		{"hasProgressBar", fmt.Sprintf("%v", cfg.Settings["hasProgressBar"])},
-		{"hasPartialSubmissions", fmt.Sprintf("%v", cfg.Settings["hasPartialSubmissions"])},
-		{"saveForLater", fmt.Sprintf("%v", cfg.Settings["saveForLater"])},
+		{"has_progress_bar", fmt.Sprintf("%v", cfg.Settings["hasProgressBar"])},
+		{"has_partial_submissions", fmt.Sprintf("%v", cfg.Settings["hasPartialSubmissions"])},
+		{"save_for_later", fmt.Sprintf("%v", cfg.Settings["saveForLater"])},
 	}
 
 	for _, f := range boolFields {
