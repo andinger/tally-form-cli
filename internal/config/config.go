@@ -10,12 +10,16 @@ import (
 
 // Config holds the global configuration from ~/.config/tally/config.yaml.
 type Config struct {
-	API          APIConfig `yaml:"api"`
-	Workspace    string    `yaml:"workspace"`
-	Logo         string    `yaml:"logo"`
-	PrimaryColor string    `yaml:"primary_color"`
-	Domain       string    `yaml:"domain"`
-	Password     string    `yaml:"password"`
+	API                   APIConfig `yaml:"api"`
+	Workspace             string    `yaml:"workspace"`
+	Logo                  string    `yaml:"logo"`
+	PrimaryColor          string    `yaml:"primary_color"`
+	Domain                string    `yaml:"domain"`
+	Password              string    `yaml:"password"`
+	Language              string    `yaml:"language"`
+	HasProgressBar        *bool     `yaml:"hasProgressBar"`
+	HasPartialSubmissions *bool     `yaml:"hasPartialSubmissions"`
+	SaveForLater          *bool     `yaml:"saveForLater"`
 }
 
 // APIConfig holds API credentials.
@@ -33,6 +37,7 @@ type Merged struct {
 	PrimaryColor string
 	Domain       string
 	Password     string
+	Language     string
 	Settings     map[string]any
 }
 
@@ -52,11 +57,26 @@ func Load(frontmatter map[string]any) (*Merged, error) {
 		PrimaryColor: userCfg.PrimaryColor,
 		Domain:       userCfg.Domain,
 		Password:     userCfg.Password,
+		Language:     userCfg.Language,
 		Settings:     make(map[string]any),
 	}
 
 	if userCfg.API.BaseURL != "" {
 		m.BaseURL = userCfg.API.BaseURL
+	}
+
+	// Apply form settings from global config
+	if userCfg.Language != "" {
+		m.Settings["language"] = userCfg.Language
+	}
+	if userCfg.HasProgressBar != nil {
+		m.Settings["hasProgressBar"] = *userCfg.HasProgressBar
+	}
+	if userCfg.HasPartialSubmissions != nil {
+		m.Settings["hasPartialSubmissions"] = *userCfg.HasPartialSubmissions
+	}
+	if userCfg.SaveForLater != nil {
+		m.Settings["saveForLater"] = *userCfg.SaveForLater
 	}
 
 	// Frontmatter overrides

@@ -51,7 +51,8 @@ func runPrepare(cmd *cobra.Command, args []string) error {
 	afterFM := rest[idx:]
 
 	// Merge settings into frontmatter
-	fields := []struct {
+	// String fields: only add if not already present (idempotent)
+	stringFields := []struct {
 		key   string
 		value string
 	}{
@@ -60,18 +61,34 @@ func runPrepare(cmd *cobra.Command, args []string) error {
 		{"password", cfg.Password},
 		{"primary_color", cfg.PrimaryColor},
 		{"domain", cfg.Domain},
+		{"language", cfg.Language},
 	}
 
-	for _, f := range fields {
+	for _, f := range stringFields {
 		if f.value == "" {
 			continue
 		}
-		if containsFMKey(fmContent, f.key) {
-			// Update existing key
-			fmContent = replaceFMKey(fmContent, f.key, f.value)
-		} else {
-			// Add new key
+		if !containsFMKey(fmContent, f.key) {
 			fmContent += fmt.Sprintf("\n%s: %q", f.key, f.value)
+		}
+	}
+
+	// Boolean fields: only add if not already present (idempotent)
+	boolFields := []struct {
+		key   string
+		value string
+	}{
+		{"hasProgressBar", fmt.Sprintf("%v", cfg.Settings["hasProgressBar"])},
+		{"hasPartialSubmissions", fmt.Sprintf("%v", cfg.Settings["hasPartialSubmissions"])},
+		{"saveForLater", fmt.Sprintf("%v", cfg.Settings["saveForLater"])},
+	}
+
+	for _, f := range boolFields {
+		if f.value == "<nil>" {
+			continue
+		}
+		if !containsFMKey(fmContent, f.key) {
+			fmContent += fmt.Sprintf("\n%s: %s", f.key, f.value)
 		}
 	}
 

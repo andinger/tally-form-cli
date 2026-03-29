@@ -70,20 +70,28 @@ func runPush(cmd *cobra.Command, args []string) error {
 
 	client := tally.NewClient(cfg.BaseURL, cfg.Token)
 
+	formURL := func(id string) string {
+		host := "tally.so"
+		if cfg.Domain != "" {
+			host = cfg.Domain
+		}
+		return fmt.Sprintf("https://%s/r/%s", host, id)
+	}
+
 	if form.FormID != "" && !forceCreate {
 		// Update existing form
 		result, err := client.UpdateForm(form.FormID, req)
 		if err != nil {
 			return fmt.Errorf("update form: %w", err)
 		}
-		fmt.Fprintf(os.Stderr, "Updated form %s\n", result.ID)
+		fmt.Fprintf(os.Stderr, "Updated form %s → %s\n", result.ID, formURL(result.ID))
 	} else {
 		// Create new form
 		result, err := client.CreateForm(req)
 		if err != nil {
 			return fmt.Errorf("create form: %w", err)
 		}
-		fmt.Fprintf(os.Stderr, "Created form %s\n", result.ID)
+		fmt.Fprintf(os.Stderr, "Created form %s → %s\n", result.ID, formURL(result.ID))
 
 		// Write back form_id to the markdown file
 		err = writeBackFormID(filePath, string(content), result.ID)
