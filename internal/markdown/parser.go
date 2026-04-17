@@ -22,14 +22,21 @@ var (
 	italicRe      = regexp.MustCompile(`\*([^*]+)\*`)
 	linkRe        = regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
 	otherMarkerRe = regexp.MustCompile(`\s*\{other\}\s*$`)
+
+	// DefaultStripPrefix is applied to a question's displayed text when the
+	// `strip_prefix` frontmatter field is absent. It removes the `F<n>:` ID
+	// marker so the prefix stays out of the pushed Tally form while remaining
+	// available as a conditional-logic reference in the Markdown source.
+	DefaultStripPrefix = regexp.MustCompile(`^F\d+:\s*`)
 )
 
 type frontmatter struct {
-	Name      string         `yaml:"name"`
-	FormID    string         `yaml:"form_id"`
-	Workspace string         `yaml:"workspace"`
-	Password  string         `yaml:"password"`
-	Settings  map[string]any `yaml:",inline"`
+	Name        string         `yaml:"name"`
+	FormID      string         `yaml:"form_id"`
+	Workspace   string         `yaml:"workspace"`
+	Password    string         `yaml:"password"`
+	StripPrefix *string        `yaml:"strip_prefix"`
+	Settings    map[string]any `yaml:",inline"`
 }
 
 // Parse converts a Markdown string into an IR Form.
@@ -51,13 +58,31 @@ func Parse(content string) (*model.Form, error) {
 	delete(fm.Settings, "form_id")
 	delete(fm.Settings, "workspace")
 	delete(fm.Settings, "password")
+	delete(fm.Settings, "strip_prefix")
 	if len(fm.Settings) > 0 {
 		form.Settings = fm.Settings
 	}
 
+	// Resolve the regex used to strip the question-ID prefix from the displayed
+	// text. Three cases:
+	//   field absent  → default regex (current behavior: strip `F<n>:`)
+	//   field == ""   → no stripping (prefix remains visible in Tally)
+	//   custom regex  → compile and apply
+	stripPrefix := DefaultStripPrefix
+	if fm.StripPrefix != nil {
+		if *fm.StripPrefix == "" {
+			stripPrefix = nil
+		} else {
+			stripPrefix, err = regexp.Compile(*fm.StripPrefix)
+			if err != nil {
+				return nil, fmt.Errorf("strip_prefix regex: %w", err)
+			}
+		}
+	}
+
 	pages := splitPages(body)
 	for _, pageContent := range pages {
-		page, err := parsePage(pageContent)
+		page, err := parsePage(pageContent, stripPrefix)
 		if err != nil {
 			return nil, err
 		}
@@ -137,7 +162,7 @@ func splitPages(body string) []pageRaw {
 	return result
 }
 
-func parsePage(raw pageRaw) (*model.Page, error) {
+func parsePage(raw pageRaw, stripPrefix *regexp.Regexp) (*model.Page, error) {
 	page := &model.Page{
 		ButtonLabel: raw.buttonLabel,
 	}
@@ -210,9 +235,17 @@ func parsePage(raw pageRaw) (*model.Page, error) {
 			flushQuestion()
 			flushText()
 			id := "F" + m[1]
+			// Displayed text is derived from the full line by applying the
+			// configured strip_prefix regex. `nil` means "keep as-is" so the
+			// `F<n>:` marker remains visible in Tally.
+			text := trimmed
+			if stripPrefix != nil {
+				text = stripPrefix.ReplaceAllString(text, "")
+			}
+			text = strings.TrimSpace(text)
 			currentQuestion = &model.Question{
 				ID:         id,
-				Text:       m[2],
+				Text:       text,
 				Required:   true, // default
 				Properties: make(map[string]any),
 			}

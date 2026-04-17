@@ -328,6 +328,30 @@ func TestHtmlToMarkdownLink(t *testing.T) {
 	}
 }
 
+func TestWriteStripsExistingPrefix(t *testing.T) {
+	// Guards against double-prefix when pulling a form whose stored title
+	// already contains `F<n>:` (e.g. pushed with strip_prefix: "").
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "F1: Real question?",
+					Type: model.ShortText,
+				},
+			},
+		}},
+	}
+	out := Write(form)
+	if strings.Contains(out, "F1: F1:") {
+		t.Errorf("Double prefix in output:\n%s", out)
+	}
+	if !strings.Contains(out, "F1: Real question?\n") {
+		t.Errorf("Expected normalized question line:\n%s", out)
+	}
+}
+
 func TestHtmlToMarkdownBoldAndItalic(t *testing.T) {
 	got := htmlToMarkdown("<b>bold</b> and <i>italic</i>")
 	want := "**bold** and *italic*"

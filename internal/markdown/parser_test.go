@@ -606,3 +606,148 @@ F1: Q?
 		t.Errorf("Settings = %v", form.Settings)
 	}
 }
+
+func TestParseStripPrefixDefault(t *testing.T) {
+	// No strip_prefix field: default behavior strips `F<n>:`.
+	content := `---
+name: "Test"
+---
+
+F1: In welcher Rolle?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	q := form.Pages[0].Blocks[0].(*model.Question)
+	if q.ID != "F1" {
+		t.Errorf("ID = %q, want %q", q.ID, "F1")
+	}
+	if q.Text != "In welcher Rolle?" {
+		t.Errorf("Text = %q, want %q", q.Text, "In welcher Rolle?")
+	}
+}
+
+func TestParseStripPrefixEmpty(t *testing.T) {
+	// strip_prefix: "" keeps the prefix visible in the displayed text.
+	content := `---
+name: "Test"
+strip_prefix: ""
+---
+
+F1: In welcher Rolle?
+> type: short-text
+F2: Welche Abteilung?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	q1 := form.Pages[0].Blocks[0].(*model.Question)
+	if q1.ID != "F1" {
+		t.Errorf("F1 ID = %q", q1.ID)
+	}
+	if q1.Text != "F1: In welcher Rolle?" {
+		t.Errorf("F1 Text = %q, want %q", q1.Text, "F1: In welcher Rolle?")
+	}
+	q2 := form.Pages[0].Blocks[1].(*model.Question)
+	if q2.Text != "F2: Welche Abteilung?" {
+		t.Errorf("F2 Text = %q, want %q", q2.Text, "F2: Welche Abteilung?")
+	}
+}
+
+func TestParseStripPrefixCustom(t *testing.T) {
+	// Custom regex: strip leading digits and colon but keep the "F".
+	content := `---
+name: "Test"
+strip_prefix: "^F\\d+:\\s*"
+---
+
+F1: In welcher Rolle?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	q := form.Pages[0].Blocks[0].(*model.Question)
+	if q.Text != "In welcher Rolle?" {
+		t.Errorf("Text = %q, want %q", q.Text, "In welcher Rolle?")
+	}
+}
+
+func TestParseStripPrefixInvalidRegex(t *testing.T) {
+	content := `---
+name: "Test"
+strip_prefix: "[unclosed"
+---
+
+F1: Q?
+> type: short-text
+`
+	_, err := Parse(content)
+	if err == nil {
+		t.Fatal("Expected error for invalid strip_prefix regex")
+	}
+}
+
+func TestParseStripPrefixNotLeakedToSettings(t *testing.T) {
+	// strip_prefix is a build-time option and must not be forwarded to Tally.
+	content := `---
+name: "Test"
+strip_prefix: ""
+language: "de"
+---
+
+F1: Q?
+> type: short-text
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	if _, ok := form.Settings["strip_prefix"]; ok {
+		t.Error("strip_prefix leaked into Settings")
+	}
+	if form.Settings["language"] != "de" {
+		t.Errorf("language missing from Settings: %v", form.Settings)
+	}
+}
+
+func TestParseStripPrefixConditionalStillReferencesID(t *testing.T) {
+	// With strip_prefix: "", the F-ID still drives conditional references.
+	content := `---
+name: "Test"
+strip_prefix: ""
+---
+
+F1: Rolle?
+> type: single-choice
+- Chef
+- Mitarbeiter
+
+> show F2 when F1 is_any_of "Chef"
+
+F2: Details?
+> type: short-text
+> hidden: true
+`
+	form, err := Parse(content)
+	if err != nil {
+		t.Fatalf("Parse error: %v", err)
+	}
+	blocks := form.Pages[0].Blocks
+	q1 := blocks[0].(*model.Question)
+	if q1.Text != "F1: Rolle?" {
+		t.Errorf("F1 Text = %q", q1.Text)
+	}
+	cond, ok := blocks[1].(*model.Conditional)
+	if !ok {
+		t.Fatalf("Expected Conditional at index 1, got %T", blocks[1])
+	}
+	if cond.Targets[0] != "F2" || cond.Conditions[0].Field != "F1" {
+		t.Errorf("Conditional = %+v", cond)
+	}
+}

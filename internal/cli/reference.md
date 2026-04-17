@@ -62,12 +62,41 @@ name: "Survey — Acme Corp"
 form_id: "auto-filled-after-push"
 workspace: "override-ws"
 password: "form-specific-password"
+strip_prefix: ""       # optional; see "Question-ID Prefix" below
 ---
 ```
 
 `form_id` is written back into the file after the first `push`. This enables upsert semantics.
 
 Use `tally prepare <file.md>` to copy global settings into the frontmatter.
+
+### Question-ID Prefix (`strip_prefix`)
+
+The `F<n>:` marker on each question is an internal ID used to reference questions from conditional-logic blocks. By default the marker is stripped from the question text before it is pushed to Tally, so it does not appear in the rendered form.
+
+Override that with the optional frontmatter field `strip_prefix` (a regex):
+
+| Value | Effect |
+|---|---|
+| *absent* | Default — strips `^F\d+:\s*` from each question's displayed text |
+| `""` (empty string) | No stripping — the `F<n>:` prefix stays visible in the Tally form |
+| any regex | Compiled and applied to the displayed text |
+
+Example — keep the prefix visible in the pushed form:
+
+```yaml
+---
+name: "Survey"
+strip_prefix: ""
+---
+
+F1: In which role are you?
+> type: single-choice
+- Manager
+- Employee
+```
+
+Conditional-logic references still use the `F<n>:` ID regardless of this setting.
 
 ## Markdown Format
 
@@ -83,7 +112,7 @@ F1: Question text here?
 - Other {other}
 ```
 
-ID format: `F<n>:` — must be sequential (F1, F2, F3, ...).
+ID format: `F<n>:` — must be sequential (F1, F2, F3, ...). The prefix is stripped from the displayed text by default; see [`strip_prefix`](#question-id-prefix-strip_prefix) to keep it visible.
 
 ### Question Types
 

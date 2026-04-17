@@ -12,6 +12,13 @@ var (
 	htmlBoldRe   = regexp.MustCompile(`<b>([^<]+)</b>`)
 	htmlItalicRe = regexp.MustCompile(`<i>([^<]+)</i>`)
 	htmlLinkRe   = regexp.MustCompile(`<a href="([^"]+)">([^<]+)</a>`)
+
+	// existingQuestionPrefixRe strips a leading `F<n>: ` from question text
+	// before the writer prepends its own `F<id>: ` prefix. This keeps
+	// round-trips idempotent when a form was pushed with `strip_prefix: ""`
+	// (the Tally-side title contains the prefix, the writer would otherwise
+	// emit it twice on `pull`).
+	existingQuestionPrefixRe = regexp.MustCompile(`^F\d+:\s*`)
 )
 
 // Write converts an IR Form back to Markdown format.
@@ -71,7 +78,8 @@ func writeBlock(b *strings.Builder, block model.Block) {
 }
 
 func writeQuestion(b *strings.Builder, q *model.Question) {
-	b.WriteString(fmt.Sprintf("%s: %s\n", q.ID, q.Text))
+	text := existingQuestionPrefixRe.ReplaceAllString(q.Text, "")
+	b.WriteString(fmt.Sprintf("%s: %s\n", q.ID, text))
 	b.WriteString(fmt.Sprintf("> type: %s\n", q.Type))
 
 	if !q.Required {
