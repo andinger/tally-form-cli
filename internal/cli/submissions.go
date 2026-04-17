@@ -93,7 +93,7 @@ func runSubmissions(cmd *cobra.Command, args []string) error {
 		qMap[q.ID] = len(header)
 		header = append(header, questionLabel(q))
 	}
-	w.Write(header)
+	_ = w.Write(header)
 
 	for _, sub := range subs.Submissions {
 		row := make([]string, len(header))
@@ -106,7 +106,7 @@ func runSubmissions(cmd *cobra.Command, args []string) error {
 			}
 			row[idx] = formatAnswer(resp, rowLabels)
 		}
-		w.Write(row)
+		_ = w.Write(row)
 	}
 
 	w.Flush()

@@ -27,8 +27,8 @@ func Decompile(tf *TallyForm) (*model.Form, error) {
 
 	// Maps for conditional resolution
 	groupToQID := make(map[string]string)       // groupUuid → question ID (for both TITLE and option groups)
-	optionUUIDToText := make(map[string]string)  // option block UUID → option text
-	blockUUIDToQID := make(map[string]string)    // any block UUID → question ID (for showBlocks)
+	optionUUIDToText := make(map[string]string) // option block UUID → option text
+	blockUUIDToQID := make(map[string]string)   // any block UUID → question ID (for showBlocks)
 
 	// First pass: build maps
 	i := 0

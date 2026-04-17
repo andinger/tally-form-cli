@@ -34,8 +34,8 @@ type Compiler struct {
 	NewUUID func() string
 
 	// Registry maps F<n> IDs to their generated UUIDs
-	questionGroupUUIDs map[string]string            // F1 → groupUuid of the TITLE block
-	contentGroupUUIDs  map[string]string            // F1 → groupUuid of the content blocks (options/inputs)
+	questionGroupUUIDs map[string]string             // F1 → groupUuid of the TITLE block
+	contentGroupUUIDs  map[string]string             // F1 → groupUuid of the content blocks (options/inputs)
 	questionBlockUUIDs map[string][]string           // F1 → all block UUIDs belonging to that question
 	optionUUIDs        map[string]map[string]string  // F1 → { "Option Text" → option block UUID }
 	firstOptionUUID    map[string]string             // F1 → UUID of the first option/input block
@@ -678,8 +678,8 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 		}
 
 		conditionals = append(conditionals, map[string]any{
-			"uuid": c.NewUUID(),
-			"type": "SINGLE",
+			"uuid":    c.NewUUID(),
+			"type":    "SINGLE",
 			"payload": condPayload,
 		})
 	}
@@ -762,9 +762,9 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 	if form.Settings != nil {
 		// Map snake_case frontmatter keys to Tally camelCase API keys
 		fmKeyMap := map[string]string{
-			"has_progress_bar":       "hasProgressBar",
+			"has_progress_bar":        "hasProgressBar",
 			"has_partial_submissions": "hasPartialSubmissions",
-			"save_for_later":         "saveForLater",
+			"save_for_later":          "saveForLater",
 		}
 		for k, v := range form.Settings {
 			if mapped, ok := fmKeyMap[k]; ok {
@@ -787,7 +787,6 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 			}
 		}
 	}
-
 
 	return settings
 }

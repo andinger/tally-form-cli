@@ -19,8 +19,8 @@ func TestCreateForm(t *testing.T) {
 		if r.URL.Path != "/forms" {
 			t.Errorf("Path = %q, want /forms", r.URL.Path)
 		}
-		json.NewDecoder(r.Body).Decode(&gotReq)
-		json.NewEncoder(w).Encode(TallyForm{ID: "new123", Name: "Test"})
+		_ = json.NewDecoder(r.Body).Decode(&gotReq)
+		_ = json.NewEncoder(w).Encode(TallyForm{ID: "new123", Name: "Test"})
 	}))
 	defer server.Close()
 
@@ -53,7 +53,7 @@ func TestUpdateForm(t *testing.T) {
 		if r.URL.Path != "/forms/abc123" {
 			t.Errorf("Path = %q, want /forms/abc123", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(TallyForm{ID: "abc123"})
+		_ = json.NewEncoder(w).Encode(TallyForm{ID: "abc123"})
 	}))
 	defer server.Close()
 
@@ -72,7 +72,7 @@ func TestGetForm(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("Method = %q, want GET", r.Method)
 		}
-		json.NewEncoder(w).Encode(TallyForm{
+		_ = json.NewEncoder(w).Encode(TallyForm{
 			ID:   "xyz",
 			Name: "Fetched",
 			Blocks: []TallyBlock{
@@ -97,7 +97,7 @@ func TestGetForm(t *testing.T) {
 
 func TestGetSubmissions(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(SubmissionsResponse{
+		_ = json.NewEncoder(w).Encode(SubmissionsResponse{
 			Questions: []SubmissionQuestion{{ID: "q1", Name: "Test Q"}},
 			Submissions: []Submission{
 				{ID: "s1", SubmittedAt: "2026-03-28", Responses: []SubmissionResponse{
@@ -120,7 +120,7 @@ func TestGetSubmissions(t *testing.T) {
 
 func TestGetFormInvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`not json`))
+		_, _ = w.Write([]byte(`not json`))
 	}))
 	defer server.Close()
 
@@ -133,7 +133,7 @@ func TestGetFormInvalidJSON(t *testing.T) {
 
 func TestCreateFormInvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`not json`))
+		_, _ = w.Write([]byte(`not json`))
 	}))
 	defer server.Close()
 
@@ -146,7 +146,7 @@ func TestCreateFormInvalidJSON(t *testing.T) {
 
 func TestUpdateFormInvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`not json`))
+		_, _ = w.Write([]byte(`not json`))
 	}))
 	defer server.Close()
 
@@ -159,7 +159,7 @@ func TestUpdateFormInvalidJSON(t *testing.T) {
 
 func TestGetSubmissionsInvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`not json`))
+		_, _ = w.Write([]byte(`not json`))
 	}))
 	defer server.Close()
 
@@ -200,7 +200,7 @@ func TestDeleteForm(t *testing.T) {
 func TestDeleteFormNotFound(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(`{"message":"Form was not found"}`))
+		_, _ = w.Write([]byte(`{"message":"Form was not found"}`))
 	}))
 	defer server.Close()
 
@@ -214,7 +214,7 @@ func TestDeleteFormNotFound(t *testing.T) {
 func TestAPIError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)
-		w.Write([]byte(`{"error":"forbidden"}`))
+		_, _ = w.Write([]byte(`{"error":"forbidden"}`))
 	}))
 	defer server.Close()
 

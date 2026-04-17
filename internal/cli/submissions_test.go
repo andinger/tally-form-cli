@@ -157,12 +157,12 @@ func TestBuildSubmissionMarkdown(t *testing.T) {
 		`submitted_at: "2026-04-17T08:15:03.000Z"`,
 		`is_completed: true`,
 		"# Submission sub-1",
-		"## Role?\n\nQA\n\n",                               // single-select → plain, no bullet
-		"## Languages?\n\n- Go\n- TypeScript\n\n",          // multi-select → bullets
-		"- **Prozesse:** OK",                               // matrix sorted by label
-		"- **Teamkultur:** Gut",                            // matrix sorted by label
-		"- [a.pdf](https://x/a.pdf)",                       // file link
-		"- ![b.png](https://x/b.png)",                      // image embed
+		"## Role?\n\nQA\n\n",                      // single-select → plain, no bullet
+		"## Languages?\n\n- Go\n- TypeScript\n\n", // multi-select → bullets
+		"- **Prozesse:** OK",                      // matrix sorted by label
+		"- **Teamkultur:** Gut",                   // matrix sorted by label
+		"- [a.pdf](https://x/a.pdf)",              // file link
+		"- ![b.png](https://x/b.png)",             // image embed
 	}
 	for _, needle := range wantContains {
 		if !strings.Contains(md, needle) {

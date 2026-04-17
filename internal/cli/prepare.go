@@ -110,13 +110,3 @@ func containsFMKey(fm, key string) bool {
 	return false
 }
 
-func replaceFMKey(fm, key, value string) string {
-	lines := strings.Split(fm, "\n")
-	for i, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmed, key+":") {
-			lines[i] = fmt.Sprintf("%s: %q", key, value)
-		}
-	}
-	return strings.Join(lines, "\n")
-}

@@ -118,7 +118,7 @@ func (c *Client) do(method, path string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("HTTP %s %s: %w", method, path, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {

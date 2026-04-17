@@ -35,12 +35,12 @@ type TallyForm struct {
 
 // SubmissionsResponse is the response from GET /forms/{id}/submissions.
 type SubmissionsResponse struct {
-	Questions []SubmissionQuestion `json:"questions"`
-	Page      int                  `json:"page"`
-	Limit     int                  `json:"limit"`
-	HasMore   bool                 `json:"hasMore"`
-	TotalNumberOfSubmissions int  `json:"totalNumberOfSubmissions"`
-	Submissions []Submission       `json:"submissions"`
+	Questions                []SubmissionQuestion `json:"questions"`
+	Page                     int                  `json:"page"`
+	Limit                    int                  `json:"limit"`
+	HasMore                  bool                 `json:"hasMore"`
+	TotalNumberOfSubmissions int                  `json:"totalNumberOfSubmissions"`
+	Submissions              []Submission         `json:"submissions"`
 }
 
 // SubmissionQuestion describes a form question in submission context.
@@ -48,11 +48,11 @@ type SubmissionsResponse struct {
 // embedded in the title (e.g. "Question text [Row label]"); Answer under the
 // matrix QuestionID is keyed by field.blockGroupUuid.
 type SubmissionQuestion struct {
-	ID     string                 `json:"id"`
-	Type   string                 `json:"type"`
-	Title  string                 `json:"title,omitempty"`
-	Name   string                 `json:"name,omitempty"`
-	Fields []SubmissionField      `json:"fields,omitempty"`
+	ID     string            `json:"id"`
+	Type   string            `json:"type"`
+	Title  string            `json:"title,omitempty"`
+	Name   string            `json:"name,omitempty"`
+	Fields []SubmissionField `json:"fields,omitempty"`
 }
 
 // SubmissionField is a single input field within a question (usually one per
@@ -80,6 +80,7 @@ type Submission struct {
 //   - []string (choice / checkbox / dropdown — always as an array)
 //   - []map[string]any (file-upload, signature — each item has id, name, url, mimeType, size)
 //   - map[string]any (matrix — keys are row UUIDs, values are arrays of selected column labels)
+//
 // FormattedAnswer is Tally's pre-formatted string (often empty when the list
 // endpoint does not compute it), so consumers should prefer Answer.
 type SubmissionResponse struct {
@@ -113,7 +114,6 @@ func parseHTMLToSchema(s string) []any {
 		// Pick the nearest tag
 		type tagMatch struct {
 			idx      int
-			openEnd  string // closing delimiter of the open tag (e.g. ">" or "">")
 			closeTag string
 			styles   func(s string) []any
 		}
