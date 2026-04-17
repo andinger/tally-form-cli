@@ -810,6 +810,7 @@ func TestCompileFormTitle(t *testing.T) {
 
 	cfg := testConfig()
 	cfg.Logo = "https://example.com/logo.png"
+	cfg.Cover = "https://example.com/cover.png"
 
 	c := testCompiler()
 	req, err := c.Compile(form, cfg)
@@ -824,8 +825,50 @@ func TestCompileFormTitle(t *testing.T) {
 	if ft.Payload["logo"] != "https://example.com/logo.png" {
 		t.Errorf("logo = %v", ft.Payload["logo"])
 	}
+	if ft.Payload["cover"] != "https://example.com/cover.png" {
+		t.Errorf("cover = %v", ft.Payload["cover"])
+	}
 	if ft.Payload["title"] != "My Form" {
 		t.Errorf("title = %v", ft.Payload["title"])
+	}
+}
+
+func TestCompileFormTitleFrontmatterCoverOverride(t *testing.T) {
+	form := &model.Form{
+		Name:  "My Form",
+		Pages: []model.Page{{}},
+		Settings: map[string]any{
+			"cover": "https://example.com/frontmatter-cover.png",
+			"logo":  "https://example.com/frontmatter-logo.png",
+		},
+	}
+
+	cfg := testConfig()
+	cfg.Cover = "https://example.com/config-cover.png"
+	cfg.Logo = "https://example.com/config-logo.png"
+
+	c := testCompiler()
+	req, err := c.Compile(form, cfg)
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+
+	ft := req.Blocks[0]
+	if ft.Payload["cover"] != "https://example.com/frontmatter-cover.png" {
+		t.Errorf("frontmatter cover did not override config: %v", ft.Payload["cover"])
+	}
+	if ft.Payload["logo"] != "https://example.com/frontmatter-logo.png" {
+		t.Errorf("frontmatter logo did not override config: %v", ft.Payload["logo"])
+	}
+
+	// Cover and logo must not leak into form.settings
+	if s, ok := req.Settings.(map[string]any); ok {
+		if _, has := s["cover"]; has {
+			t.Error("cover leaked into settings")
+		}
+		if _, has := s["logo"]; has {
+			t.Error("logo leaked into settings")
+		}
 	}
 }
 

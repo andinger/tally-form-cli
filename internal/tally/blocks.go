@@ -71,10 +71,13 @@ func (c *Compiler) Compile(form *model.Form, cfg *config.Merged) (*CreateFormReq
 		}
 	}
 
-	// Apply frontmatter logo override (form.Settings flows from YAML inline fields)
+	// Apply frontmatter logo/cover overrides (form.Settings flows from YAML inline fields)
 	if form.Settings != nil && cfg != nil {
 		if logo, ok := form.Settings["logo"].(string); ok && logo != "" {
 			cfg.Logo = logo
+		}
+		if cover, ok := form.Settings["cover"].(string); ok && cover != "" {
+			cfg.Cover = cover
 		}
 	}
 
@@ -168,6 +171,9 @@ func (c *Compiler) buildFormTitle(name string, cfg *config.Merged) TallyBlock {
 	}
 	if cfg != nil && cfg.Logo != "" {
 		payload["logo"] = cfg.Logo
+	}
+	if cfg != nil && cfg.Cover != "" {
+		payload["cover"] = cfg.Cover
 	}
 
 	return TallyBlock{
@@ -780,8 +786,8 @@ func (c *Compiler) buildSettings(form *model.Form, cfg *config.Merged) map[strin
 						},
 					}
 				}
-			} else if k == "logo" {
-				// logo goes into settings, not here — handled by buildFormTitle
+			} else if k == "logo" || k == "cover" {
+				// logo and cover go onto the FORM_TITLE block, not into settings
 			} else {
 				settings[k] = v
 			}

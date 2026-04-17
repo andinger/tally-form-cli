@@ -13,6 +13,7 @@ type Config struct {
 	API                   APIConfig `yaml:"api"`
 	Workspace             string    `yaml:"workspace"`
 	Logo                  string    `yaml:"logo"`
+	Cover                 string    `yaml:"cover"`
 	PrimaryColor          string    `yaml:"primary_color"`
 	Password              string    `yaml:"password"`
 	Language              string    `yaml:"language"`
@@ -33,6 +34,7 @@ type Merged struct {
 	BaseURL      string
 	Workspace    string
 	Logo         string
+	Cover        string
 	PrimaryColor string
 	Password     string
 	Language     string
@@ -52,6 +54,7 @@ func Load(frontmatter map[string]any) (*Merged, error) {
 		BaseURL:      "https://api.tally.so",
 		Workspace:    userCfg.Workspace,
 		Logo:         userCfg.Logo,
+		Cover:        userCfg.Cover,
 		PrimaryColor: userCfg.PrimaryColor,
 		Password:     userCfg.Password,
 		Language:     userCfg.Language,

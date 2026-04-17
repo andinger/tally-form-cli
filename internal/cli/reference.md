@@ -17,7 +17,7 @@ brew install andinger/tap/tally
 | `delete` | `delete <form-id>` | Permanently deletes a form (no confirmation, no undo) |
 | `diff` | `diff <file.md> [form-id]` | Compares local Markdown with a Tally form. Uses `form_id` from frontmatter if not provided. |
 | `submissions` | `submissions <form-id> [--format csv\|json] [--output <dir>]` | Downloads responses (default: csv) to stdout; `--output <dir>` writes one Markdown file per submission |
-| `prepare` | `prepare <file.md>` | Merges global config (workspace, logo, password, primary_color, domain) into frontmatter |
+| `prepare` | `prepare <file.md>` | Merges global config (workspace, logo, cover, password, primary_color, language) into frontmatter |
 | `config` | `config` | Shows the global config file path |
 | `reference` | `reference` | Prints this reference documentation to stdout |
 
@@ -42,6 +42,7 @@ api:
 
 workspace: "mOJGz8"
 logo: "https://storage.tally.so/..."
+cover: "https://storage.tally.so/..."
 primary_color: "#A219B1"
 password: "optional-password"
 language: "de"
@@ -50,7 +51,7 @@ has_partial_submissions: true
 save_for_later: true
 ```
 
-`primary_color` is used as both the accent color and button background color in Tally.
+`logo` and `cover` are URLs — typically uploaded via the Tally editor and then copied into the config. Both render on the form's title block. `primary_color` is used as both the accent color and button background color in Tally.
 
 ### Frontmatter
 
@@ -62,6 +63,8 @@ name: "Survey — Acme Corp"
 form_id: "auto-filled-after-push"
 workspace: "override-ws"
 password: "form-specific-password"
+logo: "https://storage.tally.so/..."   # optional, overrides global config
+cover: "https://storage.tally.so/..."  # optional, overrides global config
 strip_prefix: ""       # optional; see "Question-ID Prefix" below
 ---
 ```

@@ -14,7 +14,7 @@ func newPrepareCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "prepare <file.md>",
 		Short: "Merge global settings into the Markdown frontmatter",
-		Long:  "Writes workspace, logo, password, primary_color, and domain from global config into the form's YAML frontmatter.",
+		Long:  "Writes workspace, logo, cover, password, primary_color, and language from global config into the form's YAML frontmatter.",
 		Args:  cobra.ExactArgs(1),
 		RunE:  runPrepare,
 	}
@@ -58,6 +58,7 @@ func runPrepare(cmd *cobra.Command, args []string) error {
 	}{
 		{"workspace", cfg.Workspace},
 		{"logo", cfg.Logo},
+		{"cover", cfg.Cover},
 		{"password", cfg.Password},
 		{"primary_color", cfg.PrimaryColor},
 		{"language", cfg.Language},
