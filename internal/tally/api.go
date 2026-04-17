@@ -62,6 +62,14 @@ func (c *Client) UpdateForm(formID string, req *UpdateFormRequest) (*TallyForm, 
 	return &form, nil
 }
 
+// DeleteForm deletes a form via DELETE /forms/{id}.
+// Returns nil on success (HTTP 204). Returns an error if the form does not exist
+// or the request fails.
+func (c *Client) DeleteForm(formID string) error {
+	_, err := c.do("DELETE", "/forms/"+formID, nil)
+	return err
+}
+
 // GetForm retrieves a form via GET /forms/{id}.
 func (c *Client) GetForm(formID string) (*TallyForm, error) {
 	resp, err := c.do("GET", "/forms/"+formID, nil)
@@ -78,7 +86,7 @@ func (c *Client) GetForm(formID string) (*TallyForm, error) {
 
 // GetSubmissions retrieves all submissions for a form.
 func (c *Client) GetSubmissions(formID string) (*SubmissionsResponse, error) {
-	resp, err := c.do("GET", "/forms/"+formID+"/submissions?limit=500&status=FINISHED", nil)
+	resp, err := c.do("GET", "/forms/"+formID+"/submissions?limit=500&filter=completed", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -119,6 +127,10 @@ func (c *Client) do(method, path string, body []byte) ([]byte, error) {
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return nil, fmt.Errorf("API error %d: %s", resp.StatusCode, string(respBody))
+	}
+
+	if resp.StatusCode == http.StatusNoContent {
+		return nil, nil
 	}
 
 	return respBody, nil

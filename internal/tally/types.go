@@ -44,23 +44,48 @@ type SubmissionsResponse struct {
 }
 
 // SubmissionQuestion describes a form question in submission context.
+// For matrix questions, Fields contains one entry per row with the row label
+// embedded in the title (e.g. "Question text [Row label]"); Answer under the
+// matrix QuestionID is keyed by field.blockGroupUuid.
 type SubmissionQuestion struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
-	Name string `json:"name"`
+	ID     string                 `json:"id"`
+	Type   string                 `json:"type"`
+	Title  string                 `json:"title,omitempty"`
+	Name   string                 `json:"name,omitempty"`
+	Fields []SubmissionField      `json:"fields,omitempty"`
+}
+
+// SubmissionField is a single input field within a question (usually one per
+// question; for matrix questions one per row).
+type SubmissionField struct {
+	UUID           string `json:"uuid"`
+	Type           string `json:"type"`
+	QuestionType   string `json:"questionType"`
+	BlockGroupUUID string `json:"blockGroupUuid"`
+	Title          string `json:"title,omitempty"`
 }
 
 // Submission represents a single form submission.
 type Submission struct {
 	ID          string               `json:"id"`
 	SubmittedAt string               `json:"submittedAt"`
+	IsCompleted bool                 `json:"isCompleted,omitempty"`
 	Responses   []SubmissionResponse `json:"responses"`
 }
 
 // SubmissionResponse is a single answer within a submission.
+// Answer holds the raw value as returned by the Tally API. It can be:
+//   - string (short-text, email, date, time, URL)
+//   - number (rating, scale, input-number)
+//   - []string (choice / checkbox / dropdown — always as an array)
+//   - []map[string]any (file-upload, signature — each item has id, name, url, mimeType, size)
+//   - map[string]any (matrix — keys are row UUIDs, values are arrays of selected column labels)
+// FormattedAnswer is Tally's pre-formatted string (often empty when the list
+// endpoint does not compute it), so consumers should prefer Answer.
 type SubmissionResponse struct {
 	QuestionID      string `json:"questionId"`
-	FormattedAnswer string `json:"formattedAnswer"`
+	Answer          any    `json:"answer,omitempty"`
+	FormattedAnswer string `json:"formattedAnswer,omitempty"`
 }
 
 // SafeHTMLSchema builds the safeHTMLSchema array for plain text.

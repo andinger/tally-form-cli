@@ -242,7 +242,7 @@ func TestCompileShortText(t *testing.T) {
 	}
 }
 
-func TestCompileQuestionWithHint(t *testing.T) {
+func TestCompileQuestionWithHintFoldsIntoPlaceholder(t *testing.T) {
 	form := &model.Form{
 		Name: "Test",
 		Pages: []model.Page{{
@@ -264,35 +264,81 @@ func TestCompileQuestionWithHint(t *testing.T) {
 		t.Fatalf("Compile error: %v", err)
 	}
 
-	// FORM_TITLE + TITLE + TEXT(hint) + INPUT_EMAIL = 4
+	// FORM_TITLE + TITLE + INPUT_EMAIL = 3 (no separate TEXT hint block — it
+	// breaks the question group in the Tally editor).
+	if len(req.Blocks) != 3 {
+		t.Fatalf("Blocks = %d, want 3", len(req.Blocks))
+	}
+
+	if req.Blocks[2].Type != "INPUT_EMAIL" {
+		t.Errorf("Block[2].Type = %q, want INPUT_EMAIL", req.Blocks[2].Type)
+	}
+	placeholder, _ := req.Blocks[2].Payload["placeholder"].(string)
+	if placeholder != "Your work email" {
+		t.Errorf("placeholder = %q, want %q", placeholder, "Your work email")
+	}
+}
+
+func TestCompileQuestionWithHintKeepsExplicitPlaceholder(t *testing.T) {
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:          "F1",
+					Text:        "Email?",
+					Type:        model.Email,
+					Required:    true,
+					Hint:        "Your work email",
+					Placeholder: "name@company.com",
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+	placeholder, _ := req.Blocks[2].Payload["placeholder"].(string)
+	if placeholder != "name@company.com" {
+		t.Errorf("explicit placeholder must win — got %q", placeholder)
+	}
+}
+
+func TestCompileQuestionWithHintOnChoiceDropsHint(t *testing.T) {
+	// Choice questions have no placeholder field; hint must be silently dropped.
+	form := &model.Form{
+		Name: "Test",
+		Pages: []model.Page{{
+			Blocks: []model.Block{
+				&model.Question{
+					ID:   "F1",
+					Text: "Pick one",
+					Type: model.SingleChoice,
+					Hint: "Helper text",
+					Options: []model.Option{
+						{Text: "A"}, {Text: "B"},
+					},
+				},
+			},
+		}},
+	}
+
+	c := testCompiler()
+	req, err := c.Compile(form, testConfig())
+	if err != nil {
+		t.Fatalf("Compile error: %v", err)
+	}
+	// FORM_TITLE + TITLE + 2 OPTIONS = 4 — no hint block, no placeholder
 	if len(req.Blocks) != 4 {
 		t.Fatalf("Blocks = %d, want 4", len(req.Blocks))
 	}
-
-	// Hint is a TEXT block with italic safeHTMLSchema
-	hint := req.Blocks[2]
-	if hint.Type != "TEXT" {
-		t.Errorf("Hint type = %q, want TEXT", hint.Type)
-	}
-	if hint.GroupType != "TEXT" {
-		t.Errorf("Hint groupType = %q, want TEXT", hint.GroupType)
-	}
-
-	// Input block
-	inp := req.Blocks[3]
-	if inp.Type != "INPUT_EMAIL" {
-		t.Errorf("Input type = %q, want INPUT_EMAIL", inp.Type)
-	}
-
-	// TITLE, hint, and input all have different groupUUIDs
-	titleGroup := req.Blocks[1].GroupUUID
-	hintGroup := req.Blocks[2].GroupUUID
-	inputGroup := req.Blocks[3].GroupUUID
-	if titleGroup == inputGroup {
-		t.Error("TITLE and INPUT_EMAIL must have different groupUUIDs")
-	}
-	if hintGroup == titleGroup || hintGroup == inputGroup {
-		t.Error("Hint TEXT must have its own groupUUID")
+	for _, b := range req.Blocks {
+		if b.Type == "TEXT" {
+			t.Errorf("Choice question must not emit a TEXT hint block")
+		}
 	}
 }
 
@@ -319,61 +365,83 @@ func TestCompileMatrix(t *testing.T) {
 		t.Fatalf("Compile error: %v", err)
 	}
 
-	// FORM_TITLE + TITLE + 2 cols + 2 rows = 6 (no MATRIX container)
-	if len(req.Blocks) != 6 {
-		t.Fatalf("Blocks = %d, want 6", len(req.Blocks))
+	// FORM_TITLE + TITLE + MATRIX container + 2 cols + 2 rows = 7
+	if len(req.Blocks) != 7 {
+		t.Fatalf("Blocks = %d, want 7", len(req.Blocks))
 	}
 
-	// Columns start at index 2 (directly after TITLE)
-	if req.Blocks[2].Type != "MATRIX_COLUMN" {
-		t.Errorf("Block 2 type = %q, want MATRIX_COLUMN", req.Blocks[2].Type)
+	// MATRIX container block at index 2 — required by Tally editor. Per the
+	// editor's actual output, its groupType is MATRIX (not QUESTION as the
+	// schema claims) and its payload carries isFirst/isLast/index.
+	matrix := req.Blocks[2]
+	if matrix.Type != "MATRIX" {
+		t.Errorf("Block 2 type = %q, want MATRIX", matrix.Type)
 	}
-	if req.Blocks[2].Payload["isRequired"] != true {
+	if matrix.GroupType != "MATRIX" {
+		t.Errorf("MATRIX groupType = %q, want MATRIX", matrix.GroupType)
+	}
+	if matrix.Payload["isRequired"] != true {
+		t.Error("MATRIX container should carry isRequired")
+	}
+	if matrix.Payload["isFirst"] != false || matrix.Payload["isLast"] != true {
+		t.Errorf("MATRIX container should have isFirst=false, isLast=true")
+	}
+	if matrix.Payload["index"] != 2 {
+		t.Errorf("MATRIX container index = %v, want %d (len of columns)", matrix.Payload["index"], 2)
+	}
+
+	// Columns start at index 3
+	col0 := req.Blocks[3]
+	if col0.Type != "MATRIX_COLUMN" {
+		t.Errorf("Block 3 type = %q, want MATRIX_COLUMN", col0.Type)
+	}
+	if col0.GroupType != "MATRIX" {
+		t.Errorf("MATRIX_COLUMN groupType = %q, want MATRIX", col0.GroupType)
+	}
+	if col0.Payload["isRequired"] != true {
 		t.Error("MATRIX_COLUMN should have isRequired")
 	}
-	// Check safeHTMLSchema instead of text
-	schema, ok := req.Blocks[2].Payload["safeHTMLSchema"].([]any)
-	if !ok || len(schema) == 0 {
+	if schema, ok := col0.Payload["safeHTMLSchema"].([]any); !ok || len(schema) == 0 {
 		t.Error("MATRIX_COLUMN should have safeHTMLSchema")
 	}
 
-	// Rows
-	if req.Blocks[4].Type != "MATRIX_ROW" {
-		t.Errorf("Block 4 type = %q, want MATRIX_ROW", req.Blocks[4].Type)
+	// Rows start at index 5
+	row0 := req.Blocks[5]
+	if row0.Type != "MATRIX_ROW" {
+		t.Errorf("Block 5 type = %q, want MATRIX_ROW", row0.Type)
 	}
-	if req.Blocks[4].Payload["isRequired"] != true {
+	if row0.GroupType != "MATRIX" {
+		t.Errorf("MATRIX_ROW groupType = %q, want MATRIX", row0.GroupType)
+	}
+	if row0.Payload["isRequired"] != true {
 		t.Error("MATRIX_ROW should have isRequired")
 	}
-	rowSchema, ok := req.Blocks[4].Payload["safeHTMLSchema"].([]any)
-	if !ok || len(rowSchema) == 0 {
+	if schema, ok := row0.Payload["safeHTMLSchema"].([]any); !ok || len(schema) == 0 {
 		t.Error("MATRIX_ROW should have safeHTMLSchema")
 	}
 
-	// TITLE and matrix content must have different groupUUIDs
-	if req.Blocks[1].GroupUUID == req.Blocks[2].GroupUUID {
-		t.Error("TITLE and MATRIX_COLUMN must have different groupUUIDs")
-	}
-
-	// All matrix columns and rows share the same groupUUID
-	contentGroup := req.Blocks[2].GroupUUID
-	for i := 2; i < 6; i++ {
-		if req.Blocks[i].GroupUUID != contentGroup {
-			t.Errorf("Block %d groupUUID = %s, want %s (all matrix blocks share one group)", i, req.Blocks[i].GroupUUID, contentGroup)
+	// All matrix blocks (container + cols + rows) share one groupUuid —
+	// this matches what Tally's editor actually emits.
+	sharedGroup := matrix.GroupUUID
+	for i := 2; i < 7; i++ {
+		if req.Blocks[i].GroupUUID != sharedGroup {
+			t.Errorf("Block %d groupUUID = %s, want %s (all matrix blocks share one group)",
+				i, req.Blocks[i].GroupUUID, sharedGroup)
 		}
 	}
 
+	// TITLE must have its own, distinct groupUUID.
+	titleGroup := req.Blocks[1].GroupUUID
+	if titleGroup == sharedGroup {
+		t.Error("TITLE groupUUID must differ from the matrix group")
+	}
+
 	// Verify column/row index ordering
-	if req.Blocks[2].Payload["isFirst"] != true {
-		t.Error("First column should have isFirst=true")
+	if col0.Payload["isFirst"] != true || col0.Payload["isLast"] != false {
+		t.Error("First column should have isFirst=true, isLast=false")
 	}
-	if req.Blocks[2].Payload["isLast"] != false {
-		t.Error("First column should have isLast=false")
-	}
-	if req.Blocks[3].Payload["isFirst"] != false {
-		t.Error("Second column should have isFirst=false")
-	}
-	if req.Blocks[3].Payload["isLast"] != true {
-		t.Error("Second column should have isLast=true")
+	if req.Blocks[4].Payload["isFirst"] != false || req.Blocks[4].Payload["isLast"] != true {
+		t.Error("Second column should have isFirst=false, isLast=true")
 	}
 }
 
@@ -1243,11 +1311,11 @@ func TestCompileScale(t *testing.T) {
 	if scale.Type != "LINEAR_SCALE" {
 		t.Errorf("Type = %q, want LINEAR_SCALE", scale.Type)
 	}
-	if scale.Payload["startNumber"] != 0 {
-		t.Errorf("startNumber = %v, want 0", scale.Payload["startNumber"])
+	if scale.Payload["start"] != 0 {
+		t.Errorf("start = %v, want 0", scale.Payload["start"])
 	}
-	if scale.Payload["endNumber"] != 10 {
-		t.Errorf("endNumber = %v, want 10", scale.Payload["endNumber"])
+	if scale.Payload["end"] != 10 {
+		t.Errorf("end = %v, want 10", scale.Payload["end"])
 	}
 	if scale.Payload["leftLabel"] != "Not at all" {
 		t.Errorf("leftLabel = %v", scale.Payload["leftLabel"])

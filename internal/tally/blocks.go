@@ -2,6 +2,7 @@ package tally
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/google/uuid"
@@ -9,6 +10,19 @@ import (
 	"github.com/andinger/tally-form-cli/internal/config"
 	"github.com/andinger/tally-form-cli/internal/model"
 )
+
+// textInputTypes are input question types where a hint can be rendered as the
+// native placeholder attribute. For choice/matrix/scale/rating questions, hints
+// have no equivalent Tally representation and are silently dropped with a
+// warning.
+func hintSupportsPlaceholder(t model.QuestionType) bool {
+	switch t {
+	case model.LongText, model.ShortText, model.Number, model.Email,
+		model.Phone, model.URL, model.Date, model.Time:
+		return true
+	}
+	return false
+}
 
 type deferredCond struct {
 	cond     *model.Conditional
@@ -251,23 +265,23 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 	blocks = append(blocks, titleBlock)
 	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], titleUUID)
 
-	// Hint as italic TEXT block below the title
+	// Hint handling: Tally forms produced by the editor do NOT emit a separate
+	// TEXT block between TITLE and the input — such an orphan block breaks the
+	// question group, causing the editor to treat the question as a fragment
+	// (e.g. deleting a conditional that references such a question cascades
+	// into deleting the question itself). Instead, hints are folded into the
+	// input's `placeholder` for text-like inputs. For choice/matrix/scale
+	// questions there is no clean placeholder equivalent, so we warn and drop.
 	if q.Hint != "" {
-		hintUUID := c.NewUUID()
-		hintBlock := TallyBlock{
-			UUID:      hintUUID,
-			Type:      "TEXT",
-			GroupUUID: c.NewUUID(),
-			GroupType: "TEXT",
-			Payload: map[string]any{
-				"safeHTMLSchema": SafeHTMLSchemaFromHTML("<i>" + q.Hint + "</i>"),
-			},
+		if hintSupportsPlaceholder(q.Type) {
+			if q.Placeholder == "" {
+				q.Placeholder = q.Hint
+			}
+		} else {
+			fmt.Fprintf(os.Stderr,
+				"Warning: question %s (%s) has a hint but its type does not support placeholders — hint is dropped. Consider embedding help text into option labels or the question title.\n",
+				q.ID, q.Type)
 		}
-		if q.Hidden {
-			hintBlock.Payload["isHidden"] = true
-		}
-		blocks = append(blocks, hintBlock)
-		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], hintUUID)
 	}
 
 	// Content blocks (options, inputs, matrix, etc.) need their own groupUUID,
@@ -302,13 +316,13 @@ func (c *Compiler) compileQuestion(q *model.Question) []TallyBlock {
 	case model.Time:
 		blocks = append(blocks, c.compileInputBlock(q, "INPUT_TIME", "INPUT_TIME", contentGroupUUID)...)
 	case model.Rating:
-		blocks = append(blocks, c.compileInputBlock(q, "RATING", "RATING", contentGroupUUID)...)
+		blocks = append(blocks, c.compileRatingBlock(q, contentGroupUUID)...)
 	case model.Scale:
 		blocks = append(blocks, c.compileScaleBlock(q, contentGroupUUID)...)
 	case model.FileUpload:
-		blocks = append(blocks, c.compileInputBlock(q, "FILE_UPLOAD", "FILE_UPLOAD", contentGroupUUID)...)
+		blocks = append(blocks, c.compileFileUploadBlock(q, contentGroupUUID)...)
 	case model.Signature:
-		blocks = append(blocks, c.compileInputBlock(q, "SIGNATURE", "SIGNATURE", contentGroupUUID)...)
+		blocks = append(blocks, c.compileSignatureBlock(q, contentGroupUUID)...)
 	}
 
 	return blocks
@@ -376,9 +390,14 @@ func (c *Compiler) compileInputBlock(q *model.Question, blockType, groupType, gr
 	inputUUID := c.NewUUID()
 	payload := map[string]any{
 		"isRequired":       q.Required,
-		"hasMinCharacters": false,
-		"hasMaxCharacters": false,
 		"hasDefaultAnswer": false,
+	}
+	// Character-limit fields are only accepted by text-based inputs. Email,
+	// phone, URL, number, date, time, file-upload, signature etc. reject them
+	// with a 400 VALIDATION error.
+	if blockType == "TEXTAREA" || blockType == "INPUT_TEXT" {
+		payload["hasMinCharacters"] = false
+		payload["hasMaxCharacters"] = false
 	}
 	if q.Placeholder != "" {
 		payload["placeholder"] = q.Placeholder
@@ -400,9 +419,44 @@ func (c *Compiler) compileInputBlock(q *model.Question, blockType, groupType, gr
 }
 
 func (c *Compiler) compileMatrix(q *model.Question, contentGroupUUID string) []TallyBlock {
-	var blocks []TallyBlock
+	// Matrix layout per Tally's actual editor output (the OpenAPI schema is
+	// misleading on several points — verified by pulling a manually-created
+	// matrix form and comparing):
+	//
+	//   MATRIX container:  type=MATRIX,       groupType=MATRIX,  groupUuid = contentGroupUUID (shared)
+	//   MATRIX_COLUMN:     type=MATRIX_COLUMN, groupType=MATRIX, groupUuid = contentGroupUUID (shared)
+	//   MATRIX_ROW:        type=MATRIX_ROW,    groupType=MATRIX, groupUuid = contentGroupUUID (shared)
+	//
+	// All three share one phantom groupUuid (same pattern as choice options
+	// share one groupUuid). The MATRIX container uses groupType=MATRIX (not
+	// QUESTION as the schema suggests). Its payload carries isFirst/isLast/
+	// index values like an option block. Without these exact invariants, the
+	// Tally editor marks the form as dirty on load and blocks delete
+	// operations on other questions until the matrix is removed and the form
+	// is re-saved.
 
-	// MATRIX_COLUMN blocks (no separate MATRIX container — Tally doesn't use one)
+	matrixUUID := c.NewUUID()
+	matrixPayload := map[string]any{
+		"isRequired": q.Required,
+		"isFirst":    false,
+		"isLast":     true,
+		"index":      len(q.MatrixCols),
+	}
+	if q.Hidden {
+		matrixPayload["isHidden"] = true
+	}
+
+	blocks := []TallyBlock{{
+		UUID:      matrixUUID,
+		Type:      "MATRIX",
+		GroupUUID: contentGroupUUID,
+		GroupType: "MATRIX",
+		Payload:   matrixPayload,
+	}}
+	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], matrixUUID)
+	c.firstOptionUUID[q.ID] = matrixUUID
+
+	// MATRIX_COLUMN blocks — share the matrix content groupUuid.
 	for i, col := range q.MatrixCols {
 		colUUID := c.NewUUID()
 		blocks = append(blocks, TallyBlock{
@@ -419,12 +473,9 @@ func (c *Compiler) compileMatrix(q *model.Question, contentGroupUUID string) []T
 			},
 		})
 		c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], colUUID)
-		if i == 0 {
-			c.firstOptionUUID[q.ID] = colUUID
-		}
 	}
 
-	// MATRIX_ROW blocks
+	// MATRIX_ROW blocks — share the matrix content groupUuid.
 	for i, row := range q.MatrixRows {
 		rowUUID := c.NewUUID()
 		blocks = append(blocks, TallyBlock{
@@ -449,21 +500,24 @@ func (c *Compiler) compileMatrix(q *model.Question, contentGroupUUID string) []T
 func (c *Compiler) compileScaleBlock(q *model.Question, groupUUID string) []TallyBlock {
 	scaleUUID := c.NewUUID()
 	payload := map[string]any{
-		"isRequired": q.Required,
+		"isRequired":       q.Required,
+		"hasDefaultAnswer": false,
 	}
 	if v, ok := q.Properties["start"]; ok {
-		payload["startNumber"] = v
+		payload["start"] = v
 	}
 	if v, ok := q.Properties["end"]; ok {
-		payload["endNumber"] = v
+		payload["end"] = v
 	}
 	if v, ok := q.Properties["step"]; ok {
 		payload["step"] = v
 	}
 	if v, ok := q.Properties["left-label"]; ok {
+		payload["hasLeftLabel"] = true
 		payload["leftLabel"] = v
 	}
 	if v, ok := q.Properties["right-label"]; ok {
+		payload["hasRightLabel"] = true
 		payload["rightLabel"] = v
 	}
 	if q.Hidden {
@@ -478,6 +532,77 @@ func (c *Compiler) compileScaleBlock(q *model.Question, groupUUID string) []Tall
 		Type:      "LINEAR_SCALE",
 		GroupUUID: groupUUID,
 		GroupType: "LINEAR_SCALE",
+		Payload:   payload,
+	}}
+}
+
+func (c *Compiler) compileRatingBlock(q *model.Question, groupUUID string) []TallyBlock {
+	ratingUUID := c.NewUUID()
+	payload := map[string]any{
+		"isRequired":       q.Required,
+		"hasDefaultAnswer": false,
+	}
+	if v, ok := q.Properties["stars"]; ok {
+		payload["stars"] = v
+	}
+	if q.Hidden {
+		payload["isHidden"] = true
+	}
+
+	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], ratingUUID)
+	c.firstOptionUUID[q.ID] = ratingUUID
+
+	return []TallyBlock{{
+		UUID:      ratingUUID,
+		Type:      "RATING",
+		GroupUUID: groupUUID,
+		GroupType: "RATING",
+		Payload:   payload,
+	}}
+}
+
+func (c *Compiler) compileFileUploadBlock(q *model.Question, groupUUID string) []TallyBlock {
+	uploadUUID := c.NewUUID()
+	payload := map[string]any{
+		"isRequired":       q.Required,
+		"hasMultipleFiles": false,
+		"hasMinFiles":      false,
+		"hasMaxFiles":      false,
+		"hasMaxFileSize":   false,
+	}
+	if q.Hidden {
+		payload["isHidden"] = true
+	}
+
+	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], uploadUUID)
+	c.firstOptionUUID[q.ID] = uploadUUID
+
+	return []TallyBlock{{
+		UUID:      uploadUUID,
+		Type:      "FILE_UPLOAD",
+		GroupUUID: groupUUID,
+		GroupType: "FILE_UPLOAD",
+		Payload:   payload,
+	}}
+}
+
+func (c *Compiler) compileSignatureBlock(q *model.Question, groupUUID string) []TallyBlock {
+	sigUUID := c.NewUUID()
+	payload := map[string]any{
+		"isRequired": q.Required,
+	}
+	if q.Hidden {
+		payload["isHidden"] = true
+	}
+
+	c.questionBlockUUIDs[q.ID] = append(c.questionBlockUUIDs[q.ID], sigUUID)
+	c.firstOptionUUID[q.ID] = sigUUID
+
+	return []TallyBlock{{
+		UUID:      sigUUID,
+		Type:      "SIGNATURE",
+		GroupUUID: groupUUID,
+		GroupType: "SIGNATURE",
 		Payload:   payload,
 	}}
 }
@@ -537,7 +662,12 @@ func (c *Compiler) compileConditional(cond *model.Conditional) ([]TallyBlock, er
 					resolvedValues = append(resolvedValues, val)
 				}
 			}
-			if len(resolvedValues) == 1 {
+			// ANY_OF comparisons always take an array, even for a single value.
+			// Scalar-typed comparisons (IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN)
+			// take a single string value.
+			if comparison == "IS_ANY_OF" || comparison == "IS_NOT_ANY_OF" {
+				condPayload["value"] = resolvedValues
+			} else if len(resolvedValues) == 1 {
 				condPayload["value"] = resolvedValues[0]
 			} else {
 				condPayload["value"] = resolvedValues

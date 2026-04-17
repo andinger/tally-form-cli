@@ -84,7 +84,38 @@ Verified against form dWlGGV — the UUID is a groupUuid that no block has as it
 
 ### Matrix questions
 
-Matrix questions have **no MATRIX container block**. Columns and rows follow the TITLE directly, all sharing one content groupUuid with `groupType=MATRIX`. Labels use `safeHTMLSchema` (not `text`), and each column/row needs `isRequired`.
+Matrix questions **must** include a MATRIX container block between the TITLE and the MATRIX_COLUMN/MATRIX_ROW blocks. All matrix blocks (container + columns + rows) share **one** phantom `groupUuid` and use `groupType: MATRIX` — including the container itself, which has `groupType: MATRIX` (not `QUESTION`, despite what the OpenAPI schema says — the schema is wrong here, verified against editor-produced forms).
+
+```
+TITLE              groupUuid=T      groupType=QUESTION
+MATRIX             groupUuid=X      groupType=MATRIX        ← container, payload has isFirst/isLast/index
+MATRIX_COLUMN      groupUuid=X      groupType=MATRIX
+MATRIX_COLUMN      groupUuid=X      groupType=MATRIX
+MATRIX_ROW         groupUuid=X      groupType=MATRIX
+MATRIX_ROW         groupUuid=X      groupType=MATRIX
+```
+
+The container's payload must carry `isFirst=false`, `isLast=true`, and `index=len(columns)` alongside `isRequired`. Without the container block, the Tally editor marks the form as dirty on load and blocks delete operations on other questions until the matrix is removed. Labels use `safeHTMLSchema` (not `text`), and each column/row needs `isRequired`.
+
+### Hint text on questions
+
+Hints for text-based inputs (`TEXTAREA`, `INPUT_TEXT`, `INPUT_NUMBER`, `INPUT_EMAIL`, `INPUT_PHONE_NUMBER`, `INPUT_LINK`, `INPUT_DATE`, `INPUT_TIME`) must be folded into the input's `placeholder` field — **never** emitted as a separate TEXT block between the TITLE and the input. A TEXT orphan between question blocks breaks the question group: deleting a conditional that references the question cascades into deleting the question itself. Choice/matrix/scale/rating questions have no placeholder equivalent, so the compiler warns and drops hints for those.
+
+### Input payload restrictions
+
+`hasMinCharacters` and `hasMaxCharacters` are **only** accepted on `TEXTAREA` and `INPUT_TEXT`. All other input types (`INPUT_EMAIL`, `INPUT_NUMBER`, `INPUT_PHONE_NUMBER`, `INPUT_LINK`, `INPUT_DATE`, `INPUT_TIME`, `FILE_UPLOAD`, `SIGNATURE`) reject them with a 400 VALIDATION error.
+
+### LinearScale payload
+
+Use `start` / `end` (not `startNumber` / `endNumber`). Left/right labels require matching boolean flags: set `hasLeftLabel: true` whenever `leftLabel` is set, same for `hasRightLabel` / `rightLabel`.
+
+### Conditional value shape
+
+Comparisons come in two flavors:
+- **ANY_OF** (`IS_ANY_OF`, `IS_NOT_ANY_OF`) always expect a JSON **array** of UUIDs, even with a single value.
+- **Scalar** (`IS`, `IS_NOT`, `CONTAINS`, `DOES_NOT_CONTAIN`) expect a **string** value.
+
+Sending a string to an ANY_OF comparison fails with `value type is not allowed for this comparison`.
 
 ### safeHTMLSchema format
 

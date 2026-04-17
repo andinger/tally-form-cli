@@ -21,6 +21,7 @@ func NewRootCmd(version, commit, date string) *cobra.Command {
 
 	root.AddCommand(newPushCmd())
 	root.AddCommand(newPullCmd())
+	root.AddCommand(newDeleteCmd())
 	root.AddCommand(newDiffCmd())
 	root.AddCommand(newSubmissionsCmd())
 	root.AddCommand(newPrepareCmd())

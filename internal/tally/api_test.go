@@ -170,6 +170,47 @@ func TestGetSubmissionsInvalidJSON(t *testing.T) {
 	}
 }
 
+func TestDeleteForm(t *testing.T) {
+	var gotMethod, gotPath, gotAuth string
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotMethod = r.Method
+		gotPath = r.URL.Path
+		gotAuth = r.Header.Get("Authorization")
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "test-token")
+	if err := client.DeleteForm("abc123"); err != nil {
+		t.Fatalf("DeleteForm error: %v", err)
+	}
+
+	if gotMethod != "DELETE" {
+		t.Errorf("Method = %q, want DELETE", gotMethod)
+	}
+	if gotPath != "/forms/abc123" {
+		t.Errorf("Path = %q, want /forms/abc123", gotPath)
+	}
+	if gotAuth != "Bearer test-token" {
+		t.Errorf("Auth = %q", gotAuth)
+	}
+}
+
+func TestDeleteFormNotFound(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(`{"message":"Form was not found"}`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "token")
+	err := client.DeleteForm("missing")
+	if err == nil {
+		t.Fatal("Expected error for 404")
+	}
+}
+
 func TestAPIError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)

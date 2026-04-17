@@ -13,7 +13,7 @@ func TestNewRootCmd(t *testing.T) {
 	}
 
 	// Check subcommands are registered
-	wantCmds := []string{"push", "pull", "diff", "submissions", "prepare", "config", "reference"}
+	wantCmds := []string{"push", "pull", "delete", "diff", "submissions", "prepare", "config", "reference"}
 	for _, name := range wantCmds {
 		found := false
 		for _, sub := range cmd.Commands() {

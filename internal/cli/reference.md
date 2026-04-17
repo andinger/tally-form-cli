@@ -14,8 +14,9 @@ brew install andinger/tap/tally
 |---|---|---|
 | `push` | `push <file.md> [--dry-run] [--create]` | Upsert: creates if no `form_id`, updates if present. `--create` forces a new form. |
 | `pull` | `pull <form-id>` | Downloads form as Markdown to stdout |
+| `delete` | `delete <form-id>` | Permanently deletes a form (no confirmation, no undo) |
 | `diff` | `diff <file.md> [form-id]` | Compares local Markdown with a Tally form. Uses `form_id` from frontmatter if not provided. |
-| `submissions` | `submissions <form-id> [--format csv\|json]` | Downloads responses (default: csv) to stdout |
+| `submissions` | `submissions <form-id> [--format csv\|json] [--output <dir>]` | Downloads responses (default: csv) to stdout; `--output <dir>` writes one Markdown file per submission |
 | `prepare` | `prepare <file.md>` | Merges global config (workspace, logo, password, primary_color, domain) into frontmatter |
 | `config` | `config` | Shows the global config file path |
 | `reference` | `reference` | Prints this reference documentation to stdout |
