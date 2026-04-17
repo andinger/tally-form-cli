@@ -46,6 +46,6 @@ func runPull(cmd *cobra.Command, args []string) error {
 	}
 
 	md := markdown.Write(form)
-	fmt.Fprint(os.Stdout, md)
-	return nil
+	_, err = fmt.Fprint(os.Stdout, md)
+	return err
 }
