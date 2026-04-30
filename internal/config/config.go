@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 
 	"gopkg.in/yaml.v3"
+
+	"github.com/andinger/tally-form-cli/internal/model"
 )
 
 // Config holds the global configuration from ~/.config/tally/config.yaml.
@@ -41,8 +43,14 @@ type Merged struct {
 	Settings     map[string]any
 }
 
-// Load reads and merges configuration from global config and frontmatter.
-// Merge order: Global config < Frontmatter < Environment variables
+// Load reads and merges configuration from global config and inline frontmatter
+// settings (the part of the YAML frontmatter that is not split off into the
+// dedicated Form fields like workspace, password, name, form_id).
+//
+// To apply form-level overrides like Workspace, call ApplyFormOverride on the
+// returned *Merged.
+//
+// Merge order: Global config < Frontmatter inline settings < Environment variables
 func Load(frontmatter map[string]any) (*Merged, error) {
 	userCfg, err := loadUserConfig()
 	if err != nil {
@@ -79,19 +87,29 @@ func Load(frontmatter map[string]any) (*Merged, error) {
 		m.Settings["saveForLater"] = *userCfg.SaveForLater
 	}
 
-	// Frontmatter overrides
-	if frontmatter != nil {
-		if ws, ok := frontmatter["workspace"].(string); ok && ws != "" {
-			m.Workspace = ws
-		}
-	}
-
 	// Env var override for token
 	if envToken := os.Getenv("TALLY_API_TOKEN"); envToken != "" {
 		m.Token = envToken
 	}
 
 	return m, nil
+}
+
+// ApplyFormOverride applies form-level overrides from the parsed Form to the
+// merged configuration. The markdown parser splits dedicated frontmatter
+// fields (workspace, name, form_id, password) into typed Form fields and
+// removes them from Form.Settings — so Load alone cannot see them. This
+// method bridges that gap.
+//
+// Currently only Workspace is overridable per form; extend here when more
+// form-level overrides are added.
+func (m *Merged) ApplyFormOverride(form *model.Form) {
+	if form == nil {
+		return
+	}
+	if form.Workspace != "" {
+		m.Workspace = form.Workspace
+	}
 }
 
 // ConfigPath returns the path to the global config file.

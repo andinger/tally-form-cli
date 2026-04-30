@@ -2,6 +2,8 @@ package config
 
 import (
 	"testing"
+
+	"github.com/andinger/tally-form-cli/internal/model"
 )
 
 func TestLoadDefaults(t *testing.T) {
@@ -14,17 +16,27 @@ func TestLoadDefaults(t *testing.T) {
 	}
 }
 
-func TestLoadFrontmatterOverride(t *testing.T) {
-	fm := map[string]any{
-		"workspace": "fm-ws",
-	}
-	m, err := Load(fm)
-	if err != nil {
-		t.Fatalf("Load error: %v", err)
-	}
-	// Frontmatter workspace should override global (which may be empty in test)
+func TestApplyFormOverride_Workspace(t *testing.T) {
+	m := &Merged{Workspace: "global-ws"}
+	m.ApplyFormOverride(&model.Form{Workspace: "fm-ws"})
 	if m.Workspace != "fm-ws" {
-		t.Errorf("Workspace = %q, want fm-ws", m.Workspace)
+		t.Errorf("Workspace = %q, want fm-ws (form override should win over global)", m.Workspace)
+	}
+}
+
+func TestApplyFormOverride_EmptyWorkspaceKeepsGlobal(t *testing.T) {
+	m := &Merged{Workspace: "global-ws"}
+	m.ApplyFormOverride(&model.Form{Workspace: ""})
+	if m.Workspace != "global-ws" {
+		t.Errorf("Workspace = %q, want global-ws (empty form workspace must not clobber global)", m.Workspace)
+	}
+}
+
+func TestApplyFormOverride_NilFormIsSafe(t *testing.T) {
+	m := &Merged{Workspace: "global-ws"}
+	m.ApplyFormOverride(nil)
+	if m.Workspace != "global-ws" {
+		t.Errorf("Workspace = %q, want global-ws (nil form must be a no-op)", m.Workspace)
 	}
 }
 

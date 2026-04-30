@@ -48,6 +48,7 @@ func runDiff(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("config: %w", err)
 	}
+	cfg.ApplyFormOverride(localForm)
 	if tokenFlag != "" {
 		cfg.Token = tokenFlag
 	}

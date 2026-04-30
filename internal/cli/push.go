@@ -48,6 +48,7 @@ func runPush(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
 	}
+	cfg.ApplyFormOverride(form)
 	if tokenFlag != "" {
 		cfg.Token = tokenFlag
 	}
