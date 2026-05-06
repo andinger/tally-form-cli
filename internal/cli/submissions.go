@@ -17,8 +17,9 @@ import (
 )
 
 var (
-	outputFormat string
-	outputDir    string
+	outputFormat  string
+	outputDir     string
+	outputGroupBy string
 )
 
 func newSubmissionsCmd() *cobra.Command {
@@ -28,13 +29,18 @@ func newSubmissionsCmd() *cobra.Command {
 		Long: "Downloads submissions of a Tally form.\n\n" +
 			"Default: prints CSV (one row per submission) to stdout.\n" +
 			"With --format json: prints the full submissions JSON to stdout.\n" +
-			"With --output <dir>: writes one Markdown file per submission into the directory,\n" +
-			"named <submission-id>.md, with submission metadata in the YAML frontmatter.",
+			"With --output <dir>: writes Markdown files into the directory.\n" +
+			"  --group-by submission (default): one file per submission named <submission-id>.md.\n" +
+			"  --group-by question: one file per question named <NN>-<slug>.md, with rich\n" +
+			"    YAML frontmatter (form ID, question metadata, response counts) and one H2\n" +
+			"    section per submission. All submissions appear in every file in stable\n" +
+			"    API order so a given submission ID sits at the same offset across files.",
 		Args: cobra.ExactArgs(1),
 		RunE: runSubmissions,
 	}
 	cmd.Flags().StringVar(&outputFormat, "format", "csv", "stdout output format (csv or json) — ignored when --output is set")
-	cmd.Flags().StringVarP(&outputDir, "output", "o", "", "write one Markdown file per submission into this directory")
+	cmd.Flags().StringVarP(&outputDir, "output", "o", "", "write Markdown files into this directory (see --group-by)")
+	cmd.Flags().StringVar(&outputGroupBy, "group-by", "submission", "group output by submission or question (only with --output)")
 	return cmd
 }
 
@@ -61,20 +67,35 @@ func runSubmissions(cmd *cobra.Command, args []string) error {
 	// Matrix row labels: the list-submissions endpoint does not include them,
 	// so fetch the form once and build a uuid → label map from MATRIX_ROW
 	// blocks. This single extra call covers any number of submissions.
+	//
+	// --group-by question additionally needs the form for rich frontmatter
+	// (is_required, options, scale bounds, …) — so always fetch when in that
+	// mode, even without matrix questions.
 	rowLabels := make(map[string]string)
-	if hasMatrixQuestion(subs.Questions) {
-		form, err := client.GetForm(formID)
+	var form *tally.TallyForm
+	needsForm := hasMatrixQuestion(subs.Questions) ||
+		(outputDir != "" && outputGroupBy == "question")
+	if needsForm {
+		f, err := client.GetForm(formID)
 		if err == nil {
-			for uuid, label := range matrixRowLabelsFromBlocks(form.Blocks) {
+			form = f
+			for uuid, label := range matrixRowLabelsFromBlocks(f.Blocks) {
 				rowLabels[uuid] = label
 			}
 		}
 	}
 
-	// --output writes one Markdown file per submission into the directory.
-	// This takes precedence over --format.
+	// --output writes Markdown files into the directory. Takes precedence
+	// over --format.
 	if outputDir != "" {
-		return writeSubmissionMarkdownFiles(formID, outputDir, subs, rowLabels)
+		switch outputGroupBy {
+		case "submission":
+			return writeSubmissionMarkdownFiles(formID, outputDir, subs, rowLabels)
+		case "question":
+			return writeQuestionMarkdownFiles(formID, outputDir, subs, form, rowLabels)
+		default:
+			return fmt.Errorf("invalid --group-by value %q (must be submission or question)", outputGroupBy)
+		}
 	}
 
 	if outputFormat == "json" {
