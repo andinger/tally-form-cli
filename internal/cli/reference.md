@@ -16,7 +16,7 @@ brew install andinger/tap/tally
 | `pull` | `pull <form-id>` | Downloads form as Markdown to stdout |
 | `delete` | `delete <form-id>` | Permanently deletes a form (no confirmation, no undo) |
 | `diff` | `diff <file.md> [form-id]` | Compares local Markdown with a Tally form. Uses `form_id` from frontmatter if not provided. |
-| `submissions` | `submissions <form-id> [--format csv\|json] [--output <dir>]` | Downloads responses (default: csv) to stdout; `--output <dir>` writes one Markdown file per submission |
+| `submissions` | `submissions <form-id> [--format csv\|json] [--output <dir>] [--group-by submission\|question]` | Downloads responses (default: csv) to stdout; `--output <dir>` writes Markdown files (one per submission, or one per question with `--group-by question`) |
 | `prepare` | `prepare <file.md>` | Merges global config (workspace, logo, cover, password, primary_color, language) into frontmatter |
 | `config` | `config` | Shows the global config file path |
 | `reference` | `reference` | Prints this reference documentation to stdout |
@@ -264,6 +264,14 @@ tally diff questionnaire.md
 
 # Download submissions as CSV
 tally submissions 81GYAY --format csv > responses.csv
+
+# Per-submission Markdown files (<submission-id>.md, with frontmatter)
+tally submissions 81GYAY --output Submissions/
+
+# Per-question Markdown files (NN-slug.md, rich frontmatter, all submissions
+# in stable API order so a given submission ID sits at the same offset across
+# files — useful for side-by-side per-question evaluation)
+tally submissions 81GYAY --output Antworten/ --group-by question
 
 # Update after editing (form_id in frontmatter enables upsert)
 tally push questionnaire.md
